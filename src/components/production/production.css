@@ -1,0 +1,16 @@
+.production__tree-view__border {
+    position: fixed;
+    top: 0;
+    left: 200px;
+    height: 80%;
+    margin: 10% 0;
+    background-color: #000;
+    width: 1px;
+}
+
+.production__content__container {
+    height: 100%;
+    width: calc(100% - 200px);
+    margin: 0;
+    padding: 20px;
+}

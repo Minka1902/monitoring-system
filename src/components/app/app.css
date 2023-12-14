@@ -1,0 +1,11 @@
+#root {
+  height: 100vh;
+}
+
+section {
+  background-color: #fff9f0;
+  width: 100%;
+  height: calc(100% - 63px);
+  display: flex;
+  flex-direction: row;
+}

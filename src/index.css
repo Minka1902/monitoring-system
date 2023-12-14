@@ -1,3 +1,38 @@
+/* ! app */
+@import url('./components/app/app.css');
+
+/* ! buttons */
+@import url('./components/buttons/buttons.css');
+
+/* ! nav-over-page */
+@import url('./components/navOverPage/navOverPage.css');
+
+/* ! right-click-menu */
+@import url('./components/rightClickMenu/rightClickMenu.css');
+
+/* ! production */
+@import url('./components/production/production.css');
+
+/* ! main */
+@import url('./components/main/main.css');
+
+/* ! drilling */
+@import url('./components/drilling/drilling.css');
+
+/* ! geology */
+@import url('./components/geology/geology.css');
+
+/* ! project-plan */
+@import url('./components/projectPlan/projectPlan.css');
+
+/* ! map */
+@import url('./components/map/map.css');
+
+
+
+/* todo FONT IMPORT */
+@import url('./vendor/font.css');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
