@@ -6,6 +6,25 @@ section {
   background-color: #fff9f0;
   width: 100%;
   height: calc(100% - 63px);
+  padding-left: 250px;
   display: flex;
   flex-direction: row;
+}
+
+.tree-view__border {
+  position: fixed;
+  top: 0;
+  left: 250px;
+  height: 80%;
+  margin: 10% 0;
+  background-color: #000;
+  width: 1px;
+}
+
+.tree-view__container {
+  position: fixed;
+  display: flex;
+  width: 250px;
+  flex-direction: row;
+  padding-top: 30px;
 }
