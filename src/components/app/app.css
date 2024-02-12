@@ -4,9 +4,9 @@
 
 section {
   background-color: #fff9f0;
-  width: 100%;
-  height: calc(100% - 63px);
-  padding-left: 250px;
+  width: calc(100% - 250px);
+  height: calc(100% - 65px);
+  margin-left: 250px;
   display: flex;
   flex-direction: row;
 }
@@ -22,9 +22,25 @@ section {
 }
 
 .tree-view__container {
+  height: calc(100% - 65px);
+  background-color: #fff9f0;
   position: fixed;
   display: flex;
   width: 250px;
   flex-direction: row;
   padding-top: 30px;
+}
+
+.text {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  line-height: 17px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.list {
+  list-style: disc;
+  padding: 0 0 0 20px;
+  margin: 0;
 }

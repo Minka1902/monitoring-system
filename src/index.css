@@ -28,7 +28,11 @@
 /* ! map */
 @import url('./components/map/map.css');
 
+/* ! progress bar */
+@import url('./components/progressBar/progressBar.css');
 
+/* ! table */
+@import url('./components/table/table.css');
 
 /* todo FONT IMPORT */
 @import url('./vendor/font.css');

@@ -36,19 +36,6 @@
     background-color: #F66969;
 }
 
-/* .nav-over-page__button::before {
-    content: "";
-    position: absolute;
-    background-color: transparent;
-    transform: rotate(180deg);
-    left: -5px;
-    bottom: -10px;
-    height: 10px;
-    width: 5px;
-    border-top-left-radius: 5px;
-    box-shadow: 0 -5px 0 0 red;
-} */
-
 .button-active {
     background-color: #fff9f0;
 }
