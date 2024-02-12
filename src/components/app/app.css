@@ -44,3 +44,24 @@ section {
   padding: 0 0 0 20px;
   margin: 0;
 }
+
+@media screen and (max-width:1024px) {
+  section {
+    width: calc(100% - 150px);
+    margin-left: 150px;
+    justify-content: center;
+  }
+
+  .tree-view__border {
+    left: 150px;
+  }
+
+  .tree-view__container {
+    width: 150px;
+  }
+
+  .MuiTreeItem-label {
+    line-height: 1;
+    font-size: 0.7rem !important;
+  }
+}

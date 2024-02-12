@@ -15,26 +15,26 @@
 }
 
 .projectPlan__time-bar {
-    position: fixed;
+    position: absolute;
     top: 70px;
     right: 5px;
 }
 
 .projectPlan__resources-graph-container {
     width: 640px;
-    height: 260px;
+    height: 100%;
     grid-area: a;
 }
 
 .projectPlan__fields-table-container {
     width: 450px;
-    height: 300px;
+    height: 100%;
     grid-area: b;
 }
 
 .projectPlan__state-graph-container {
     width: 445px;
-    height: 300px;
+    height: 100%;
     grid-area: c;
 }
 
@@ -48,8 +48,7 @@
 
 .projectPlan__status-table-container {
     width: 100%;
-    height: 130px;
-    grid-area: auto;
+    max-height: 130px;
     display: flex;
     justify-content: center;
     grid-area: e;
@@ -59,23 +58,50 @@
 
 @media screen and (min-width: 768px) and (max-width:1024px) {
     .projectPlan__content__container {
-        grid-template-rows: 200px 200px 200px;
-        grid-row-gap: 5px;
-        grid-column-gap: 5px;
+        grid-template-rows: 160px 160px 160px;
+        grid-row-gap: 0px;
+        grid-column-gap: 0px;
+        padding: 28px 10px 10px 10px;
     }
 
     .projectPlan__fields-table-container {
-        width: 300px;
-        height: 200px;
+        width: 250px;
+        font-size: 10px;
+
     }
 
     .projectPlan__resources-graph-container {
-        width: 400px;
-        height: 200px;
+        width: 350px;
+        margin-top: -10px;
     }
 
     .projectPlan__state-graph-container {
         width: 350px;
-        height: 200px;
+        margin-top: -15px;
+    }
+
+    .projectPlan__status-table-container {
+        width: 320px;
+        font-size: 10px;
+        margin-top: -10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .projectPlan__content__container {
+        width: calc(100% - 50px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: scroll;
+        margin: 0 25px;
+    }
+
+    .projectPlan__resources-graph-container {
+        width: 100%;width: 445px;
+    }
+
+    .projectPlan__status-table-container {
+        margin-top: 10px;
     }
 }

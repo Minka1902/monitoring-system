@@ -23,13 +23,6 @@
     margin-top: -43px;
 }
 
-.progress-bar__title {
-    margin-bottom: -17px;
-    font-size: 11px;
-    font-weight: bold;
-    margin-left: -80px;
-}
-
 .progress-bar__scales {
     display: flex;
     justify-content: space-between;
@@ -45,4 +38,19 @@
 .green {
     font-size: 13px;
     color: rgb(103, 172, 1);
+}
+
+@media screen and (min-width: 768px) and (max-width:1024px) {
+    .progress-bar {
+        height: 10px;
+        border-radius: 5px;
+    }
+    
+    .progress-bar__scale {
+        height: 15px;
+        margin: 0;
+        font-weight: 600;
+        font-size: 10px;
+    }
+
 }
