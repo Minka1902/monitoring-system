@@ -1,18 +1,41 @@
 import 'regenerator-runtime';
 import 'leaflet/dist/leaflet.css';
-import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import proj4 from 'proj4';
 import * as L from 'leaflet';
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl, Polygon } from "react-leaflet";
 import React from 'react';
 import Topography from 'leaflet-topography';
 import { options, maps, markersArray } from '../../constants/leaflet/mapOptions';
-import { customMarkerCross } from '../../constants/leaflet/markers';
+import { customMarkerDot } from '../../constants/leaflet/markers';
+import { poly } from '../../constants/for_map';
+import { Children } from 'react';
 
 function SetViewOnClick({ coords }) {
   const map = useMap();
   map.setView(coords, 7);
 
   return null;
+};
+
+const epsgConvert = ({ x, y }) => {
+  const epsg = require('epsg');
+  let fromProj = epsg[`EPSG:2039`];
+  let toProj = epsg[`EPSG:4326`];
+  if (toProj && fromProj) {
+    return proj4(fromProj, toProj, [x, y]);
+  } else {
+    console.log("Error! EPSG CODE NON-EXISTING!")
+  }
+};
+
+function CreatePolygon() {
+  let polygon = [];
+
+  for (let i = 0; i < poly.length; i++) {
+    polygon[i] = epsgConvert({ x: poly[i][0], y: poly[i][1] }).reverse();
+  };
+
+  return polygon;
 };
 
 export default function Map({ coords }) {
@@ -43,12 +66,17 @@ export default function Map({ coords }) {
         doubleClickZoom={true}
         dragging={true}
       >
+        <Polygon positions={CreatePolygon()} >
+          <Popup closeButton={false}>
+            North-West
+          </Popup>
+        </Polygon>
         <SetViewOnClick coords={coords} />
         <LocationFinderDummy />
 
         {markersArray.map((marker, index) => {
           return (
-            <Marker key={index} icon={customMarkerCross} position={[marker.coords[1], marker.coords[0]]}>
+            <Marker key={index} icon={customMarkerDot} position={epsgConvert({ x: marker.x, y: marker.y }).reverse()}>
               <Popup>
                 <p>{marker.name}</p>
               </Popup>

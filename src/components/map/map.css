@@ -1,5 +1,33 @@
 .leaflet-container {
-  height: 400px;
-  width: 400px;
+  height: 800px;
+  width: 800px;
   border: 1px solid grey;
+}
+
+@media screen and (max-width: 1444px) {
+  .leaflet-container {
+    height: 600px;
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 1224px) {
+  .leaflet-container {
+    height: 500px;
+    width: 500px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .leaflet-container {
+    height: 400px;
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .leaflet-container {
+    height: 250px;
+    width: 250px;
+  }
 }

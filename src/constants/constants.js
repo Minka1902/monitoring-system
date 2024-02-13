@@ -71,10 +71,3 @@ export const statusTable = [
     { stage: 'Seismic', name: '3D, sq. km', commitment: 1300, actual: 970, value: 75 },
     { stage: 'Seismic', name: '2D, km', commitment: 1000, actual: 1200, value: 120 },
 ];
-
-export const markersArray = [
-    { coords: [31.657, 34.635], name: 'Well 1' },
-    { coords: [31.475, 34.816], name: 'Well 2' },
-    { coords: [31.412, 34.696], name: 'Well 3' },
-    { coords: [31.455, 34.604], name: 'Well 4' },
-];

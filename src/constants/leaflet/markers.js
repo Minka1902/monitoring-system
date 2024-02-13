@@ -57,3 +57,12 @@ export const customMarkerCross = new L.Icon({
     popupAnchor: [0, -9],
     tooltipAnchor: [16, -22],
 });
+
+export const customMarkerDot = new L.Icon({
+    iconUrl: 'https://www.svgrepo.com/show/462283/pin.svg',
+    iconSize: [20, 20],
+    iconAnchor: [7, 15],
+    popupAnchor: [3.5, -12],
+    color: '#FF0000',
+    tooltipAnchor: [16, -22],
+});
