@@ -8,7 +8,7 @@ const removePort = () => {
   return newOrigin;
 };
 
-export const PUBLIC_URL = `${removePort()}:4000`;
+export const PUBLIC_URL = `${removePort()}:4001`;
 
 export const register = (password, email) => {
   return fetch(`${PUBLIC_URL}/signup`, {

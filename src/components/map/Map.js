@@ -1,14 +1,12 @@
 import 'regenerator-runtime';
 import 'leaflet/dist/leaflet.css';
 import proj4 from 'proj4';
-import * as L from 'leaflet';
+// import * as L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl, Polygon } from "react-leaflet";
 import React from 'react';
 import Topography from 'leaflet-topography';
-import { options, maps, markersArray } from '../../constants/leaflet/mapOptions';
+import { options, maps, markersArray, poly } from '../../constants/leaflet/mapOptions';
 import { customMarkerDot } from '../../constants/leaflet/markers';
-import { poly } from '../../constants/for_map';
-import { Children } from 'react';
 
 function SetViewOnClick({ coords }) {
   const map = useMap();
@@ -66,11 +64,7 @@ export default function Map({ coords }) {
         doubleClickZoom={true}
         dragging={true}
       >
-        <Polygon positions={CreatePolygon()} >
-          <Popup closeButton={false}>
-            North-West
-          </Popup>
-        </Polygon>
+        <Polygon positions={CreatePolygon()} />
         <SetViewOnClick coords={coords} />
         <LocationFinderDummy />
 
@@ -99,6 +93,6 @@ export default function Map({ coords }) {
           })}
         </LayersControl>
       </MapContainer>
-    </div>
+    </div >
   );
 }
