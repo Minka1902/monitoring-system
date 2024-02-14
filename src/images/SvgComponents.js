@@ -908,3 +908,19 @@ export function SvgUniregistry({ color = '#000' }) {
         </svg>
     );
 };
+
+export function SvgFile({ color = '#000' }) {
+    return (
+        <svg width="20" height="20" fill={color} viewBox="0 0 24 24">
+            <path d="M20.55 11.025 15.975 6.45c-.225-.3-.6-.45-.975-.45H9c-.825 0-1.5.675-1.5 1.5V21c0 .825.675 1.5 1.5 1.5h10.5c.825 0 1.5-.675 1.5-1.5v-8.925c0-.375-.15-.75-.45-1.05ZM15 7.5l4.425 4.5H15V7.5ZM9 21V7.5h4.5V12c0 .825.675 1.5 1.5 1.5h4.5V21H9Z"></path>
+        </svg>
+    );
+};
+
+export function SvgFolder({ color = '#000' }) {
+    return (
+        <svg width="20" height="20" fill={color} viewBox="0 0 24 24">
+            <path d="m8.377 4.5 2.566 2.558.434.442H21v12H3v-15h5.377Zm0-1.5H3a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 3 21h18a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 21 6h-9L9.443 3.442A1.5 1.5 0 0 0 8.377 3Z"></path>
+        </svg>
+    );
+};
