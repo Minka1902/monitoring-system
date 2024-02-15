@@ -143,7 +143,7 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
 };
 
 export function LinesChart({ data, backgroundColor = '#fff9f0', title = 'Please pass a title.', subtitle }) {
-    const [options, setOptions] = React.useState({
+    const [options,] = React.useState({
         // title: { text: title === false ? '' : title },
         subtitle: { text: subtitle },
         data: data,
@@ -182,7 +182,7 @@ export function LinesChart({ data, backgroundColor = '#fff9f0', title = 'Please 
 };
 
 export const BulletChart = (data, title = 'Please pass a title.', subtitle) => {
-    const [options, setOptions] = React.useState({
+    const [options,] = React.useState({
         title: { text: title },
         subtitle: { text: subtitle },
         data: data,
@@ -209,7 +209,7 @@ export const BulletChart = (data, title = 'Please pass a title.', subtitle) => {
 };
 
 export const BubbleChart = (title, subtitle, data) => {
-    const [options, setOptions] = React.useState({
+    const [options,] = React.useState({
         title: { text: title },
         subtitle: { text: subtitle },
         series: [

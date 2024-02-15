@@ -40,7 +40,7 @@ export default function Map({ coords }) {
   const { BaseLayer } = LayersControl;
 
   const LocationFinderDummy = () => {
-    const map = useMapEvents({
+    const map = useMapEvents({  //eslint-disable-line
       click(evt) {
         Topography.getTopography(evt.latlng, options)
           .then((data) => {
@@ -89,7 +89,7 @@ export default function Map({ coords }) {
                     attribution={map.attribution}
                   />
                 </BaseLayer>);
-            }
+            } return <></>;
           })}
         </LayersControl>
       </MapContainer>

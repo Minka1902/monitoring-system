@@ -34,11 +34,11 @@ function App() {
       .catch((err) => {
         console.log({ message: "Couldn't get structure from server.", err });
       })
-  }, []);
+  }, []); //eslint-disable-line
 
   React.useEffect(() => {
     history.push('/main');
-  }, [])
+  }, [])  //eslint-disable-line
 
   return (
     <>

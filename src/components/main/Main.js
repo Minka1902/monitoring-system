@@ -3,7 +3,7 @@ import Map from '../map/Map';
 import { LineChart } from '../chart/Charts';
 
 export default function Main() {
-    const [coords, setCoords] = React.useState([31.3, 34.8]);
+    const [coords,] = React.useState([31.3, 34.8]);
 
     return (
         <section id="main">

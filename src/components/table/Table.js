@@ -1,6 +1,5 @@
 import React from "react";
 import ProgressBar from "../progressBar/ProgressBar";
-import { Minimize } from "@mui/icons-material";
 
 export function TableStandard(props) {
     const { tableHeaders, data, color = '#f2f2f2' } = props;

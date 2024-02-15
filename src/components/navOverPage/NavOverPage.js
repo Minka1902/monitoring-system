@@ -16,7 +16,7 @@ export default function NavOverPage({ pages }) {
     return (
         <div className="navigation__container">
             <div className="logo__container">
-                <img className="logo__image" src={geomageLogo} />
+                <img className="logo__image" src={geomageLogo} alt="Logo of Geomage-2003 LTD" />
             </div>
             <nav className="nav-over-page">
                 {pages && pages.map((page, index) => {
