@@ -82,7 +82,7 @@ export default function Map({ coords }) {
           {maps.map((map, index) => {
             if (map.valid) {
               return (
-                <BaseLayer checked={map.checked} name={map.name} key={index}>
+                <BaseLayer checked={map.checked} name={map.name} key={map.url + index}>
                   <TileLayer
                     className='TileLayer'
                     url={map.url}

@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import { pages } from '../../constants/constants'
+import { findElementByName } from '../../constants/functions';
 import NavOverPage from "../navOverPage/NavOverPage";
-import MyTreeView from "../treeView/TreeView";
+import MyTreeView from "../myTreeView/MyTreeView";
 import Main from "../main/Main";
 import Geology from "../geology/Geology";
 import Production from "../production/Production";
@@ -18,11 +19,8 @@ function App() {
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
-  // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
+  // !!!!!!!!!!!     RESERVOIR handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const rightClickItems = [
-    { buttonText: 'sign out', buttonClicked: () => console.log('Right click'), filter: 'root', isAllowed: true },
-  ];
 
   React.useEffect(() => {
     fieldsApiOBJ.getStructure()
@@ -36,6 +34,27 @@ function App() {
       })
   }, []); //eslint-disable-line
 
+  const getReservoir = (event) => {
+    if (event.target.innerText) {
+      fieldsApiOBJ.getReservoir({ path: '/brur/lower_cretaceous/drilling.csv' })
+        .then((data) => {
+          if (data) {
+
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
+  const rightClickItems = [
+    { buttonText: 'sign out', buttonClicked: () => console.log('Right click'), filter: 'root', isAllowed: true },
+  ];
+
   React.useEffect(() => {
     history.push('/main');
   }, [])  //eslint-disable-line
@@ -44,7 +63,7 @@ function App() {
     <>
       <NavOverPage pages={pages} />
       <div className="tree-view__container">
-        <MyTreeView files={tree} />
+        <MyTreeView files={tree} onElementClick={getReservoir} />
         <div className="tree-view__border" />
       </div>
 

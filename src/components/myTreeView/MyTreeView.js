@@ -4,7 +4,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 
-export default function MyTreeView({ files }) {
+export default function MyTreeView({ files, onElementClick }) {
     return (
         <TreeView
             aria-label="file system navigator"
@@ -14,25 +14,25 @@ export default function MyTreeView({ files }) {
             sx={{ height: '100%', flexGrow: 1, maxWidth: 250, overflowY: 'auto' }}
         >
             {files !== undefined ? files.children.map((entry, index) => (
-                <TreeItem nodeId={entry.name} label={entry.name}>
-                    <TreeElement key={`${entry.name}${index}`} entry={entry} />
+                <TreeItem key={`${entry.name}${index}`} onClick={onElementClick} nodeId={entry.name} label={entry.name}>
+                    <TreeElement key={`${entry.name}${index}`} entry={entry} onClick={onElementClick} />
                 </TreeItem>
             )) : <></>}
         </TreeView>
     );
 }
 
-function TreeElement({ entry }) {
+function TreeElement({ entry, onClick }) {
     return (
         entry !== undefined ?
             <div style={{ paddingLeft: `5px` }} >
                 {entry.children?.map((entry, index) => (
                     entry.type === 'directory' && entry.children.length > 0 ?
-                        <TreeItem nodeId={entry.name} label={entry.name}>
-                            <TreeElement key={`${entry.name}${index}`} entry={entry} />
+                        <TreeItem key={`${entry.name}${index}`} nodeId={entry.name} label={<div onClick={onClick}>{entry.name}</div>}>
+                            <TreeElement entry={entry} onClick={onClick} />
                         </TreeItem>
                         :
-                        <TreeItem nodeId={`${entry.name}${index}`} label={entry.name}>
+                        <TreeItem nodeId={`${entry.name}${index}`} key={`${entry.name}${index}`} label={<div onClick={onClick}>{entry.name}</div>}>
                         </TreeItem>
                 ))}
             </div>
