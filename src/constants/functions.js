@@ -343,3 +343,13 @@ export const formatMemory = (memory = 0) => {
     }
     return `${memory === 0 ? 0 : tempMem.toFixed(4)} ${memoryUnits[counter]}`;
 };
+
+// ! 	gets a name and formats it
+// TODO formatName('lower_cretaceous') | formatName('drilling.csv') 
+// ?  	"Lower cretaceous" | "Drilling"
+export const formatName = (name = "") => {
+    let formattedString = name.replace(/_/g, ' ');
+    formattedString = formattedString.replace(/\.[^/.]+$/, '');
+    formattedString = formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
+    return formattedString;
+};
