@@ -27,7 +27,7 @@ export default function Main() {
         if (markers.length > 0) {
             calculateMarkersCenter();
         }
-    }, [markers])
+    }, [markers])   //eslint-disable-line
 
     return (
         <section id="main">
