@@ -1,7 +1,8 @@
 import React from "react";
+import MarkersContext from '../../contexts/MarkersContext';
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import { pages } from '../../constants/constants'
-import { findElementByName } from '../../constants/functions';
+import { pathFromName } from '../../constants/functions';
 import NavOverPage from "../navOverPage/NavOverPage";
 import MyTreeView from "../myTreeView/MyTreeView";
 import Main from "../main/Main";
@@ -16,6 +17,7 @@ function App() {
   // const safeDocument = typeof document !== 'undefined' ? document : {};
   // const html = safeDocument.documentElement;
   const [tree, setTree] = React.useState({ name: 'root', type: 'directory', children: [], });
+  const [markers, setMarkers] = React.useState([]);
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
@@ -36,15 +38,19 @@ function App() {
 
   const getReservoir = (event) => {
     if (event.target.innerText) {
-      fieldsApiOBJ.getReservoir({ path: '/brur/lower_cretaceous/drilling.csv' })
-        .then((data) => {
-          if (data) {
-
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const name = event.target.closest('li').classList[1].toLowerCase();
+      const path = pathFromName(name);
+      if (path.slice(path.length - 4) === '.csv') {
+        fieldsApiOBJ.getReservoir({ path: path })
+          .then((data) => {
+            if (data) {
+              setMarkers(data);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   };
 
@@ -60,10 +66,10 @@ function App() {
   }, [])  //eslint-disable-line
 
   return (
-    <>
+    <MarkersContext.Provider value={markers}>
       <NavOverPage pages={pages} />
       <div className="tree-view__container">
-        <MyTreeView files={tree} onElementClick={getReservoir} />
+        <MyTreeView files={tree} onClick={getReservoir} />
         <div className="tree-view__border" />
       </div>
 
@@ -89,7 +95,7 @@ function App() {
         </Route>
       </Switch>
       <RightClickMenu items={rightClickItems} isLoggedIn={true} />
-    </>
+    </MarkersContext.Provider>
   );
 };
 export default withRouter(App);
