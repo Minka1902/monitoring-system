@@ -1,3 +1,4 @@
+import { RoomTwoTone } from '@mui/icons-material';
 import { shortMonthArray, monthArray, shortMonthArrayLow, memoryUnits } from './constants';
 
 // ! 	gets a HTML string, returns the number of words.
@@ -349,7 +350,22 @@ export const formatMemory = (memory = 0) => {
 // ?  	"Lower cretaceous" | "Drilling"
 export const formatName = (name = "") => {
     let formattedString = name.replace(/_/g, ' ');
+    if (formattedString.indexOf('-') !== -1) {
+        formattedString = formattedString.slice(formattedString.lastIndexOf('-') + 1)
+    }
     formattedString = formattedString.replace(/\.[^/.]+$/, '');
     formattedString = formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
+
     return formattedString;
+};
+
+
+// ! 	gets a name and formats it
+// TODO formatName('lower_cretaceous') | formatName('drilling.csv') 
+// ?  	"Lower cretaceous" | "Drilling"
+export const pathFromName = (name) => {
+    let path = '/' + name.replace(/ /g, '_');
+    path = path.replace(/-/g, '/');
+    const last = path.lastIndexOf('/');
+    return path.slice(0, last) + `/${name}`;
 };
