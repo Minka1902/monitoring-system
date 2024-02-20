@@ -1,11 +1,12 @@
 import 'regenerator-runtime';
 import 'leaflet/dist/leaflet.css';
+import MarkersContext from "../../contexts/MarkersContext";
 import proj4 from 'proj4';
-// import * as L from 'leaflet';
+import epsg from 'epsg';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl, Polygon } from "react-leaflet";
 import React from 'react';
 import Topography from 'leaflet-topography';
-import { options, maps, markersArray, poly } from '../../constants/leaflet/mapOptions';
+import { options, maps, poly } from '../../constants/leaflet/mapOptions';
 import { customMarkerDot } from '../../constants/leaflet/markers';
 
 function SetViewOnClick({ coords }) {
@@ -15,29 +16,9 @@ function SetViewOnClick({ coords }) {
   return null;
 };
 
-const epsgConvert = ({ x, y }) => {
-  const epsg = require('epsg');
-  let fromProj = epsg[`EPSG:2039`];
-  let toProj = epsg[`EPSG:4326`];
-  if (toProj && fromProj) {
-    return proj4(fromProj, toProj, [x, y]);
-  } else {
-    console.log("Error! EPSG CODE NON-EXISTING!")
-  }
-};
-
-function CreatePolygon() {
-  let polygon = [];
-
-  for (let i = 0; i < poly.length; i++) {
-    polygon[i] = epsgConvert({ x: poly[i][0], y: poly[i][1] }).reverse();
-  };
-
-  return polygon;
-};
-
 export default function Map({ coords }) {
   const { BaseLayer } = LayersControl;
+  const markers = React.useContext(MarkersContext);
 
   const LocationFinderDummy = () => {
     const map = useMapEvents({  //eslint-disable-line
@@ -54,6 +35,31 @@ export default function Map({ coords }) {
     return null;
   };
 
+  const epsgConvert = ({ x, y }) => {
+    const toProj = epsg['EPSG:4326'];
+    const fromProj = epsg['EPSG:2039'];
+    let coordinates = proj4(fromProj, toProj, [parseFloat(x), parseFloat(y)]);
+    return coordinates;
+  };
+
+  function CreatePolygon() {
+    let polygon = [];
+
+    for (let i = 0; i < poly.length; i++) {
+      polygon[i] = epsgConvert({ x: poly[i][0], y: poly[i][1] }).reverse();
+    };
+
+    return polygon;
+  };
+
+  function ZoomIn() {
+    const map = useMap();
+    if (markers.length > 0 && coords[0] !== 31.3) {
+      map.setView(coords, 11);
+    }
+    return null;
+  };
+
   return (
     <div id='map'>
       <MapContainer
@@ -65,10 +71,10 @@ export default function Map({ coords }) {
         dragging={true}
       >
         <Polygon positions={CreatePolygon()} />
-        <SetViewOnClick coords={coords} />
+        {coords[0] === 31.3 && coords[1] === 34.8 ? <SetViewOnClick coords={coords} /> : <ZoomIn />}
         <LocationFinderDummy />
 
-        {markersArray.map((marker, index) => {
+        {markers.map((marker, index) => {
           return (
             <Marker key={index} icon={customMarkerDot} position={epsgConvert({ x: marker.x, y: marker.y }).reverse()}>
               <Popup>
