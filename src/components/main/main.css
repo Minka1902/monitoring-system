@@ -1,8 +1,18 @@
 .main__content__container {
     display: flex;
     flex-direction: row;
+    justify-content: start;
     height: 100%;
     width: calc(100vw - 250px);
+    margin: 0 3px 0 0;
+    padding: 20px;
+}
+
+.main__secondary__container {
+    border: #035B1C solid 1px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     margin: 0;
     padding: 20px;
 }
@@ -12,15 +22,26 @@
 }
 
 .main__graph__container {
-    border: 1px solid red;
     width: clamp(600px, 600px, 600px);
     height: 250px;
-    margin-left: 15px;
+    margin: 0 auto;
 }
 
-.main__graph__title {
-    font-family: 'Inter', Arial, Helvetica;
-    font-size: 20px;
-    text-align: center;
-    margin: 0;
+.main__well__info {
+    border: red solid 1px;
+    font: Inter, Arial, Helvetica;
+    font-size: 24px;
+    line-height: 40px;
+    font-weight: 600;
+    color: #035B1C;
+    width: 600px;
+    margin: 20px auto 0;
+}
+
+.main__well_other-ops {
+    font-weight: 400;
+}
+
+.main__well_survey {
+    color: red;
 }
