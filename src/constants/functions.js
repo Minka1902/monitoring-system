@@ -1,4 +1,3 @@
-import { RoomTwoTone } from '@mui/icons-material';
 import { shortMonthArray, monthArray, shortMonthArrayLow, memoryUnits } from './constants';
 
 // ! 	gets a HTML string, returns the number of words.
@@ -368,4 +367,12 @@ export const pathFromName = (name) => {
     path = path.replace(/-/g, '/');
     const last = path.lastIndexOf('/');
     return path.slice(0, last) + `/${name}`;
+};
+
+export const getRandomInt = (min = 0, max) => {
+    let randomNumber = 0;
+    while (randomNumber <= min) {
+        randomNumber = Math.floor(Math.random() * max);
+    }
+    return randomNumber;
 };
