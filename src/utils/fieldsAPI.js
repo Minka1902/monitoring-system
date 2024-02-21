@@ -25,6 +25,8 @@ class fieldsApi {
   getStructure = () => this._fetch({ method: "GET", url: "/reservoirs" });
 
   getReservoir = ({ path }) => this._fetch({ method: "POST", url: "/reservoir", data: { path } });
+
+  getWellsData = ({ folderName }) => this._fetch({ method: "POST", url: "/fields", data: { folderName } });
 }
 // ! REAL API
 const fieldsApiOBJ = new fieldsApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: PUBLIC_URL });

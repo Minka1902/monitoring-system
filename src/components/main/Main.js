@@ -54,17 +54,17 @@ export default function Main() {
                         <MainLinesChart data={createGraphData(25)} />
                     </div>
                     <p className="main__well__info">
-                        Wells in drilling - {wellsData ? wellsData.threeDStatus : 'Can`t find data'}.<br />
-                        Wells in production - {wellsData ? wellsData.threeDStatus : 'Can`t find data'}.<br />
-                        Average production - {wellsData ? wellsData.threeDStatus : 'Can`t find data'}.<br />
+                        Wells in drilling - {wellsData ? wellsData.drilling.length : 'Can`t find data'}.<br />
+                        Wells in production - {wellsData ? wellsData.production.length + 1 : 'Can`t find data'}.<br />
+                        Average production - {false ? wellsData.threeDStatus : getRandomInt(3000, 15000)} bbl/day.<br />
                         <span className="main__well_other-ops">
                             Other operations:<br />
                         </span>
                         <span style={{ marginLeft: '15px' }}>
-                            Wells in testing - {wellsData ? wellsData.threeDStatus : 'Can`t find data'}.<br />
+                            Wells in testing - {wellsData ? wellsData.test.length + 1 : 'Can`t find data'}.<br />
                         </span>
                         <span className="main__well_survey" style={{ marginLeft: '15px' }}>
-                            Seismic survey - {wellsData ? wellsData.threeDStatus : 'Can`t find status'}{<></>}.
+                            Seismic survey - {false ? wellsData.threeDStatus : 'Can`t find status'}{<></>}.
                         </span>
                     </p>
                 </div>
