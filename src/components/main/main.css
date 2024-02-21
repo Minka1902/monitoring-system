@@ -1,7 +1,6 @@
 .main__content__container {
     display: flex;
     flex-direction: row;
-    justify-content: start;
     height: 100%;
     width: calc(100vw - 250px);
     margin: 0 3px 0 0;
@@ -9,7 +8,6 @@
 }
 
 .main__secondary__container {
-    border: #035B1C solid 1px;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -28,7 +26,6 @@
 }
 
 .main__well__info {
-    border: red solid 1px;
     font: Inter, Arial, Helvetica;
     font-size: 24px;
     line-height: 40px;
