@@ -83,7 +83,7 @@ export function BarChart({ chartData, title = defTitle, subtitle = defSubtitle, 
     );
 };
 
-export function LineChart({ chartData, title = 'Please pass a title.', subtitle = defSubtitle, chartClass = 'chart-bar-container', label, maxY = 100, isXZero = false, isYZero = false }) {
+export function LineChart({ chartData, title = 'Please pass a title.', subtitle = defSubtitle, chartClass = 'chart-bar-container', label, maxY = 10000, isXZero = false, isYZero = false }) {
     let data;
     if (chartData !== undefined)
         data = {
@@ -142,10 +142,8 @@ export function LineChart({ chartData, title = 'Please pass a title.', subtitle 
     );
 };
 
-export function LinesChart({ data, backgroundColor = '#fff9f0', title = 'Please pass a title.', subtitle }) {
+export function LinesChart({ data, backgroundColor = 'transparent' }) {
     const [options,] = React.useState({
-        // title: { text: title === false ? '' : title },
-        subtitle: { text: subtitle },
         data: data,
         series: [
             {
@@ -175,6 +173,44 @@ export function LinesChart({ data, backgroundColor = '#fff9f0', title = 'Please 
         ],
         background: {
             fill: backgroundColor,
+        },
+    });
+
+    return <AgChartsReact options={options} />;
+};
+
+export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+    const [options,] = React.useState({
+        title: { text: '7-day production' },
+        data: data,
+        series: [
+            {
+                type: 'line',
+                xKey: 'year',
+                yKey: 'gas',
+                yName: 'gas',
+            },
+            {
+                type: 'line',
+                xKey: 'year',
+                yKey: 'oil',
+                yName: 'oil',
+            },
+            {
+                type: 'line',
+                xKey: 'year',
+                yKey: 'water',
+                yName: 'water',
+            },
+        ],
+        background: {
+            fill: backgroundColor,
+        },
+        contextMenu: {
+            enabled: typeof contextMenuAction === 'object' ? true : false,
+            extraActions: [
+                { label: 'Say hello', action: () => window.alert('Hello world') },
+            ],
         },
     });
 
