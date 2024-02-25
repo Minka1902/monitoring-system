@@ -58,8 +58,38 @@ export const customMarkerCross = new L.Icon({
     tooltipAnchor: [16, -22],
 });
 
-export const customMarkerDot = new L.Icon({
+export const customMarkerDotBlack = new L.Icon({
     iconUrl: 'https://www.svgrepo.com/show/462283/pin.svg',
+    iconSize: [20, 20],
+    iconAnchor: [7, 15],
+    popupAnchor: [3.5, -12],
+    color: '#FF0000',
+    tooltipAnchor: [16, -22],
+});
+
+export const customMarkerDotBlue = new L.Icon({
+    iconUrl: 'https://www.svgrepo.com/show/462283/pin.svg',
+    className: 'icon-blue',
+    iconSize: [20, 20],
+    iconAnchor: [7, 15],
+    popupAnchor: [3.5, -12],
+    color: '#FF0000',
+    tooltipAnchor: [16, -22],
+});
+
+export const customMarkerDotRed = new L.Icon({
+    iconUrl: 'https://www.svgrepo.com/show/462283/pin.svg',
+    className: 'icon-red',
+    iconSize: [20, 20],
+    iconAnchor: [7, 15],
+    popupAnchor: [3.5, -12],
+    color: '#FF0000',
+    tooltipAnchor: [16, -22],
+});
+
+export const customMarkerDotGreen = new L.Icon({
+    iconUrl: 'https://www.svgrepo.com/show/462283/pin.svg',
+    className: 'icon-green',
     iconSize: [20, 20],
     iconAnchor: [7, 15],
     popupAnchor: [3.5, -12],
