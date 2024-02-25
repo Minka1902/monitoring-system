@@ -1,13 +1,15 @@
 import 'regenerator-runtime';
 import 'leaflet/dist/leaflet.css';
 import MarkersContext from "../../contexts/MarkersContext";
+import DataContext from "../../contexts/DataContext";
 import proj4 from 'proj4';
 import epsg from 'epsg';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl, Polygon } from "react-leaflet";
+import { shortenString } from '../../constants/functions';
 import React from 'react';
 import Topography from 'leaflet-topography';
 import { options, maps, poly } from '../../constants/leaflet/mapOptions';
-import { customMarkerDot } from '../../constants/leaflet/markers';
+import { customMarkerDotBlack, customMarkerDotRed, customMarkerDotBlue, customMarkerDotGreen } from '../../constants/leaflet/markers';
 
 function SetViewOnClick({ coords }) {
   const map = useMap();
@@ -18,7 +20,10 @@ function SetViewOnClick({ coords }) {
 
 export default function Map({ coords }) {
   const { BaseLayer } = LayersControl;
+  const mapRef = React.useRef();
+  const markersArray = [customMarkerDotBlue, customMarkerDotRed, customMarkerDotGreen]
   const markers = React.useContext(MarkersContext);
+  const wellsData = React.useContext(DataContext);
 
   const LocationFinderDummy = () => {
     const map = useMapEvents({  //eslint-disable-line
@@ -35,9 +40,9 @@ export default function Map({ coords }) {
     return null;
   };
 
-  const epsgConvert = ({ x, y }) => {
-    const toProj = epsg['EPSG:4326'];
-    const fromProj = epsg['EPSG:2039'];
+  const epsgConvert = ({ x, y, toEpsg = 4326, fromEpsg = 2039 }) => {
+    const toProj = epsg[`EPSG:${toEpsg}`];
+    const fromProj = epsg[`EPSG:${fromEpsg}`];
     let coordinates = proj4(fromProj, toProj, [parseFloat(x), parseFloat(y)]);
     return coordinates;
   };
@@ -54,8 +59,10 @@ export default function Map({ coords }) {
 
   function ZoomIn() {
     const map = useMap();
-    if (markers.length > 0 && coords[0] !== 31.3) {
-      map.setView(coords, 11);
+    if (markers !== undefined) {
+      if (markers.length > 0 && coords[0] !== 31.3) {
+        map.setView(coords, 10);
+      }
     }
     return null;
   };
@@ -65,24 +72,41 @@ export default function Map({ coords }) {
       <MapContainer
         center={coords}
         minZoom={7}
+        zoom={7}
         maxZoom={18}
         scrollWheelZoom={true}
         doubleClickZoom={true}
         dragging={true}
+        ref={mapRef}
       >
         <Polygon positions={CreatePolygon()} />
         {coords[0] === 31.3 && coords[1] === 34.8 ? <SetViewOnClick coords={coords} /> : <ZoomIn />}
         <LocationFinderDummy />
 
-        {markers.map((marker, index) => {
-          return (
-            <Marker key={index} icon={customMarkerDot} position={epsgConvert({ x: marker.x, y: marker.y }).reverse()}>
-              <Popup>
-                <p>{marker.name}</p>
-              </Popup>
-            </Marker>
-          );
-        })}
+        {markers ?
+          markers.map((marker, index) => {
+            return (
+              <Marker key={index} icon={customMarkerDotBlack} position={epsgConvert({ x: marker.x, y: marker.y }).reverse()}>
+                <Popup>
+                  <p>{marker.name}</p>
+                </Popup>
+              </Marker>
+            );
+          }) :
+          <>
+            {wellsData ? Object.keys(wellsData).map((key, markerIndex) => {
+              return wellsData[key].map((well, index) => {
+                return (
+                  <Marker key={index} icon={markersArray[markerIndex]} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
+                    <Popup>
+                      <p>{well.name}</p>
+                    </Popup>
+                  </Marker>
+                );
+              })
+            }) : <></>}
+          </>
+        }
 
         <LayersControl>
           {maps.map((map, index) => {
@@ -92,13 +116,13 @@ export default function Map({ coords }) {
                   <TileLayer
                     className='TileLayer'
                     url={map.url}
-                    attribution={map.attribution}
+                    attribution={shortenString(map.attribution)}
                   />
                 </BaseLayer>);
-            } return <></>;
+            };
           })}
         </LayersControl>
       </MapContainer>
     </div >
   );
-}
+};
