@@ -15,11 +15,13 @@ export default function MyTreeView({ files, onClick }) {
             defaultEndIcon={<DescriptionIcon />}
             sx={{ height: '100%', flexGrow: 1, maxWidth: 250, overflowY: 'auto' }}
         >
-            {files !== undefined ? files.children.map((entry, index) => (
-                <TreeItem className={entry.name + " " + entry.type} key={`${entry.name}${index}`} onClick={onClick} nodeId={entry.name} label={formatName(entry.name)}>
-                    <TreeElement key={`${entry.name}${index}`} entry={entry} onClick={onClick} />
-                </TreeItem>
-            )) : <></>}
+            <TreeItem nodeId='root-node-item' label='All files'>
+                {files !== undefined ? files.children.map((entry, index) => (
+                    <TreeItem className={entry.name + " " + entry.type} key={`${entry.name}${index}`} onClick={onClick} nodeId={entry.name} label={formatName(entry.name)}>
+                        <TreeElement key={`${entry.name}${index}`} entry={entry} onClick={onClick} />
+                    </TreeItem>
+                )) : <></>}
+            </TreeItem>
         </TreeView>
     );
 };
@@ -36,7 +38,7 @@ function TreeElement({ entry, onClick }) {
                             : entry.type === 'file' && wellsData ?
                                 wellsData[entry.name.slice(entry.name.lastIndexOf('-') + 1, -4)].map((well) => {
                                     return (
-                                        <TreeItem key={well.name} nodeId={well.name} className='well' label={formatName(well.name)}>
+                                        <TreeItem key={well.name} nodeId={well.name} className={well.name + ' ' + 'well'} label={formatName(well.name)}>
                                         </TreeItem>
 
                                     );

@@ -53,16 +53,18 @@ function App() {
   };
 
   const getWellsData = (folderName = 'brur') => {
-    fieldsApiOBJ.getWellsData({ folderName: folderName })
-      .then((data) => {
-        if (data) {
-          setWellsData(data);
-          setMarkers(undefined);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (folderName !== '') {
+      fieldsApiOBJ.getWellsData({ folderName: folderName })
+        .then((data) => {
+          if (data) {
+            setWellsData(data);
+            setMarkers(undefined);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const onTreeItemClick = (event) => {
@@ -72,8 +74,10 @@ function App() {
     if (type === 'file') {
       getReservoir(pathFromName(name));
     } else {
-      if (name !== 'well') {
+      if (parentName !== "css-16alkdk-MuiTreeItem-root") {
         getWellsData(parentName !== undefined ? `${parentName}/${name}` : name);
+      } else {
+        getWellsData(parentName !== undefined ? name : '');
       }
     }
   };
@@ -94,7 +98,7 @@ function App() {
   // ???????????????????????????????????????????????????
 
   React.useEffect(() => {
-    getWellsData();
+    // getWellsData();
     getFileStructure();
   }, []); //eslint-disable-line
 

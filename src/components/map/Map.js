@@ -80,7 +80,7 @@ export default function Map({ coords }) {
         ref={mapRef}
       >
         <Polygon positions={CreatePolygon()} />
-        {coords[0] === 31.3 && coords[1] === 34.8 ? <SetViewOnClick coords={coords} /> : <ZoomIn />}
+        {coords[0] === 31.3 && coords[1] === 34.8 ? wellsData !== undefined ? <SetViewOnClick coords={coords} /> : <ZoomIn /> : <ZoomIn />}
         <LocationFinderDummy />
 
         {markers ?
