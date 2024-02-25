@@ -1,7 +1,19 @@
 .leaflet-container {
-  height: 800px;
-  width: 800px;
+  width: 850px;
+  height: 850px;
   border: 1px solid grey;
+}
+
+.icon-blue {
+  filter: invert(31%) sepia(84%) saturate(6015%) hue-rotate(215deg) brightness(90%) contrast(89%);
+}
+
+.icon-red {
+  filter: invert(31%) sepia(84%) saturate(6015%) hue-rotate(0deg) brightness(90%) contrast(89%);
+}
+
+.icon-green {
+  filter: invert(31%) sepia(84%) saturate(6015%) hue-rotate(100deg) brightness(90%) contrast(89%);
 }
 
 @media screen and (max-width: 1444px) {
@@ -20,14 +32,14 @@
 
 @media screen and (max-width: 1024px) {
   .leaflet-container {
-    height: 400px;
-    width: 400px;
+    height: 300px;
+    width: 300px;
   }
 }
 
 @media screen and (max-width: 768px) {
   .leaflet-container {
-    height: 250px;
-    width: 250px;
+    height: 200px;
+    width: 200px;
   }
 }

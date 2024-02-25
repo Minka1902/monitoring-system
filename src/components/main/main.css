@@ -13,6 +13,7 @@
     height: 100%;
     margin: 0;
     padding: 20px;
+    width: 600px;
 }
 
 #map {
@@ -20,7 +21,7 @@
 }
 
 .main__graph__container {
-    width: clamp(600px, 600px, 600px);
+    width: 100%;
     height: 250px;
     margin: 0 auto;
 }
@@ -31,7 +32,7 @@
     line-height: 40px;
     font-weight: 600;
     color: #035B1C;
-    width: 600px;
+    width: 100%;
     margin: 20px auto 0;
 }
 
@@ -42,3 +43,27 @@
 .main__well_survey {
     color: red;
 }
+
+@media screen and (min-width: 1024px) and (max-width:1540px) {
+    .main__secondary__container {
+        width: 500px;
+    }
+}
+
+
+@media screen and (min-width: 768px) and (max-width:1024px) {
+    .main__well__info {
+        font-size: 12px;
+        line-height: 26px;
+    }
+
+    .main__secondary__container {
+        width: 200px;
+    }
+
+    .main__graph__container {
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 768px) {}
