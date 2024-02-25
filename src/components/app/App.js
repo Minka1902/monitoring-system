@@ -52,12 +52,29 @@ function App() {
     }
   };
 
+  const mergeObjects = (object1, object2) => {
+    if (typeof object1 === 'object' && typeof object1 === 'object') {
+      const mergedObject = {};
+      for (const key in object1) {
+        if (object1.hasOwnProperty(key) && object2.hasOwnProperty(key)) {
+          mergedObject[key] = object1[key].concat(object2[key]);
+        }
+      }
+      return mergedObject;
+    }
+  };
+
   const getWellsData = (folderName = 'brur') => {
     if (folderName !== '') {
       fieldsApiOBJ.getWellsData({ folderName: folderName })
         .then((data) => {
           if (data) {
-            setWellsData(data);
+            if (typeof data === 'object' && data.length > 0) {
+              const obj = mergeObjects(data[0], data[1]);
+              setWellsData(obj);
+            } else {
+              setWellsData(data);
+            }
             setMarkers(undefined);
           }
         })
