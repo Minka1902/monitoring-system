@@ -18,8 +18,8 @@ function App() {
   // const safeDocument = typeof document !== 'undefined' ? document : {};
   // const html = safeDocument.documentElement;
   const [tree, setTree] = React.useState({ name: 'root', type: 'directory', children: [], });
-  const [markers, setMarkers] = React.useState([]);
-  const [wellsData, setWellsData] = React.useState();
+  const [markers, setMarkers] = React.useState(undefined);
+  const [wellsData, setWellsData] = React.useState(undefined);
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
@@ -38,34 +38,44 @@ function App() {
       });
   };
 
-  const getReservoir = (event) => {
-    if (event.target.innerText) {
-      const name = event.target.closest('li').classList[1].toLowerCase();
-      const path = pathFromName(name);
-      if (path.slice(path.length - 4) === '.csv') {
-        fieldsApiOBJ.getReservoir({ path: path })
-          .then((data) => {
-            if (data) {
-              setMarkers(data);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+  const getReservoir = (path) => {
+    if (path && path.slice(-4) === '.csv') {
+      fieldsApiOBJ.getReservoir({ path: path })
+        .then((data) => {
+          if (data) {
+            setMarkers(data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
-  const getWellsData = (event) => {
-    fieldsApiOBJ.getWellsData({ folderName: "brur" })
+  const getWellsData = (folderName = 'brur') => {
+    fieldsApiOBJ.getWellsData({ folderName: folderName })
       .then((data) => {
         if (data) {
           setWellsData(data);
+          setMarkers(undefined);
         }
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const onTreeItemClick = (event) => {
+    const type = event.target.closest('li').classList[2].toLowerCase();
+    const name = event.target.closest('li').classList[1].toLowerCase();
+    const parentName = event.target.closest('li').closest('ul').parentElement.classList[1];
+    if (type === 'file') {
+      getReservoir(pathFromName(name));
+    } else {
+      if (name !== 'well') {
+        getWellsData(parentName !== undefined ? `${parentName}/${name}` : name);
+      }
+    }
   };
 
   // ???????????????????????????????????????????????????
@@ -93,7 +103,7 @@ function App() {
       <DataContext.Provider value={wellsData}>
         <NavOverPage pages={pages} />
         <div className="tree-view__container">
-          <MyTreeView files={tree} onClick={getReservoir} />
+          <MyTreeView files={tree} onClick={onTreeItemClick} />
           <div className="tree-view__border" />
         </div>
 
