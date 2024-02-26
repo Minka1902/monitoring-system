@@ -12,6 +12,7 @@
     "ag-charts-react": "^9.0.1",
     "chart.js": "^4.4.1",
     "epsg": "^0.5.0",
+    "faker": "^5.5.3",
     "leaflet": "^1.9.4",
     "leaflet-topography": "^0.2.1",
     "proj4": "^2.10.0",
