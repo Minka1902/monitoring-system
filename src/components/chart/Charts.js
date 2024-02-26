@@ -1,12 +1,28 @@
 import React from "react";
 import Chart from 'chart.js/auto';      //eslint-disable-line
-import { Pie, Bar, Line } from "react-chartjs-2";
+import { Pie, Bar, Line, Bubble } from "react-chartjs-2";
+import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, } from 'chart.js';
 import 'ag-charts-enterprise';
 import { AgChartsReact } from 'ag-charts-react';
+import faker from 'faker';
 
 const defSubtitle = { text: 'Please pass a subtitle.', font: { size: 12, family: 'tahoma, Ariel, sans-serif', weight: 'normal', style: 'italic', }, color: '#000', padding: { top: 5, bottom: 5 } };
 const defTitle = { text: 'Please pass a title.', font: { size: 12, family: 'tahoma, Ariel, sans-serif', weight: 'normal', style: 'italic' }, color: '#00AAAA', padding: { top: 5, bottom: 5 } };
 export function PieChart({ chartData, title = defTitle, subtitle = defSubtitle, chartClass = 'chart-pie-container' }) {
+    const data = {
+        datasets: [
+            {
+                label: 'Red dataset',
+                data: Array.from({ length: 25 }, () => ({
+                    x: faker.datatype.number({ min: 176019, max: 177926 }),
+                    y: faker.datatype.number({ min: 546900, max: 548699 }),
+                    r: faker.datatype.number({ min: 5, max: 20 }),
+                })),
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            }
+        ]
+    };
+
     return (
         <div className={chartClass}>
             <h2 style={{ textAlign: "center" }}>Pie Chart</h2>
@@ -244,61 +260,40 @@ export const BulletChart = (data, title = 'Please pass a title.', subtitle) => {
     );
 };
 
-export const BubbleChart = (title, subtitle, data) => {
-    const [options,] = React.useState({
-        title: { text: title },
-        subtitle: { text: subtitle },
-        series: [
-            {
-                type: data.firstSet.type,
-                title: data.firstSet.title,
-                data: data.firstSet,
-                xKey: "height",
-                xName: "Height",
-                yKey: "weight",
-                yName: "Weight",
-                sizeKey: "age",
-                sizeName: "Age",
-            },
-            {
-                type: data.secondSet.type ? data.secondSet.title : '',
-                title: data.secondSet.title ? data.secondSet.title : '',
-                data: data.secondSet ? data.secondSet : null,
-                xKey: "height",
-                xName: "Height",
-                yKey: "weight",
-                yName: "Weight",
-                sizeKey: "age",
-                sizeName: "Age",
-            },
-        ],
-        axes: [
-            {
-                type: "number",
-                position: "bottom",
-                title: {
-                    text: "Height",
-                },
-                label: {
-                    formatter: (params) => {
-                        return params.value + "cm";
-                    },
-                },
-            },
-            {
-                type: "number",
-                position: "left",
-                title: {
-                    text: "Weight",
-                },
-                label: {
-                    formatter: (params) => {
-                        return params.value + "kg";
-                    },
-                },
-            },
-        ],
-    });
+export function BubbleChart({ chartData = undefined }) {
+    ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
-    return <AgChartsReact options={options} />;
-};
+    const options = {
+        scales: {
+            y: {
+                beginAtZero: false,
+            },
+        },
+    };
+
+    const data = {
+        datasets: [
+            {
+                label: 'Red dataset',
+                data: Array.from({ length: 25 }, () => ({
+                    x: faker.datatype.number({ min: 176019, max: 177926 }),
+                    y: faker.datatype.number({ min: 546900, max: 548699 }),
+                    r: faker.datatype.number({ min: 5, max: 20 }),
+                })),
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            // {
+            //     label: 'Blue dataset',
+            //     data: Array.from({ length: 25 }, () => ({
+            //         x: faker.datatype.number({ min: -100, max: 100 }),
+            //         y: faker.datatype.number({ min: -100, max: 100 }),
+            //         r: faker.datatype.number({ min: 5, max: 20 }),
+            //     })),
+            //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            // },
+        ],
+    };
+
+    return <Bubble options={options} data={chartData === undefined ? data : chartData} />;
+}
+
