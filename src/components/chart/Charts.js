@@ -229,6 +229,7 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
             ],
         },
     });
+    console.log(options);
 
     return <AgChartsReact options={options} />;
 };
@@ -295,5 +296,45 @@ export function BubbleChart({ chartData = undefined }) {
     };
 
     return <Bubble options={options} data={chartData === undefined ? data : chartData} />;
-}
+};
 
+export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+    const [options, setOptions] = React.useState({
+        title: {
+            text: "Return on investment",
+        },
+        data: data,
+        series: [
+            {
+                type: "area",
+                xKey: "month",
+                yKey: "subscriptions",
+                yName: "subscriptions",
+            },
+            {
+                type: "area",
+                xKey: "month",
+                yKey: "services",
+                yName: "services",
+            },
+            {
+                type: "area",
+                xKey: "month",
+                yKey: "products",
+                yName: "products",
+            },
+        ],
+        background: {
+            fill: backgroundColor,
+        },
+        contextMenu: {
+            enabled: typeof contextMenuAction === 'object' ? true : false,
+            extraActions: [
+                { label: 'Say hello', action: () => window.alert('Hello world') },
+            ],
+        },
+    });
+    console.log(options);
+
+    return <AgChartsReact options={options} />;
+};
