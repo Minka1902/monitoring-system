@@ -1,16 +1,18 @@
 import React from "react";
 import Map from '../map/Map';
 import MarkersContext from "../../contexts/MarkersContext";
+import GraphDataContext from "../../contexts/GraphDataContext";
 import DataContext from "../../contexts/DataContext";
 import { getRandomInt } from "../../constants/functions";
 import { MainLinesChart, AreaChart } from '../chart/Charts';
 import proj4 from 'proj4';
 import epsg from 'epsg';
 
-export default function Main({ rOIData, mainGraphData }) {
+export default function Main() {
     const [coords, setCoords] = React.useState([31.3, 34.8]);
     const markers = React.useContext(MarkersContext);
     const wellsData = React.useContext(DataContext);
+    const graphData = React.useContext(GraphDataContext);
 
     const calculateMarkersCenter = () => {
         let center = { x: 0, y: 0 };
@@ -47,19 +49,20 @@ export default function Main({ rOIData, mainGraphData }) {
             <div className="main__content__container">
                 <div className="main__left__container">
                     <Map coords={coords} calcCenter={calculateMarkersCenter} />
-                    <div className="main__resources_graph">
-                        {
-                            rOIData !== undefined ?
-                                <AreaChart data={rOIData} /> : <></>
-                        }
+                    <div className="main__resources_graph return_on_investment">
+                        {graphData && graphData.return_on_investment !== undefined ?
+                            <AreaChart data={graphData.return_on_investment} /> :
+                            <></>}
                         <br /><br /><br />
                         GIP/recoverable:<br />{getRandomInt(20, 250)}/{getRandomInt(20, 150)} MMcf<br /><br />
                         OIP/recoverable:<br />{getRandomInt(20, 250)}/{getRandomInt(20, 150)} MMbbl
                     </div>
                 </div>
                 <div className="main__right__container">
-                    <div className="main__graph__container">
-                        <MainLinesChart data={mainGraphData} />
+                    <div className="main__graph__container week_production">
+                        {graphData && graphData.week_production !== undefined ?
+                            <MainLinesChart data={graphData.week_production} /> :
+                            <></>}
                     </div>
                     <p className="main__well__info">
                         Wells in drilling - {wellsData && wellsData.drilling ? wellsData.drilling.length : 'Please click a field/reservoir'}<br />
