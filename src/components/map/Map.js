@@ -88,7 +88,13 @@ export default function Map({ coords }) {
             return (
               <Marker key={index} icon={customMarkerDotBlack} position={epsgConvert({ x: marker.x, y: marker.y }).reverse()}>
                 <Popup>
-                  <p>{marker.name}</p>
+                  {Object.keys(marker).map((prop, index) => {
+                    if (prop !== 'x' && prop !== 'y') {
+                      return (
+                        <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {marker[prop]}</p>
+                      );
+                    }
+                  })}
                 </Popup>
               </Marker>
             );
@@ -99,7 +105,13 @@ export default function Map({ coords }) {
                 return (
                   <Marker key={index} icon={markersArray[markerIndex]} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
                     <Popup>
-                      <p>{well.name}</p>
+                      {Object.keys(well).map((prop, index) => {
+                        if (prop !== 'x' && prop !== 'y') {
+                          return (
+                            <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {well[prop]}</p>
+                          );
+                        }
+                      })}
                     </Popup>
                   </Marker>
                 );
