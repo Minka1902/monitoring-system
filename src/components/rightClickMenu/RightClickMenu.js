@@ -19,6 +19,10 @@ export default function RightClickMenu({ items, isLoggedIn }) {
         while (element) {
             if ((element.classList.contains(filter)) || (element.id === filter)) {
                 return { found: true, id: element.id };
+            } else {
+                if (element.nodeName.toLowerCase() === filter) {
+                    return { found: true, evt };
+                }
             }
             if (element.nodeName === 'BODY') {
                 return { found: false };
