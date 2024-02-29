@@ -59,9 +59,9 @@ export default function Map({ coords }) {
 
   function ZoomIn() {
     const map = useMap();
-    if (markers !== undefined) {
-      if (markers.length > 0 && coords[0] !== 31.3) {
-        map.setView(coords, 10);
+    if (wellsData !== undefined) {
+      if (wellsData.length > 0 && coords[0] !== 31.3) {
+        map.setView(coords, 11);
       }
     }
     return null;
