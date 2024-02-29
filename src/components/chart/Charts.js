@@ -229,7 +229,6 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
             ],
         },
     });
-    console.log(options);
 
     return <AgChartsReact options={options} />;
 };
@@ -283,15 +282,6 @@ export function BubbleChart({ chartData = undefined }) {
                 })),
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
-            // {
-            //     label: 'Blue dataset',
-            //     data: Array.from({ length: 25 }, () => ({
-            //         x: faker.datatype.number({ min: -100, max: 100 }),
-            //         y: faker.datatype.number({ min: -100, max: 100 }),
-            //         r: faker.datatype.number({ min: 5, max: 20 }),
-            //     })),
-            //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            // },
         ],
     };
 
@@ -334,7 +324,6 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
             ],
         },
     });
-    console.log(options);
 
     return <AgChartsReact options={options} />;
 };
