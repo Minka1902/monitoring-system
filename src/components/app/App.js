@@ -1,8 +1,8 @@
 import React from "react";
 import MarkersContext from '../../contexts/MarkersContext';
 import DataContext from '../../contexts/DataContext';
+import GraphDataContext from '../../contexts/GraphDataContext';
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
-import faker from "faker";
 import { pages } from '../../constants/constants'
 import { pathFromName } from '../../constants/functions';
 import NavOverPage from "../navOverPage/NavOverPage";
@@ -21,13 +21,12 @@ function App() {
   const [tree, setTree] = React.useState({ name: 'root', type: 'directory', children: [], });
   const [markers, setMarkers] = React.useState(undefined);
   const [wellsData, setWellsData] = React.useState(undefined);
-  const [rOIData, setROIData] = React.useState(undefined);
+  const [graphData, setGraphData] = React.useState(undefined);
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!     RESERVOIR handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-
   const getFileStructure = () => {
     fieldsApiOBJ.getStructure()
       .then((data) => {
@@ -101,17 +100,22 @@ function App() {
     }
   };
 
-
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!     RESERVOIR handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-
   const getGraphData = (name) => {
     if (name) {
       fieldsApiOBJ.getGraphData({ fileName: name })
         .then((data) => {
           if (data) {
-            setROIData(data);
+            let temp = {};
+            temp[data.name] = data.value;
+            for (const prop in graphData) {
+              if (prop !== data.name) {
+                temp[prop] = graphData[prop];
+              }
+            }
+            setGraphData(temp);
           }
         })
         .catch((err) => {
@@ -122,70 +126,82 @@ function App() {
     }
   };
 
-  const createGraphData = (howMuchData) => {
-    let data = [];
-    for (let i = 0; i < howMuchData; i++) {
-      let obj = {};
-      obj.gas = faker.datatype.number(1500, 10000);
-      obj.oil = faker.datatype.number(900, 8000);
-      obj.water = faker.datatype.number(600, 6500);
-      obj.year = 2000 + i;
-      data[i] = obj;
+  const getPageGraphData = (page) => {
+    if (page) {
+      fieldsApiOBJ.getPageGraphData({ page })
+        .then((data) => {
+          if (data) {
+            setGraphData(data);
+          }
+        })
+        .catch((err) => {
+          if (err) {
+            console.log(err);
+          }
+        })
     }
-    return data;
   };
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const rightClickItems = [
-    { buttonText: 'sign out', buttonClicked: () => console.log('Right click'), filter: 'root', isAllowed: true },
-  ];
+  const handleRefreshClicked = (item) => {
+    if (item.evt.target.parentElement.parentElement.parentElement.classList.length > 0) {
+      const fileName = item.evt.target.parentElement.parentElement.parentElement.classList[1];
+      getGraphData(`${fileName}.csv`);
+    } else {
+      if (item.evt.target.parentElement.classList.length > 0) {
+        const fileName = item.evt.target.parentElement.classList[1];
+        getGraphData(`${fileName}.csv`);
+      }
+    }
+  };
 
-  React.useEffect(() => {
-    history.push('/main');
-  }, [])  //eslint-disable-line
+  const rightClickItems = [
+    { buttonText: 'refresh', buttonClicked: handleRefreshClicked, filter: 'canvas', isAllowed: true },
+  ];
 
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!!     INIT handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-
   React.useEffect(() => {
+    history.push('/main');
     getFileStructure();
-    getGraphData('return_on_investment.csv')
+    getPageGraphData('main');
   }, []); //eslint-disable-line
 
   return (
     <MarkersContext.Provider value={markers}>
       <DataContext.Provider value={wellsData}>
-        <NavOverPage pages={pages} />
-        <div className="tree-view__container">
-          <MyTreeView files={tree} onClick={onTreeItemClick} />
-          <div className="tree-view__border" />
-        </div>
+        <GraphDataContext.Provider value={graphData}>
+          <NavOverPage pages={pages} onClick={getPageGraphData} />
+          <div className="tree-view__container">
+            <MyTreeView files={tree} onClick={onTreeItemClick} />
+            <div className="tree-view__border" />
+          </div>
+          <Switch>
+            <Route path='/main'>
+              <Main />
+            </Route>
 
-        <Switch>
-          <Route path='/main'>
-            <Main rOIData={rOIData} mainGraphData={createGraphData(25)} />
-          </Route>
+            <Route path='/geology'>
+              <Geology />
+            </Route>
 
-          <Route path='/geology'>
-            <Geology />
-          </Route>
+            <Route path='/production'>
+              <Production />
+            </Route>
 
-          <Route path='/production'>
-            <Production />
-          </Route>
+            <Route path='/drilling'>
+              <Drilling />
+            </Route>
 
-          <Route path='/drilling'>
-            <Drilling />
-          </Route>
-
-          <Route path='/project-plan'>
-            <ProjectPlan />
-          </Route>
-        </Switch>
-        <RightClickMenu items={rightClickItems} isLoggedIn={true} />
+            <Route path='/project-plan'>
+              <ProjectPlan />
+            </Route>
+          </Switch>
+          <RightClickMenu items={rightClickItems} isLoggedIn={true} />
+        </GraphDataContext.Provider>
       </DataContext.Provider>
     </MarkersContext.Provider>
   );
