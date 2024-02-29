@@ -2,14 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import geomageLogo from '../../images/geomageLogo.png';
 
-export default function NavOverPage({ pages }) {
+export default function NavOverPage({ pages, onClick }) {
     const [currentPage, setCurrentPage] = React.useState('main');
 
     const onButtonClick = (evt) => {
         if (evt.target.innerHTML !== currentPage) {
             setCurrentPage(evt.target.innerHTML);
-        } else {
-
+            onClick(evt.target.innerHTML);
         }
     };
 
