@@ -1,6 +1,6 @@
 .projectPlan__content__container {
     height: 100%;
-    width: calc(100% - 200px);
+    width: 100%;
     margin: 0;
     padding: 45px 20px 20px 20px;
     box-sizing: border-box;
