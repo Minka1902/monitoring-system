@@ -16,7 +16,7 @@
 
 .projectPlan__time-bar {
     position: absolute;
-    top: 70px;
+    top: 85px;
     right: 5px;
 }
 
@@ -40,10 +40,22 @@
 
 
 .projectPlan__well__info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    font: Inter, Arial, Helvetica;
+    font-size: 24px;
+    line-height: 40px;
+    font-weight: 600;
+    color: #035B1C;
+    width: 100%;
+    margin: 20px auto 0;
     grid-area: d;
+}
+
+.projectPlan__well_other-ops {
+    font-weight: 400;
+}
+
+.projectPlan__well_survey {
+    color: red;
 }
 
 .projectPlan__status-table-container {
@@ -98,7 +110,8 @@
     }
 
     .projectPlan__resources-graph-container {
-        width: 100%;width: 445px;
+        width: 100%;
+        width: 445px;
     }
 
     .projectPlan__status-table-container {
