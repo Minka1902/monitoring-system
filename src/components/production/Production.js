@@ -10,13 +10,13 @@ export default function Production() {
                 <ProgressBar value={2015} maxValue={2024} minValue={1984} />
             </div>
             <div className="production__content__container">
-                <div className="production__daily-prod_graph">
+                <div className="production__daily-prod_graph daily_production">
                     <MainLinesChart />
                 </div>
                 <div className="production__well_stage">
                     <img className="production__well_stage-image" src={require('../../images/wellStage.png')} alt="asdasd" />
                 </div>
-                <div className="production__bubble-graph">
+                <div className="production__bubble-graph production_bubble">
                     <BubbleChart />
                     <div className="production__switch__container">
                         <ButtonToggle />
