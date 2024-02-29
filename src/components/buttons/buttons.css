@@ -4,8 +4,7 @@
     justify-content: space-between;
     background-color: transparent;
     padding: 8px;
-    transition: background-color 0.4s;
-    /* overflow: hidden; */
+    transition: background-color 0.3s;
 }
 
 .toggle-switch.checked {
@@ -44,8 +43,8 @@
     right: 0;
     bottom: 0;
     background-color: #8f8f8f;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
 }
 
 .slider:before {
@@ -58,8 +57,8 @@
     border-radius: 5px;
     background-color: #00e04c;
     border: 1px solid #009506;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
     -webkit-transition-timing-function: cubic-bezier(0.75, 0.02, 0.86, 1.31);
     transition-timing-function: cubic-bezier(0.75, 0.02, 3.86, 3.31);
     -webkit-transform-origin: bottom right;
