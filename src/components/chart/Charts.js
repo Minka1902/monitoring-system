@@ -171,7 +171,7 @@ export function BubbleChart({ chartData = undefined }) {
 };
 
 export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
-    const [options, setOptions] = React.useState({
+    const [options,] = React.useState({
         title: {
             text: "Return on investment",
         },

@@ -93,7 +93,7 @@ export default function Map({ coords }) {
                       return (
                         <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {marker[prop]}</p>
                       );
-                    }
+                    } return <></>;
                   })}
                 </Popup>
               </Marker>
@@ -110,7 +110,7 @@ export default function Map({ coords }) {
                           return (
                             <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {well[prop]}</p>
                           );
-                        }
+                        } return <></>;
                       })}
                     </Popup>
                   </Marker>
@@ -131,7 +131,7 @@ export default function Map({ coords }) {
                     attribution={shortenString(map.attribution)}
                   />
                 </BaseLayer>);
-            };
+            } return <></>;
           })}
         </LayersControl>
       </MapContainer>

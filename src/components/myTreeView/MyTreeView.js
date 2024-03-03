@@ -38,7 +38,7 @@ function TreeElement({ entry, onClick }) {
                             : entry.type === 'file' && wellsData ?
                                 wellsData[entry.name.slice(entry.name.lastIndexOf('-') + 1, -4)].map((well) => {
                                     return (
-                                        <TreeItem key={well.name} nodeId={well.name} className={well.name + ' ' + 'well'} label={formatName(well.name)}>
+                                        <TreeItem key={well.name} nodeId={well.name} className={well.name + ' well'} label={formatName(well.name)}>
                                         </TreeItem>
 
                                     );

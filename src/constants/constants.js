@@ -8,54 +8,6 @@ export const memoryUnits = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', '
 
 export const pages = ['main', 'geology', 'production', 'drilling', 'project-plan'];
 
-export const statusGraph = [
-    {
-        name: '1',
-        '2D': 0,
-        '3D': 0,
-        prod: 0,
-        explore: 0,
-    }, {
-        name: '2',
-        '2D': 30,
-        '3D': 0,
-        prod: 10,
-        explore: 0,
-    }, {
-        name: '3',
-        '2D': 60,
-        '3D': 0,
-        prod: 30,
-        explore: 0,
-    }, {
-        name: '4',
-        '2D': 90,
-        '3D': 75,
-        prod: 45,
-        explore: 17.5,
-    }, {
-        name: '5',
-        '2D': 120,
-        '3D': 75,
-        prod: 45,
-        explore: 35,
-    }, {
-        name: '6',
-    }, {
-        name: '7',
-    }, {
-        name: '8',
-    }, {
-        name: '9',
-    }, {
-        name: '10',
-    }, {
-        name: '11',
-    }, {
-        name: '12',
-    }
-];
-
 export const fieldsData = [
     { fieldName: 'Field 1', object: { objectName: 'Object 1', minBbl: 30 } },
     { fieldName: ' ', object: { objectName: 'Object 2', minBbl: 22 } },

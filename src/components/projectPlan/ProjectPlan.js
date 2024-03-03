@@ -3,7 +3,7 @@ import GraphDataContext from '../../contexts/GraphDataContext';
 import DataContext from "../../contexts/DataContext";
 import { LinesChart } from "../chart/Charts";
 import { TableStandard, TableProgress } from '../table/Table';
-import { statusGraph, fieldsData, statusTable } from "../../constants/constants";
+import { fieldsData, statusTable } from "../../constants/constants";
 import ProgressBar from '../progressBar/ProgressBar';
 
 export default function ProjectPlan() {
