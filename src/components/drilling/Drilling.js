@@ -1,7 +1,7 @@
 import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import { DrillingLinesChart, } from '../chart/Charts';
-import ButtonToggle from "../buttons/ButtonToggle";
+import ToggleSwitch from "../buttons/ButtonToggle";
 
 export default function Drilling() {
     const graphData = React.useContext(GraphDataContext);
@@ -43,7 +43,7 @@ export default function Drilling() {
                         <div className="drilling__3d__picture">
 
                         </div>
-                        <ButtonToggle states={['3D', 'Section']} onClick={toogle3D} />
+                        <ToggleSwitch states={['3D', 'Section']} onClick={toogle3D} />
                     </div>
                 </div>
                 <div className="drilling__content_right">
