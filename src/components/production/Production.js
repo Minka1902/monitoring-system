@@ -1,9 +1,12 @@
 import React from "react";
+import GraphDataContext from "../../contexts/GraphDataContext";
 import ProgressBar from '../progressBar/ProgressBar';
 import ButtonToggle from "../buttons/ButtonToggle";
-import { MainLinesChart, BubbleChart } from '../chart/Charts';
+import { ProductionLinesChart, BubbleChart } from '../chart/Charts';
 
 export default function Production() {
+    const graphData = React.useContext(GraphDataContext);
+
     return (
         <section id="Production">
             <div className="production__time-bar">
@@ -11,7 +14,9 @@ export default function Production() {
             </div>
             <div className="production__content__container">
                 <div className="production__daily-prod_graph daily_production">
-                    <MainLinesChart />
+                    {graphData && graphData.daily_production !== undefined ?
+                        <ProductionLinesChart data={graphData.daily_production} /> :
+                        <></>}
                 </div>
                 <div className="production__well_stage">
                     <img className="production__well_stage-image" src={require('../../images/wellStage.png')} alt="asdasd" />
