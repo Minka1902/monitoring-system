@@ -1,6 +1,34 @@
 .geology__content__container {
     height: 100%;
-    width: calc(100% - 200px);
+    width: 100%;
     margin: 0;
     padding: 20px;
+    box-sizing: border-box;
+}
+
+.geology__content_top {
+    height: 80%;
+    width: 100%;
+}
+
+.geology__button__container {
+    padding-top: calc(10% - 15px);
+    height: 20%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.geology__image {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+.geology__section2__container{
+    position: fixed;
+    top: 70%;
+    z-index: 2;
+    left: 75%;
+    width: 288px;
+    height: 237px;
 }
