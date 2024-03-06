@@ -1,7 +1,8 @@
 import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
-import { DrillingLinesChart, } from '../chart/Charts';
+import { DrillingLinesChart, DrillingLasChart } from '../chart/Charts';
 import ToggleSwitch from "../buttons/ButtonToggle";
+import Checkbox from "../buttons/Checkbox";
 
 export default function Drilling() {
     const graphData = React.useContext(GraphDataContext);
@@ -41,7 +42,7 @@ export default function Drilling() {
                     </div>
                     <div className="drilling__content_bottom">
                         <div className="drilling__3d__picture">
-
+                            
                         </div>
                         <ToggleSwitch states={['3D', 'Section']} onClick={toogle3D} />
                     </div>
@@ -53,11 +54,14 @@ export default function Drilling() {
                     </div>
                     <div className="drilling__content_bottom">
                         <div className="drilling__geo_stats las_doc">
-                            las graph
-                            {/* {graphData && graphData.las_doc
+                            {graphData && graphData.las_doc !== undefined
                                 ? <DrillingLasChart well={graphData.las_doc} />
                                 : <></>
-                            } */}
+                            }
+                            <div className="las_well" id="well_holder-curvebox_holder0"></div>
+                            <div className="las_well" id="well_holder-curvebox_holder1"></div>
+                            <div className="las_well" id="well_holder-curvebox_holder2"></div>
+                            <div className="las_well" id="well_holder-curvebox_holder3"></div>
                         </div>
                     </div>
                 </div>
