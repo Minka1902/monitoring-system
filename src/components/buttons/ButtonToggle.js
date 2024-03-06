@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function ToggleSwitch({ states = ['Current', 'Cumulative'], onClick = () => console.log('Toggle clicked') }) {
+export default function ToggleSwitch({ states = ['Current', 'Cumulative'], onClick = () => console.log('Toggle clicked'), name = 'toggle-switch' }) {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleToggle = (evt) => {
@@ -9,10 +9,10 @@ export default function ToggleSwitch({ states = ['Current', 'Cumulative'], onCli
     };
 
     return (
-        <div className={`toggle-switch ${isChecked ? 'checked' : ''}`}>
+        <div className={`toggle-switch${isChecked ? ' checked' : ''}`}>
             <span className="label-left">{states[0]}</span>
             <label className="switch" >
-                <input type="checkbox" checked={isChecked} onChange={handleToggle} />
+                <input type="checkbox" checked={isChecked} onChange={handleToggle} name={name} />
                 <span className="slider" onClick={handleToggle}></span>
             </label>
             <span className="label-right">{states[1]}</span>
