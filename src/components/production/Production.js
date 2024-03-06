@@ -1,7 +1,7 @@
 import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import ProgressBar from '../progressBar/ProgressBar';
-import ButtonToggle from "../buttons/ButtonToggle";
+import ToggleSwitch from "../buttons/ButtonToggle";
 import { ProductionLinesChart, BubbleChart } from '../chart/Charts';
 
 export default function Production() {
@@ -24,7 +24,7 @@ export default function Production() {
                 <div className="production__bubble-graph production_bubble">
                     <BubbleChart />
                     <div className="production__switch__container">
-                        <ButtonToggle />
+                        <ToggleSwitch />
                     </div>
                 </div>
                 <div className="production__another-graph">
