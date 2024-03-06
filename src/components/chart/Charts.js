@@ -5,6 +5,8 @@ import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, } from 'c
 import 'ag-charts-enterprise';
 import { AgChartsReact } from 'ag-charts-react';
 import faker from 'faker';
+import wellioviz from 'wellioviz';
+import { lasGraphTemplate } from '../../constants/chart';
 
 export function LinesChart({ data, backgroundColor = 'transparent' }) {
     const [options,] = React.useState({
@@ -324,37 +326,53 @@ export function DrillingLinesChart({ data, backgroundColor = '#fff9f0', contextM
     return <AgChartsReact options={options} />;
 };
 
-// export function DrillingLasChart2({ well_data }) {
-//     const well_json = wellio.las2json(well_data);
-//     const depth_curve_name = "DEPTH";
-//     const uwi2 = "00/01-01-073-05W5/0";
-//     const three_things_2 = wellioviz.fromJSONofWEllGetThingsForPlotting(well_json, depth_curve_name);
-//     const well_log_curves_reformatted_for_d3_2 = three_things_2["well_log_curves_reformatted_for_d3"];
-//     const curve_names2 = three_things_2["curve_names"];
-//     const example_template = wellioviz.curveBoxTemplateExamples("example");
-//     const poro_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(example_template, well_log_curves_reformatted_for_d3_2, [uwi2], ["PHID", "PHIN"], ["purple", "pink"], [""], [{
-//         "curve_name": "PHID",
-//         "fill": "yes",
-//         "fill_direction": "between",
-//         "cutoffs": [0],
-//         "fill_colors": ["lightblue"],
-//         "curve2": "PHIN"
-//     },
-//     {
-//         "curve_name": "PHID",
-//         "fill": "no",
-//         "fill_direction": "left",
-//         "cutoffs": [],
-//         "fill_colors": [],
-//         "curve2": ""
-//     }
-//     ], "well_holder_1C", 200, 400, "DEPTH");
-//     const resd_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(example_template, well_log_curves_reformatted_for_d3_2, [uwi2], ['RESD'], ["RED"], [""], [[
-//         { "curve_name": "RESD", "fill": "yes", "fill_direction": "left", "cutoffs": [0, 4, 25], "fill_colors": ["#ffe6e6", "#ffb3b3", "red"], "curve2": "" }]], "well_holder_1B", 200, 400, "DEPTH");
-//     const gr_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(example_template, well_log_curves_reformatted_for_d3_2, [uwi2], ["CAL"], ["black"], [""], [
-//         { "curve_name": "GR", "fill": "no", "fill_direction": "left", "cutoffs": [0, 4, 25], "fill_colors": ["gray", "orange", "yellow"], "curve2": "" }], "well_holder_1A", 200, 400, "DEPT");
-//     const gr_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(example_template, well_log_curves_reformatted_for_d3_2, [uwi2], ["GR"], ["black"], [""], [
-//         { "curve_name": "GR", "fill": "yes", "fill_direction": "left", "cutoffs": [0, 4, 25], "fill_colors": ["gray", "orange", "yellow"], "curve2": "" }], "well_holder_1A", 200, 400, "DEPTH")
-//     let result_1 = wellioviz.multipleLogPlot("well_holder", [gr_plot_template_noFill, gr_plot_template_1, resd_plot_template_1, poro_plot_template_1]);
-//     return result_1;
-// };
+export function DrillingLasChart({ well, depth_curve_name = "DEPT" }) {
+    if (well) {
+        const wellInfo = well['WELL INFORMATION BLOCK'];
+        const uwi2 = wellInfo.UWI.DATA === '' ? wellInfo.API.DATA === '' ? wellInfo.WELL.DATA : wellInfo.API.DATA : wellInfo.UWI.DATA;
+        const three_things_2 = wellioviz.fromJSONofWEllGetThingsForPlotting(well, depth_curve_name);
+        const curve_names2 = three_things_2["curve_names"];
+        const well_log_curves_reformatted_for_d3_2 = three_things_2["well_log_curves_reformatted_for_d3"];
+        const sp_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["SP"], ["black"], [""], [{
+            "curve_name": "SP",
+            "fill": "no",
+            "fill_direction": "left",
+            "cutoffs": [0],
+            "fill_colors": ["gray", "orange", "yellow"],
+            "curve2": ""
+        }], "well_holder_1A", 180, 700, depth_curve_name)
+        const ll3_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ['LL3'], ["RED"], [""], [{
+            "curve_name": "LL3",
+            "fill": "yes",
+            "fill_direction": "left",
+            "cutoffs": [5, 10, 25],
+            "fill_colors": ["#ffe6e6", "#ffb3b3", "red"],
+            "curve2": "LL3"
+        }], "well_holder_1B", 180, 700, depth_curve_name);
+        const poro_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1C' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["RILD", "RILM"], ["purple", "pink"], [""], [{
+            "curve_name": "RILD",
+            "fill": "yes",
+            "fill_direction": "between",
+            "cutoffs": [0],
+            "fill_colors": ["lightblue"],
+            "curve2": "RILD"
+        }, {
+            "curve_name": "RILM",
+            "fill": "no",
+            "fill_direction": "left",
+            "cutoffs": [],
+            "fill_colors": [],
+            "curve2": ""
+        }], "well_holder_1C", 180, 700, depth_curve_name);
+        const sp_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1A' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["SP"], ["black"], [""], [{
+            "curve_name": "SP",
+            "fill": "yes",
+            "fill_direction": "right",
+            "cutoffs": [0],
+            "fill_colors": ["yellow", "orange", "gray"],
+            "curve2": ""
+        }], "well_holder_1A", 180, 700, depth_curve_name);
+
+        const results = wellioviz.multipleLogPlot("well_holder-", [sp_plot_template_noFill, ll3_plot_template_1, poro_plot_template_1, sp_plot_template_1]);
+    }
+};
