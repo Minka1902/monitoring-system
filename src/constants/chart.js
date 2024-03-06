@@ -1,6 +1,4 @@
-import React from "react"
-
-export const lasGraphOptions = ({ graphId, title = '', height = 700, width = 200, grouped_or_independent = 'independent' }) => {
+export const lasGraphTemplate = ({ graphId, title = '', grouped_or_independent = 'independent' }) => {
     return [{
         "curve_box": {
             "show_well_name": "yes", /// not built yet
@@ -10,11 +8,11 @@ export const lasGraphOptions = ({ graphId, title = '', height = 700, width = 200
             "curve_box_depth_max": -999, /// not built yet
             "take_out_null_or_visualize": "no", /// not built yet
             "show_title": title === '' ? "no" : "yes",
-            "width": width,
-            "height": height,
-            "height_multiplier_components": 2,
-            "margin": { "top": 0, "right": 0, "bottom": 0, "left": 60 },
-            "title": { "text": title, "title_font_size": "12px" }, /// not built yet
+            "width": 200,
+            "height": 700,
+            "height_multiplier_components": 0.99,
+            "margin": { "top": 10, "right": 0, "bottom": 0, "left": 40 },
+            "title": { "text": title, "title_font_size": "10px" }, /// not built yet
             "div_id": graphId, /// Should be skip-able // default=random str? What happens if div doesn't exist?
             "order_of_component": ["curves", "rectanges", "lines"], /// not built yet
             "lines_connected_across_curveboxes": "no", /// not built yet
@@ -28,7 +26,7 @@ export const lasGraphOptions = ({ graphId, title = '', height = 700, width = 200
             "mouseover_yes_or_no": "yes", //// "yes" or "no"
             "mouseover_depth_or_depth_and_curve": "depth_and_curve", /// options= "depth_and_curve", "depth", or "curve"
             "mouseover_curvename": "default", //// default is first curve
-            "mouseover_color_or_default_which_is_curve_color": "green" /// default is default, which then uses curve color or black
+            "mouseover_color_or_default_which_is_curve_color": "default" /// default is default, which then uses curve color or black
         },
         "components": [{
             "curves": [
@@ -50,8 +48,8 @@ export const lasGraphOptions = ({ graphId, title = '', height = 700, width = 200
                         }
                     ],
                     "curve_units": ["g/cm3"],
-                    "depth_limits": [{ "min": "1100", "max": "1200" }],
-                    "curve_limits": [{ "curve_name": "LL3", "min": 0, "max": 6 }],
+                    "depth_limits": [{ "min": "autocalculate", "max": "autocalculate" }],
+                    "curve_limits": [{ "curve_name": "LL3", "min": 5, "max": 10 }],
                     "data": [{ "depth": 1598.3, "RHOB": 2.2322 }, {
                         "depth": 1598.4,
                         "RHOB": 2.0513
