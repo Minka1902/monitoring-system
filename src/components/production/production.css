@@ -53,6 +53,12 @@
     padding: 10px;
 }
 
+.production__bubble-graph__container {
+    background-image: url('../../images/bubbleMapMap.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .production__switch__container {
     margin: 25px auto;
     height: 100px;

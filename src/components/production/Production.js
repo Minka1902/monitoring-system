@@ -22,7 +22,9 @@ export default function Production() {
                     <img className="production__well_stage-image" src={require('../../images/wellStage.png')} alt="asdasd" />
                 </div>
                 <div className="production__bubble-graph production_bubble">
-                    <BubbleChart />
+                    <div className="production__bubble-graph__container">
+                        <BubbleChart />
+                    </div>
                     <div className="production__switch__container">
                         <ToggleSwitch />
                     </div>
