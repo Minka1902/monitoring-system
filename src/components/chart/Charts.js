@@ -144,7 +144,7 @@ export const BulletChart = (data, title = 'Please pass a title.', subtitle) => {
     );
 };
 
-export function BubbleChart({ chartData = undefined }) {
+export function BubbleChart({ chartData = undefined, bubbleColor = 'rgba(255, 99, 132, 0.7)' }) {
     ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
     const options = {
@@ -164,7 +164,7 @@ export function BubbleChart({ chartData = undefined }) {
                     y: faker.datatype.number({ min: 546900, max: 548699 }),
                     r: faker.datatype.number({ min: 5, max: 20 }),
                 })),
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                backgroundColor: bubbleColor,
             },
         ],
     };
