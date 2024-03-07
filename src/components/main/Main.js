@@ -1,5 +1,5 @@
 import React from "react";
-import Map from '../map/Map';
+import MainMap from '../map/MainMap';
 import MarkersContext from "../../contexts/MarkersContext";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import DataContext from "../../contexts/DataContext";
@@ -48,7 +48,7 @@ export default function Main() {
         <section id="main">
             <div className="main__content__container">
                 <div className="main__left__container">
-                    <Map coords={coords} calcCenter={calculateMarkersCenter} />
+                    <MainMap coords={coords} calcCenter={calculateMarkersCenter} />
                     <div className="main__resources_graph return_on_investment">
                         {graphData && graphData.return_on_investment !== undefined ?
                             <AreaChart data={graphData.return_on_investment} /> :
