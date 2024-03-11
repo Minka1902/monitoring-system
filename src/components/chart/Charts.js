@@ -364,7 +364,7 @@ export function DrillingLasChart({ well, depth_curve_name = "DEPT" }) {
         return (
             <>
                 {three_things_2["curve_names"].map((curveName, index) => {
-                    return curveName !== depth_curve_name ? <Checkbox text={curveName} key={index} /> : <></>
+                    return curveName !== depth_curve_name ? <Checkbox text={curveName} key={index} /> : ''
                 })}
             </>
         );
