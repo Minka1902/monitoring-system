@@ -11,11 +11,11 @@ export default function BubblePieChart({ well, myMap, tooltip__wrapper = 'toolti
                 zIndex: 1000,
             }}
         >
-            <PieChart width={20} height={20}>
+            <PieChart width={24} height={24}>
                 <Tooltip wrapperClassName={tooltip__wrapper} />
                 <Pie
                     data={well.data}
-                    outerRadius={10}
+                    outerRadius={12}
                     fill="#8884d8"
                     dataKey="value"
                 >
