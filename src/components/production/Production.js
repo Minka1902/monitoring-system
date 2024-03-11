@@ -2,7 +2,8 @@ import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import ProgressBar from '../progressBar/ProgressBar';
 import ToggleSwitch from "../buttons/ButtonToggle";
-import { ProductionLinesChart, BubbleChart } from '../chart/Charts';
+import { ProductionLinesChart } from '../chart/Charts';
+import MapWithOverlay from "../map/ProductionMap";
 
 export default function Production() {
     const graphData = React.useContext(GraphDataContext);
@@ -23,7 +24,7 @@ export default function Production() {
                 </div>
                 <div className="production__bubble-graph production_bubble">
                     <div className="production__bubble-graph__container">
-                        <BubbleChart />
+                        <MapWithOverlay />
                     </div>
                     <div className="production__switch__container">
                         <ToggleSwitch />
