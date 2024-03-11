@@ -2,13 +2,12 @@ import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import { DrillingLinesChart, DrillingLasChart } from '../chart/Charts';
 import ToggleSwitch from "../buttons/ButtonToggle";
-// import Checkbox from "../buttons/Checkbox";
 
 export default function Drilling() {
     const graphData = React.useContext(GraphDataContext);
     const [is3D, setIs3D] = React.useState(false);
 
-    const toogle3D = () => {
+    const toggle3D = () => {
         setIs3D(!is3D);
     };
 
@@ -42,9 +41,9 @@ export default function Drilling() {
                     </div>
                     <div className="drilling__content_bottom">
                         <div className="drilling__3d__picture">
-                            
+
                         </div>
-                        <ToggleSwitch states={['3D', 'Section']} onClick={toogle3D} />
+                        <ToggleSwitch states={['3D', 'Section']} onClick={toggle3D} />
                     </div>
                 </div>
                 <div className="drilling__content_right">
@@ -54,14 +53,18 @@ export default function Drilling() {
                     </div>
                     <div className="drilling__content_bottom">
                         <div className="drilling__geo_stats las_doc">
-                            {graphData && graphData.las_doc !== undefined
-                                ? <DrillingLasChart well={graphData.las_doc} />
-                                : <></>
-                            }
-                            <div className="las_well" id="well_holder-curvebox_holder0"></div>
-                            <div className="las_well" id="well_holder-curvebox_holder1"></div>
-                            <div className="las_well" id="well_holder-curvebox_holder2"></div>
-                            <div className="las_well" id="well_holder-curvebox_holder3"></div>
+                            <div className="drilling__geo_stats__container">
+                                <div className="las_well" id="well_holder-curvebox_holder0"></div>
+                                <div className="las_well" id="well_holder-curvebox_holder1"></div>
+                                <div className="las_well" id="well_holder-curvebox_holder2"></div>
+                                <div className="las_well" id="well_holder-curvebox_holder3"></div>
+                            </div>
+                            <div className="drilling__curve_names">
+                                {graphData && graphData.las_doc !== undefined
+                                    ? <DrillingLasChart well={graphData.las_doc} />
+                                    : <></>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
