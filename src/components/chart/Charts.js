@@ -220,13 +220,13 @@ export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contex
             {
                 type: 'line',
                 xKey: 'x',
-                yKey: 'y',
+                yKey: 'y1',
                 yName: 'gas',
             },
             {
                 type: 'line',
                 xKey: 'x',
-                yKey: 'y',
+                yKey: 'y2',
                 yName: 'oil',
             }
         ],
