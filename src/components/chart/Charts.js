@@ -1,10 +1,6 @@
 import React from "react";
-import Chart from 'chart.js/auto';      //eslint-disable-line
-import { Bubble } from "react-chartjs-2";
-import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, } from 'chart.js';
 import 'ag-charts-enterprise';
 import { AgChartsReact } from 'ag-charts-react';
-import faker from 'faker';
 import wellioviz from 'wellioviz';
 import { lasGraphTemplate } from '../../constants/chart';
 
@@ -117,61 +113,6 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
     return <AgChartsReact options={options} />;
 };
 
-export const BulletChart = (data, title = 'Please pass a title.', subtitle) => {
-    const [options,] = React.useState({
-        title: { text: title },
-        subtitle: { text: subtitle },
-        data: data,
-        series: [
-            {
-                type: 'bullet',
-                direction: 'horizontal',
-                valueKey: 'income2',
-                valueName: 'Actual income',
-                targetKey: 'objective',
-                targetName: 'Target income',
-                scale: { max: 2024, min: 1500 },
-            },
-        ],
-        background: {
-            visible: false,
-        },
-        height: 140,
-    });
-
-    return (
-        <AgChartsReact options={options} />
-    );
-};
-
-export function BubbleChart({ chartData = undefined, bubbleColor = 'rgba(255, 99, 132, 0.7)' }) {
-    ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
-
-    const options = {
-        scales: {
-            y: {
-                beginAtZero: false,
-            },
-        },
-    };
-
-    const data = {
-        datasets: [
-            {
-                label: 'Red dataset',
-                data: Array.from({ length: 25 }, () => ({
-                    x: faker.datatype.number({ min: 176019, max: 177926 }),
-                    y: faker.datatype.number({ min: 546900, max: 548699 }),
-                    r: faker.datatype.number({ min: 5, max: 20 }),
-                })),
-                backgroundColor: bubbleColor,
-            },
-        ],
-    };
-
-    return <Bubble options={options} data={chartData === undefined ? data : chartData} />;
-};
-
 export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
     const [options,] = React.useState({
         title: {
@@ -229,6 +170,51 @@ export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contex
                 yKey: 'y2',
                 yName: 'oil',
             }
+        ],
+        background: {
+            fill: backgroundColor,
+        },
+        contextMenu: {
+            enabled: typeof contextMenuAction === 'object' ? true : false,
+            extraActions: [
+                { label: 'Say hello', action: () => window.alert('Hello world') },
+            ],
+        },
+        theme: {
+            overrides: {
+                line: {
+                    series: {
+                        highlightStyle: {
+                            series: {
+                                dimOpacity: 0.2,
+                                strokeWidth: 4,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return <AgChartsReact options={options} />;
+};
+
+export function ProductionChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+    const [options,] = React.useState({
+        data: data,
+        series: [
+            {
+                type: 'line',
+                xKey: 'x',
+                yKey: 'y',
+                yName: 'WHP',
+            },
+            {
+                type: 'line',
+                xKey: 'x',
+                yKey: 'y2',
+                yName: 'Oil Rate',
+            },
         ],
         background: {
             fill: backgroundColor,
