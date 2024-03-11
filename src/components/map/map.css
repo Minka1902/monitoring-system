@@ -16,6 +16,13 @@
   filter: invert(31%) sepia(84%) saturate(6015%) hue-rotate(100deg) brightness(90%) contrast(89%);
 }
 
+.tooltip__wrapper {
+  position: relative;
+  bottom: 60px;
+  text-transform: capitalize;
+  font-size: 14px;
+}
+
 @media screen and (max-width: 1444px) {
   .leaflet-container {
     height: 600px;
