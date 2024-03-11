@@ -2,7 +2,7 @@ import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import ProgressBar from '../progressBar/ProgressBar';
 import ToggleSwitch from "../buttons/ButtonToggle";
-import { ProductionLinesChart } from '../chart/Charts';
+import { ProductionLinesChart, ProductionChart } from '../chart/Charts';
 import MapWithOverlay from "../map/ProductionMap";
 
 export default function Production() {
@@ -30,8 +30,10 @@ export default function Production() {
                         <ToggleSwitch />
                     </div>
                 </div>
-                <div className="production__another-graph">
-                    Unknown graph
+                <div className="production__another-graph i_dont_know">
+                    {graphData && graphData.i_dont_know !== undefined ?
+                        <ProductionChart data={graphData.i_dont_know} /> :
+                        <></>}
                 </div>
             </div>
         </section>
