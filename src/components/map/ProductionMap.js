@@ -36,7 +36,7 @@ const MapWithOverlay = () => {
     ]);
 
     const LocationFinderDummy = () => {
-        const map = useMapEvents({
+        const map = useMapEvents({ // eslint-disable-line
             move() {
                 const map = mapRef.current;
                 if (map) {

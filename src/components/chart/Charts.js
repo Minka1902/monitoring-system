@@ -331,7 +331,7 @@ export function DrillingLasChart({ well, depth_curve_name = "DEPT" }) {
         const wellInfo = well['WELL INFORMATION BLOCK'];
         const uwi2 = wellInfo.UWI.DATA === '' ? wellInfo.API.DATA === '' ? wellInfo.WELL.DATA : wellInfo.API.DATA : wellInfo.UWI.DATA;
         const three_things_2 = wellioviz.fromJSONofWEllGetThingsForPlotting(well, depth_curve_name);
-        const curve_names2 = three_things_2["curve_names"];
+        // const curve_names2 = three_things_2["curve_names"];
         const well_log_curves_reformatted_for_d3_2 = three_things_2["well_log_curves_reformatted_for_d3"];
         const sp_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["SP"], ["black"], [""], [{
             "curve_name": "SP",
@@ -372,7 +372,7 @@ export function DrillingLasChart({ well, depth_curve_name = "DEPT" }) {
             "fill_colors": ["yellow", "orange", "gray"],
             "curve2": ""
         }], "well_holder_1A", 180, 700, depth_curve_name);
-
+        // eslint-disable-next-line
         const results = wellioviz.multipleLogPlot("well_holder-", [sp_plot_template_noFill, ll3_plot_template_1, poro_plot_template_1, sp_plot_template_1]);
     }
 };

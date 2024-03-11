@@ -2,7 +2,7 @@ import React from "react";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import { DrillingLinesChart, DrillingLasChart } from '../chart/Charts';
 import ToggleSwitch from "../buttons/ButtonToggle";
-import Checkbox from "../buttons/Checkbox";
+// import Checkbox from "../buttons/Checkbox";
 
 export default function Drilling() {
     const graphData = React.useContext(GraphDataContext);
