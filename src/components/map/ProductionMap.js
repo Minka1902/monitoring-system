@@ -1,41 +1,22 @@
 import 'regenerator-runtime';
 import 'leaflet/dist/leaflet.css';
+import epsg from 'epsg';
+import proj4 from 'proj4';
 import BubblePieChart from '../chart/BubblePieChart';
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import React from 'react';
+import MarkersContext from "../../contexts/MarkersContext";
+import DataContext from "../../contexts/DataContext";
 
 const MapWithOverlay = () => {
     const mapRef = React.useRef();
-    const center = { lat: 31.9, lng: 35, };
+    const markers = React.useContext(MarkersContext);
+    const wellsData = React.useContext(DataContext);
+    const center = { lat: 31.9, lng: 35 };
     const [tempChartData, setTempChartData] = React.useState(undefined);
-    const [chartData, setChartData] = React.useState([
-        {
-            name: 'well1',
-            data: [{ name: 'water', value: 50, fill: 'blue' }, { name: 'oil', value: 27, fill: 'black' }, { name: 'gas', value: 23, fill: 'gray' }],
-            location: { lat: 31.9, lng: 35 },
-            divPoint: { x: 100, y: 20 },
-        },
-        {
-            name: 'well2',
-            data: [{ name: 'water', value: 30, fill: 'blue' }, { name: 'oil', value: 40, fill: 'black' }, { name: 'gas', value: 30, fill: 'gray' }],
-            location: { lat: 31.89, lng: 35 },
-            divPoint: { x: 150, y: 20 },
-        },
-        {
-            name: 'well3',
-            data: [{ name: 'water', value: 30, fill: 'blue' }, { name: 'oil', value: 40, fill: 'black' }, { name: 'gas', value: 30, fill: 'gray' }],
-            location: { lat: 31.9, lng: 35.01 },
-            divPoint: { x: 150, y: 20 },
-        },
-        {
-            name: 'well4',
-            data: [{ name: 'water', value: 30, fill: 'blue' }, { name: 'oil', value: 40, fill: 'black' }, { name: 'gas', value: 30, fill: 'gray' }],
-            location: { lat: 31.89, lng: 35.01 },
-            divPoint: { x: 150, y: 20 },
-        },
-    ]);
+    const [chartData, setChartData] = React.useState([]);
 
-    const LocationFinderDummy = () => {
+    const LocationFinder = () => {
         const map = useMapEvents({ // eslint-disable-line
             move() {
                 const map = mapRef.current;
@@ -74,14 +55,43 @@ const MapWithOverlay = () => {
         return null;
     };
 
+    const epsgConvert = ({ x, y, toEpsg = 4326, fromEpsg = 2039 }) => {
+        const toProj = epsg[`EPSG:${toEpsg}`];
+        const fromProj = epsg[`EPSG:${fromEpsg}`];
+        let coordinates = proj4(fromProj, toProj, [parseFloat(x), parseFloat(y)]);
+        return { lat: parseFloat(coordinates[1].toFixed(5)), lng: parseFloat(coordinates[0].toFixed(5)) };
+    };
+
+    const createData = (wells) => {
+        let newData = [];
+        for (let i = 0; i < wells.length; i++) {
+            const coordinates = epsgConvert({ x: wells[i].x, y: wells[i].y })
+            const data = [{ name: 'water', value: parseFloat(wells[i].water), fill: 'blue' }, { name: 'oil', value: parseFloat(wells[i].oil), fill: 'black' }, { name: 'gas', value: parseFloat(wells[i].gas), fill: 'gray' }];
+            const tempD = { name: wells[i].name, location: coordinates, divPoint: { x: 100, y: 100 }, data };
+            newData[i] = tempD;
+        }
+        return newData;
+    };
+
+    React.useEffect(() => {
+        if (markers && markers[0].oil) {
+            createData(markers);
+        } else {
+            if (wellsData && wellsData.production[0].oil) {
+                const asd = createData(wellsData.production);
+                setChartData(asd);
+            }
+        }
+    }, [markers, wellsData]);
+
     return (
-        <MapContainer center={center} zoom={13} ref={mapRef} style={{ height: '500px', width: '100%' }} inertia={true}>
+        <MapContainer center={center} zoom={7} ref={mapRef} style={{ height: '500px', width: '100%' }} inertia={true}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
-            <LocationFinderDummy />
+            <LocationFinder />
 
             {chartData !== undefined && chartData.map((well, index) => (
                 <BubblePieChart
