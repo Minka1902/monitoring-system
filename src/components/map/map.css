@@ -21,6 +21,13 @@
   bottom: 60px;
   text-transform: capitalize;
   font-size: 14px;
+  display: flex;
+  flex-direction: row;
+}
+
+.tooltip__wrapper::after {
+  content: '\00a0' 'bbl';
+  margin-top: 5px;
 }
 
 @media screen and (max-width: 1444px) {
