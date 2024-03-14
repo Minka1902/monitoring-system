@@ -46,10 +46,12 @@ export default function Main() {
         if (dataKeys.length >= 1) {
             let tempArr = [];
             for (let k = 0; k < dataKeys.length; k++) {
-                for (let i = fromIndex; i < toIndex; i++) {
-                    tempArr[i - fromIndex] = { day: i + 1, oil: data[dataKeys[k]][i].oil, gas: data[dataKeys[k]][i].gas, water: data[dataKeys[k]][i].water };
+                if (data[dataKeys[k]] !== "File not found.") {
+                    for (let i = fromIndex; i < toIndex; i++) {
+                        tempArr[i - fromIndex] = { day: i + 1, oil: data[dataKeys[k]][i].oil, gas: data[dataKeys[k]][i].gas, water: data[dataKeys[k]][i].water };
+                    }
+                    arraysObject[dataKeys[k]] = tempArr;
                 }
-                arraysObject[dataKeys[k]] = tempArr;
             }
         }
         return averageOfArrays(arraysObject);
