@@ -376,3 +376,21 @@ export const getRandomInt = (min = 0, max) => {
     }
     return randomNumber;
 };
+
+// ! 	gets a node tree and a node name
+// TODO findNodePathByName(nodeTree, 'nodeName')
+// ?  	['path', 'from', 'tree', 'root']
+export const findNodePathByName = (tree, nodeName, currentPath = []) => {
+    if (tree.name === nodeName) {
+        return [...currentPath, tree.name];
+    }
+    if (tree.children) {
+        for (const child of tree.children) {
+            const newPath = findNodePathByName(child, nodeName, [...currentPath, tree.name]);
+            if (newPath) {
+                return newPath;
+            }
+        }
+    }
+    return null;
+};
