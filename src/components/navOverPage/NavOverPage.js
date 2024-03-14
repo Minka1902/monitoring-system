@@ -5,7 +5,7 @@ import geomageLogo from '../../images/geomageLogo.png';
 export default function NavOverPage({ pages, onClick }) {
     const history = useHistory();
     const [currentPage, setCurrentPage] = React.useState(history.location.pathname.slice(1, history.location.pathname.length) || 'main');
-    const pageResourcesNeeded = { main: ['polygons'], production: ['prod_300'], drilling: [''], "project-plan": [''] };
+    const pageResourcesNeeded = { main: ['polygons', 'prod_300'], production: ['prod_300'], drilling: [''], "project-plan": [''] };
 
     const onButtonClick = (evt) => {
         if (evt.target.innerHTML !== currentPage) {
