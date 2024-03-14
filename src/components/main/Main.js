@@ -1,6 +1,7 @@
 import React from "react";
 import MainMap from '../map/MainMap';
 import MarkersContext from "../../contexts/MarkersContext";
+import PageDataContext from "../../contexts/PageDataContext";
 import GraphDataContext from "../../contexts/GraphDataContext";
 import DataContext from "../../contexts/DataContext";
 import { getRandomInt } from "../../constants/functions";
@@ -13,6 +14,7 @@ export default function Main() {
     const markers = React.useContext(MarkersContext);
     const wellsData = React.useContext(DataContext);
     const graphData = React.useContext(GraphDataContext);
+    const pageData = React.useContext(PageDataContext);
 
     const calculateMarkersCenter = () => {
         let center = { x: 0, y: 0 };
@@ -28,13 +30,53 @@ export default function Main() {
         setCoords(coordinates);
     };
 
-    const returnAvgProduction = () => {
+    const calcAvgProduction = () => {
         if (wellsData) {
             let total = 0;
             for (let i = 0; i < wellsData.production.length; i++) {
-                total += parseFloat(wellsData.production[i].avgProd);
+                total += parseFloat(wellsData.production[i].oil ? wellsData.production[i].oil : 0);
             }
-            return total / wellsData.production.length;
+            return parseInt(total / wellsData.production.length);
+        }
+    };
+
+    const prepData = (data, fromIndex = 0, toIndex = 10) => {
+        const dataKeys = Object.keys(data);
+        let arraysObject = {};
+        if (dataKeys.length >= 1) {
+            let tempArr = [];
+            for (let k = 0; k < dataKeys.length; k++) {
+                for (let i = fromIndex; i < toIndex; i++) {
+                    tempArr[i - fromIndex] = { day: i + 1, oil: data[dataKeys[k]][i].oil, gas: data[dataKeys[k]][i].gas, water: data[dataKeys[k]][i].water };
+                }
+                arraysObject[dataKeys[k]] = tempArr;
+            }
+        }
+        return averageOfArrays(arraysObject);
+    };
+
+    const averageOfArrays = (objectOfArrays) => {
+        const wellNames = Object.keys(objectOfArrays);
+        if (wellNames.length === 1) {
+            let averagedArray = [];
+            for (let i = 0; i < objectOfArrays[wellNames[0]].length; i++) {
+                averagedArray[i] = { day: 0, oil: 0, water: 0, gas: 0 };
+            }
+            for (let i = 0; i < wellNames.length; i++) {
+                for (let j = 0; j < objectOfArrays[wellNames[i]].length; j++) {
+                    for (const prop in objectOfArrays[wellNames[i]][j]) {
+                        averagedArray[j][prop] += objectOfArrays[wellNames[i]][j][prop];
+                    }
+                }
+            }
+            for (let i = 0; i < averagedArray.length; i++) {
+                for (const prop in averagedArray[i]) {
+                    averagedArray[i][prop] = averagedArray[i][prop] / wellNames.length
+                }
+            }
+            return averagedArray;
+        } else {
+            return objectOfArrays[wellNames[0]];
         }
     };
 
@@ -48,7 +90,7 @@ export default function Main() {
         <section id="main">
             <div className="main__content__container">
                 <div className="main__left__container">
-                    <MainMap coords={coords} calcCenter={calculateMarkersCenter} />
+                    <MainMap coords={coords} calcCenter={calculateMarkersCenter} polygons={pageData && pageData.polygons} />
                     <div className="main__resources_graph return_on_investment">
                         {graphData && graphData.return_on_investment !== undefined ?
                             <AreaChart data={graphData.return_on_investment} /> :
@@ -59,15 +101,15 @@ export default function Main() {
                     </div>
                 </div>
                 <div className="main__right__container">
-                    <div className="main__graph__container week_production">
-                        {graphData && graphData.week_production !== undefined ?
-                            <MainLinesChart data={graphData.week_production} /> :
+                    <div className="main__graph__container prod_300">
+                        {pageData && pageData.prod_300 !== undefined ?
+                            <MainLinesChart data={prepData(pageData.prod_300)} /> :
                             <></>}
                     </div>
                     <p className="main__well__info">
                         Wells in drilling - {wellsData && wellsData.drilling ? wellsData.drilling.length : 'Please click a field/reservoir'}<br />
                         Wells in production - {wellsData && wellsData.production && wellsData.production !== undefined ? wellsData.production.length : 'Please click a field/reservoir'}<br />
-                        Average production - {wellsData && wellsData.production && wellsData.production ? returnAvgProduction() : 'Please click a field/reservoir'} bbl/day<br />
+                        Average production - {wellsData && wellsData.production && wellsData.production ? calcAvgProduction() : 'Please click a field/reservoir'}~ bbl/day<br />
                         <span className="main__well_other-ops">
                             Other operations:<br />
                         </span>
