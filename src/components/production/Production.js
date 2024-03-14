@@ -16,10 +16,12 @@ export default function Production() {
         if (dataKeys.length >= 1) {
             let tempArr = [];
             for (let k = 0; k < dataKeys.length; k++) {
-                for (let i = fromIndex; i < toIndex; i++) {
-                    tempArr[i - fromIndex] = { day: i + 1, fluids: sumOfArray(createArray(data[dataKeys[k]], propName, i)), water: data[dataKeys[k]][i].water };
+                if (data[dataKeys[k]] !== "File not found.") {
+                    for (let i = fromIndex; i < toIndex; i++) {
+                        tempArr[i - fromIndex] = { day: i + 1, fluids: sumOfArray(createArray(data[dataKeys[k]], propName, i)), water: data[dataKeys[k]][i].water };
+                    }
+                    arraysObject[dataKeys[k]] = tempArr;
                 }
-                arraysObject[dataKeys[k]] = tempArr;
             }
         }
         return averageOfArrays(arraysObject);
