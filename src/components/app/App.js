@@ -2,9 +2,10 @@ import React from "react";
 import MarkersContext from '../../contexts/MarkersContext';
 import DataContext from '../../contexts/DataContext';
 import GraphDataContext from '../../contexts/GraphDataContext';
+import PageDataContext from "../../contexts/PageDataContext";
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import { pages } from '../../constants/constants'
-import { pathFromName } from '../../constants/functions';
+import { pathFromName, findNodePathByName } from '../../constants/functions';
 import NavOverPage from "../navOverPage/NavOverPage";
 import MyTreeView from "../myTreeView/MyTreeView";
 import Main from "../main/Main";
@@ -14,6 +15,7 @@ import Drilling from "../drilling/Drilling";
 import ProjectPlan from "../projectPlan/ProjectPlan";
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
 import fieldsApiOBJ from "../../utils/fieldsAPI";
+import dataApiOBJ from "../../utils/dataApi";
 
 function App() {
   // const safeDocument = typeof document !== 'undefined' ? document : {};
@@ -22,10 +24,11 @@ function App() {
   const [markers, setMarkers] = React.useState(undefined);
   const [wellsData, setWellsData] = React.useState(undefined);
   const [graphData, setGraphData] = React.useState(undefined);
+  const [pageData, setPageData] = React.useState(undefined);
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
-  // !!!!!!!!!!!     RESERVOIR handling     !!!!!!!!!!!!
+  // !!!!!!!!!!!     STRUCTURE handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
   const getFileStructure = () => {
     fieldsApiOBJ.getStructure()
@@ -39,6 +42,9 @@ function App() {
       });
   };
 
+  // ???????????????????????????????????????????????????
+  // !!!!!!!!!!!     RESERVOIR handling     !!!!!!!!!!!!
+  // ???????????????????????????????????????????????????
   const getReservoir = (path) => {
     if (path && path.slice(-4) === '.csv') {
       fieldsApiOBJ.getReservoir({ path: path })
@@ -89,6 +95,7 @@ function App() {
     const type = event.target.closest('li').classList[2].toLowerCase();
     const name = event.target.closest('li').classList[1].toLowerCase();
     const parentName = event.target.closest('li').closest('ul').parentElement.classList[1];
+    // const pathToNode = findNodePathByName(tree, name.toUpperCase());
     if (type === 'file') {
       getReservoir(pathFromName(name));
     } else {
@@ -126,7 +133,7 @@ function App() {
     }
   };
 
-  const getPageGraphData = (page) => {
+  const getPageGraphData = (page, array) => {
     if (page) {
       fieldsApiOBJ.getPageGraphData({ page })
         .then((data) => {
@@ -139,6 +146,17 @@ function App() {
             console.log(err);
           }
         })
+
+      dataApiOBJ.initPage({ dataNames: array, wellNames: ['HELETZ_1', 'heletz1'] })
+        .then((data) => {
+          if (data) {
+            setPageData(data);
+          }
+        }).catch((err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
     }
   };
 
@@ -170,37 +188,52 @@ function App() {
     getPageGraphData('main');
   }, []); //eslint-disable-line
 
+  React.useEffect(() => {
+    dataApiOBJ.initPage({ dataNames: ['polygons'], wellNames: ['HELETZ_1', 'asd_1'] })
+      .then((data) => {
+        if (data) {
+          setPageData(data);
+        }
+      }).catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+  }, []); //eslint-disable-line
+
   return (
     <MarkersContext.Provider value={markers}>
       <DataContext.Provider value={wellsData}>
         <GraphDataContext.Provider value={graphData}>
-          <NavOverPage pages={pages} onClick={getPageGraphData} />
-          <div className="tree-view__container">
-            <MyTreeView files={tree} onClick={onTreeItemClick} />
-            <div className="tree-view__border" />
-          </div>
-          <Switch>
-            <Route path='/main'>
-              <Main />
-            </Route>
+          <PageDataContext.Provider value={pageData}>
+            <NavOverPage pages={pages} onClick={getPageGraphData} />
+            <div className="tree-view__container">
+              <MyTreeView files={tree} onClick={onTreeItemClick} />
+              <div className="tree-view__border" />
+            </div>
+            <Switch>
+              <Route path='/main'>
+                <Main />
+              </Route>
 
-            <Route path='/geology'>
-              <Geology />
-            </Route>
+              <Route path='/geology'>
+                <Geology />
+              </Route>
 
-            <Route path='/production'>
-              <Production />
-            </Route>
+              <Route path='/production'>
+                <Production />
+              </Route>
 
-            <Route path='/drilling'>
-              <Drilling />
-            </Route>
+              <Route path='/drilling'>
+                <Drilling />
+              </Route>
 
-            <Route path='/project-plan'>
-              <ProjectPlan />
-            </Route>
-          </Switch>
-          <RightClickMenu items={rightClickItems} isLoggedIn={true} />
+              <Route path='/project-plan'>
+                <ProjectPlan />
+              </Route>
+            </Switch>
+            <RightClickMenu items={rightClickItems} isLoggedIn={true} />
+          </PageDataContext.Provider>
         </GraphDataContext.Provider>
       </DataContext.Provider>
     </MarkersContext.Provider>
