@@ -27,28 +27,23 @@ export default function MyTreeView({ files, onClick }) {
 };
 
 function TreeElement({ entry, onClick }) {
-    const wellsData = React.useContext(DataContext);
+    const onBlurEvent = (event) => { };
+
     return (
         entry !== undefined ?
             <div style={{ paddingLeft: `5px` }} >
                 {entry.children?.map((entry, index) => (
-                    <TreeItem key={`${entry.name}${index}`} onClick={onClick} nodeId={entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
-                        {entry.type === 'directory' && entry.children.length > 0
-                            ? <TreeElement entry={entry} onClick={onClick} />
-                            : entry.type === 'file' && wellsData ?
-                                wellsData[entry.name.slice(entry.name.lastIndexOf('-') + 1, -4)].map((well, index) => {
-                                    return (
-                                        <TreeItem key={well.name + index} nodeId={well.name + index} className={well.name + ' well'} label={formatName(well.name)}>
-                                        </TreeItem>
-
-                                    );
-                                })
-                                :
-                                <></>}
+                    <TreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
+                        {entry.children?.map((entry, index) => (
+                            <TreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
+                                {entry.children.length > 0
+                                    ? <TreeElement entry={entry} onClick={onClick} />
+                                    : <></>}
+                            </TreeItem>
+                        ))}
                     </TreeItem>
-                ))
-                }
-            </div >
+                ))}
+            </div>
             :
             <></>
     )
