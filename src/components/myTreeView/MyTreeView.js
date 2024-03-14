@@ -4,7 +4,6 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { formatName } from '../../constants/functions';
-import DataContext from "../../contexts/DataContext";
 
 export default function MyTreeView({ files, onClick }) {
     return (
