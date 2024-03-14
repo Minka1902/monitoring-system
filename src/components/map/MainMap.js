@@ -8,7 +8,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersCon
 import { shortenString } from '../../constants/functions';
 import React from 'react';
 import Topography from 'leaflet-topography';
-import { options, maps, poly } from '../../constants/leaflet/mapOptions';
+import { options, maps } from '../../constants/leaflet/mapOptions';
 import { customMarkerDotBlack, customMarkerDotRed, customMarkerDotBlue, customMarkerDotGreen } from '../../constants/leaflet/markers';
 
 function SetViewOnClick({ coords }) {
@@ -18,7 +18,7 @@ function SetViewOnClick({ coords }) {
   return null;
 };
 
-export default function Map({ coords }) {
+export default function Map({ coords, polygons }) {
   const { BaseLayer } = LayersControl;
   const mapRef = React.useRef();
   const markersArray = [customMarkerDotBlue, customMarkerDotRed, customMarkerDotGreen]
@@ -47,14 +47,16 @@ export default function Map({ coords }) {
     return coordinates;
   };
 
-  function CreatePolygon() {
-    let polygon = [];
+  function CreatePolygon(polygonData) {
+    if (polygonData) {
+      let polygon = [];
 
-    for (let i = 0; i < poly.length; i++) {
-      polygon[i] = epsgConvert({ x: poly[i][0], y: poly[i][1] }).reverse();
-    };
+      for (let i = 0; i < polygonData.length; i++) {
+        polygon[i] = epsgConvert({ x: polygonData[i].x, y: polygonData[i].y }).reverse();
+      };
 
-    return polygon;
+      return polygon;
+    }
   };
 
   function ZoomIn() {
@@ -79,7 +81,10 @@ export default function Map({ coords }) {
         dragging={true}
         ref={mapRef}
       >
-        <Polygon positions={CreatePolygon()} />
+        {polygons && Object.keys(polygons).map((polygon, index) => {
+          return <Polygon positions={CreatePolygon(polygons[polygon])} key={index} />
+        })}
+
         {coords[0] === 31.3 && coords[1] === 34.8 ? wellsData !== undefined ? <SetViewOnClick coords={coords} /> : <ZoomIn /> : <ZoomIn />}
         <LocationFinderDummy />
 
