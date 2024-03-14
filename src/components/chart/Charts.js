@@ -154,6 +154,13 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
     return <AgChartsReact options={options} />;
 };
 
+function renderer({ datum, xKey, yKey, yName }) {
+    return {
+        title: yName,
+        content: `Day ${datum[xKey]}, ` + parseInt(datum[yKey]) + '-bbl',
+    };
+}
+
 export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
     const [options,] = React.useState({
         title: { text: 'Daily production' },
@@ -161,19 +168,52 @@ export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contex
         series: [
             {
                 type: 'line',
-                xKey: 'x',
-                yKey: 'y1',
-                yName: 'gas',
+                xKey: 'day',
+                tooltip: { renderer: renderer },
+                yKey: 'fluids',
+                yName: 'Fluids',
             },
             {
                 type: 'line',
-                xKey: 'x',
-                yKey: 'y2',
-                yName: 'oil',
+                xKey: 'day',
+                tooltip: { renderer: renderer },
+                yKey: 'water',
+                yName: 'Water',
             }
+        ],
+        axes: [
+            {
+                type: "category",
+                position: "bottom",
+            },
+            {
+                type: "number",
+                position: "left",
+                keys: ["fluids"],
+                title: {
+                    text: "Total fluids extracted - bbl/day",
+                },
+                label: {
+                    formatter: (params) => {
+                        return params.value / 1000 + "K";
+                    },
+                },
+            },
+            {
+                type: "number",
+                position: "right",
+                keys: ["water"],
+                title: {
+                    enabled: true,
+                    text: "Water extracted - bbl/day",
+                },
+            },
         ],
         background: {
             fill: backgroundColor,
+        },
+        navigator: {
+            enabled: true,
         },
         contextMenu: {
             enabled: typeof contextMenuAction === 'object' ? true : false,
