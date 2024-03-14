@@ -62,28 +62,54 @@ export function LinesChart({ data, backgroundColor = 'transparent' }) {
     return <AgChartsReact options={options} />;
 };
 
+function gasRenderer({ datum, xKey, yKey, yName }) {
+    return {
+        title: yName,
+        content: `Day ${datum[xKey]}, ` + datum[yKey] + '-bbl',
+    };
+};
+
 export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
     const [options,] = React.useState({
-        title: { text: '7-day production' },
+        title: { text: '10-day production' },
         data: data,
         series: [
             {
                 type: 'line',
-                xKey: 'year',
+                tooltip: { renderer: gasRenderer },
+                xKey: 'day',
                 yKey: 'gas',
                 yName: 'gas',
             },
             {
                 type: 'line',
-                xKey: 'year',
+                tooltip: { renderer: renderer },
+                xKey: 'day',
                 yKey: 'oil',
                 yName: 'oil',
             },
             {
                 type: 'line',
-                xKey: 'year',
+                tooltip: { renderer: renderer },
+                xKey: 'day',
                 yKey: 'water',
                 yName: 'water',
+            },
+        ],
+        axes: [
+            {
+                type: "category",
+                position: "bottom",
+            },
+            {
+                type: "number",
+                position: "left",
+                keys: ["water", "gas"],
+            },
+            {
+                type: "number",
+                position: "right",
+                keys: ["oil"],
             },
         ],
         background: {
@@ -159,7 +185,7 @@ function renderer({ datum, xKey, yKey, yName }) {
         title: yName,
         content: `Day ${datum[xKey]}, ` + parseInt(datum[yKey]) + '-bbl',
     };
-}
+};
 
 export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
     const [options,] = React.useState({
