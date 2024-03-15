@@ -147,16 +147,18 @@ function App() {
           }
         })
 
-      dataApiOBJ.initPage({ dataNames: array, wellNames: ['HELETZ_1', 'heletz1'] })
-        .then((data) => {
-          if (data) {
-            setPageData(data);
-          }
-        }).catch((err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+      if (array !== undefined && array.length > 0)
+        if (array.length === 1 && array[0] !== '')
+          dataApiOBJ.initPage({ dataNames: array, wellNames: ['HELETZ_1'] })
+            .then((data) => {
+              if (data) {
+                setPageData(data);
+              }
+            }).catch((err) => {
+              if (err) {
+                console.log(err);
+              }
+            });
     }
   };
 
@@ -189,7 +191,7 @@ function App() {
   }, []); //eslint-disable-line
 
   React.useEffect(() => {
-    dataApiOBJ.initPage({ dataNames: ['polygons'], wellNames: ['HELETZ_1', 'asd_1'] })
+    dataApiOBJ.initPage({ dataNames: ['polygons', 'prod_300'], wellNames: ['HELETZ_1', 'asd_1'] })
       .then((data) => {
         if (data) {
           setPageData(data);
