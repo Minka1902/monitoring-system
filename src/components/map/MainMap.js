@@ -8,7 +8,7 @@ import { shortenString } from '../../constants/functions';
 import React from 'react';
 import Topography from 'leaflet-topography';
 import { options, maps } from '../../constants/leaflet/mapOptions';
-import { customMarkerDotRed, customMarkerDotBlue, customMarkerDotGreen } from '../../constants/leaflet/markers';
+import { customMarkerDotRed } from '../../constants/leaflet/markers';
 
 function SetViewOnClick({ coords }) {
   const map = useMap();
@@ -20,7 +20,6 @@ function SetViewOnClick({ coords }) {
 export default function Map({ coords, polygons }) {
   const { BaseLayer } = LayersControl;
   const mapRef = React.useRef();
-  const markersArray = [customMarkerDotBlue, customMarkerDotRed, customMarkerDotGreen];
   const wellsData = React.useContext(DataContext);
 
   const LocationFinderDummy = () => {
@@ -98,7 +97,7 @@ export default function Map({ coords, polygons }) {
         {wellsData ? Object.keys(wellsData).map((key, markerIndex) => {
           return wellsData[key].map((well, index) => {
             return (
-              <Marker key={index} icon={markersArray[markerIndex]} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
+              <Marker key={index} icon={customMarkerDotRed} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
                 <Popup>
                   {Object.keys(well).map((prop, index) => {
                     if (prop !== 'x' && prop !== 'y') {
