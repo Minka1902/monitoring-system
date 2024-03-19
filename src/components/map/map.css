@@ -19,11 +19,15 @@
 .polygon_blue {
   stroke: blue;
   fill: blue;
+  stroke-width: 3;
+  opacity: 1;
 }
 
 .polygon_black {
   stroke: black;
   fill: black;
+  stroke-width: 2;
+  opacity: 0.8;
 }
 
 .tooltip__wrapper {
