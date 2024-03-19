@@ -1,11 +1,9 @@
 import React from "react";
-import MarkersContext from '../../contexts/MarkersContext';
 import DataContext from '../../contexts/DataContext';
 import GraphDataContext from '../../contexts/GraphDataContext';
 import PageDataContext from "../../contexts/PageDataContext";
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import { pages } from '../../constants/constants'
-import { pathFromName, findNodePathByName } from '../../constants/functions';
 import NavOverPage from "../navOverPage/NavOverPage";
 import MyTreeView from "../myTreeView/MyTreeView";
 import Main from "../main/Main";
@@ -21,10 +19,11 @@ function App() {
   // const safeDocument = typeof document !== 'undefined' ? document : {};
   // const html = safeDocument.documentElement;
   const [tree, setTree] = React.useState({ name: 'root', type: 'directory', children: [], });
-  const [markers, setMarkers] = React.useState(undefined);
   const [wellsData, setWellsData] = React.useState(undefined);
   const [graphData, setGraphData] = React.useState(undefined);
   const [pageData, setPageData] = React.useState(undefined);
+  const [wellNames, setWellNames] = React.useState(["Brur_1", "Brur_10", "Brur_2", "Brur_5", "Heletz_1", "Heletz_9", "Heletz_11", "Heletz_35"]);
+  const pageResourcesNeeded = { main: ['polygons', 'prod_300', 'safety', 'return_on_investment'], production: ['prod_300'], drilling: [''], "project-plan": [''] };
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
@@ -42,15 +41,72 @@ function App() {
       });
   };
 
+  function getNodeByPath(nodePath) {
+    // Split the node path string into an array of node names
+    const pathNodes = nodePath.split('/').filter(node => node !== ''); // Remove empty strings
+
+    // Recursive function to find a node
+    function findNode(node, currentIndex) {
+      // If the current node is the last node in the path
+      if (currentIndex === pathNodes.length - 1) {
+        return node;
+      }
+
+      // If the current node is not the last node in the path, continue traversing
+      if (node.children) {
+        for (const child of node.children) {
+          if (child.name === pathNodes[currentIndex + 1]) {
+            return findNode(child, currentIndex + 1);
+          }
+        }
+      }
+
+      // If the child corresponding to the next node in the path is not found
+      return null;
+    }
+
+    // Start the traversal from the root of the tree
+    return findNode(tree, 0);
+  };
+
+  function getLastBranches(node) {
+    // Base case: If the node has no children, it's a last branch
+    if (node) {
+      if (!node.children || node.children.length === 0) {
+        return [node];
+      }
+
+      // Recursive case: Traverse the children and collect last branches
+      let lastBranches = [];
+      for (const child of node.children) {
+        const childBranches = getLastBranches(child);
+        lastBranches = lastBranches.concat(childBranches);
+      }
+      return lastBranches;
+    }
+  }
+
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!     RESERVOIR handling     !!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const getReservoir = (path) => {
+  const getReservoir = (path, wellName = '') => {
     if (path && path.slice(-4) === '.csv') {
       fieldsApiOBJ.getReservoir({ path: path })
         .then((data) => {
           if (data) {
-            setMarkers(data);
+            if (wellName === '') {
+              setWellsData(data);
+            } else {
+              const result = { drilling: [], production: [], test: [] };
+              const key = path.slice(path.lastIndexOf('-') + 1, -4);
+              for (let i = 0; i < data[key].length; i++) {
+                if (data[key][i].name.toLowerCase() === wellName.toLowerCase()) {
+                  result[key].push(data[key][i]);
+                  break;
+                }
+              }
+              setWellsData(result);
+            }
           }
         })
         .catch((err) => {
@@ -71,18 +127,19 @@ function App() {
     }
   };
 
-  const getWellsData = (folderName = 'brur') => {
+  const getWellsData = (folderName = '') => {
     if (folderName !== '') {
       fieldsApiOBJ.getWellsData({ folderName: folderName })
         .then((data) => {
           if (data) {
             if (typeof data === 'object' && data.length > 0) {
               const obj = mergeObjects(data[0], data[1]);
+              setPageData(obj);
               setWellsData(obj);
             } else {
+              setPageData(data);
               setWellsData(data);
             }
-            setMarkers(undefined);
           }
         })
         .catch((err) => {
@@ -91,19 +148,35 @@ function App() {
     }
   };
 
+  const createNamesArray = (array) => {
+    let temp = [];
+    for (let i = 0; i < array.length; i++) {
+      temp[i] = array[i].name;
+    }
+    return temp;
+  };
+
   const onTreeItemClick = (event) => {
     const type = event.target.closest('li').classList[2].toLowerCase();
     const name = event.target.closest('li').classList[1].toLowerCase();
-    const parentName = event.target.closest('li').closest('ul').parentElement.classList[1];
-    // const pathToNode = findNodePathByName(tree, name.toUpperCase());
-    if (type === 'file') {
-      getReservoir(pathFromName(name));
+    const nodePath = event.target.closest('li').id.slice(5);
+    let names;
+    if (type !== 'well') {
+      names = createNamesArray(getLastBranches(getNodeByPath(nodePath)));
     } else {
-      if (parentName !== "css-16alkdk-MuiTreeItem-root") {
-        getWellsData(parentName !== undefined ? `${parentName}/${name}` : name);
+      names = name;
+    }
+    setWellNames(names);
+    if (type !== 'well') {
+      if (type === 'file') {
+        getReservoir(nodePath);
       } else {
-        getWellsData(parentName !== undefined ? name : '');
+        getWellsData(nodePath.slice(nodePath.indexOf('/', 1)));
+        getPageData(history.location.pathname.slice(1), names);
       }
+    } else {
+      const parentPath = event.target.closest('li').closest('ul').parentElement.id.slice(5);
+      getReservoir(parentPath, name);
     }
   };
 
@@ -133,33 +206,18 @@ function App() {
     }
   };
 
-  const getPageGraphData = (page, array) => {
-    if (page) {
-      fieldsApiOBJ.getPageGraphData({ page })
-        .then((data) => {
-          if (data) {
-            setGraphData(data);
-          }
-        })
-        .catch((err) => {
-          if (err) {
-            console.log(err);
-          }
-        })
-
-      if (array !== undefined && array.length > 0)
-        if (array.length === 1 && array[0] !== '')
-          dataApiOBJ.initPage({ dataNames: array, wellNames: ['HELETZ_1'] })
-            .then((data) => {
-              if (data) {
-                setPageData(data);
-              }
-            }).catch((err) => {
-              if (err) {
-                console.log(err);
-              }
-            });
-    }
+  const getPageData = (page = 'main', names = undefined) => {
+    dataApiOBJ.initPage({ dataNames: pageResourcesNeeded[page], wellNames: names === undefined ? wellNames : names })
+      .then((data) => {
+        if (data) {
+          setPageData(data);
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
   };
 
   // ???????????????????????????????????????????????????
@@ -187,58 +245,43 @@ function App() {
   React.useEffect(() => {
     history.push('/main');
     getFileStructure();
-    getPageGraphData('main');
-  }, []); //eslint-disable-line
-
-  React.useEffect(() => {
-    dataApiOBJ.initPage({ dataNames: ['polygons', 'prod_300'], wellNames: ['HELETZ_1', 'asd_1'] })
-      .then((data) => {
-        if (data) {
-          setPageData(data);
-        }
-      }).catch((err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+    getPageData();
   }, []); //eslint-disable-line
 
   return (
-    <MarkersContext.Provider value={markers}>
-      <DataContext.Provider value={wellsData}>
-        <GraphDataContext.Provider value={graphData}>
-          <PageDataContext.Provider value={pageData}>
-            <NavOverPage pages={pages} onClick={getPageGraphData} />
-            <div className="tree-view__container">
-              <MyTreeView files={tree} onClick={onTreeItemClick} />
-              <div className="tree-view__border" />
-            </div>
-            <Switch>
-              <Route path='/main'>
-                <Main />
-              </Route>
+    <DataContext.Provider value={wellsData}>
+      <GraphDataContext.Provider value={graphData}>
+        <PageDataContext.Provider value={pageData}>
+          <NavOverPage pages={pages} onClick={getPageData} />
+          <div className="tree-view__container">
+            <MyTreeView files={tree} onClick={onTreeItemClick} />
+            <div className="tree-view__border" />
+          </div>
+          <Switch>
+            <Route path='/main'>
+              <Main />
+            </Route>
 
-              <Route path='/geology'>
-                <Geology />
-              </Route>
+            <Route path='/geology'>
+              <Geology />
+            </Route>
 
-              <Route path='/production'>
-                <Production />
-              </Route>
+            <Route path='/production'>
+              <Production />
+            </Route>
 
-              <Route path='/drilling'>
-                <Drilling />
-              </Route>
+            <Route path='/drilling'>
+              <Drilling />
+            </Route>
 
-              <Route path='/project-plan'>
-                <ProjectPlan />
-              </Route>
-            </Switch>
-            <RightClickMenu items={rightClickItems} isLoggedIn={true} />
-          </PageDataContext.Provider>
-        </GraphDataContext.Provider>
-      </DataContext.Provider>
-    </MarkersContext.Provider>
+            <Route path='/project-plan'>
+              <ProjectPlan />
+            </Route>
+          </Switch>
+          <RightClickMenu items={rightClickItems} isLoggedIn={true} />
+        </PageDataContext.Provider>
+      </GraphDataContext.Provider>
+    </DataContext.Provider>
   );
 };
 export default withRouter(App);
