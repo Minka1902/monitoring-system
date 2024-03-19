@@ -143,7 +143,7 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
 function ROIRenderer({ datum, xKey, yKey, yName }) {
     return {
         title: yName,
-        content: `Month ${datum[xKey]}, ` + datum[yKey] / 1000 + 'K $',
+        content: `${datum[xKey]}, ` + datum[yKey] / 1000 + 'K $',
     };
 };
 
