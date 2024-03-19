@@ -2,7 +2,6 @@ import React from "react";
 import MainMap from '../map/MainMap';
 import PageDataContext from "../../contexts/PageDataContext";
 import DataContext from "../../contexts/DataContext";
-import { getRandomInt } from "../../constants/functions";
 import { shortMonthArray } from "../../constants/constants";
 import { reduceDays } from '../../utils/timeDiff.ts';
 import { MainLinesChart, AreaChart } from '../chart/Charts';
@@ -65,7 +64,8 @@ export default function Main() {
         if (wellNames.length > 1) {
             let averagedArray = [];
             for (let i = 0; i < objectOfArrays[wellNames[0]].length; i++) {
-                averagedArray[i] = { day: reduceDays(new Date(), 10 - i).toLocaleDateString(), oil: 0, water: 0, gas: 0 };
+                const dateString = `${reduceDays(new Date(), 10 - i).getDate()}/${reduceDays(new Date(), 10 - i).getMonth() + 1}`;
+                averagedArray[i] = { day: dateString, oil: 0, water: 0, gas: 0 };
             }
             for (let i = 0; i < wellNames.length; i++) {
                 for (let j = 0; j < objectOfArrays[wellNames[i]].length; j++) {
@@ -95,7 +95,8 @@ export default function Main() {
         if (wellNames.length > 1) {
             let averagedArray = [];
             for (let i = 0; i < 12; i++) {
-                averagedArray[i] = { month: shortMonthArray[i], expenses: 0, cashFlow: 0 };
+                const currentMonth = new Date().getMonth() + 1;
+                averagedArray[i] = { month: shortMonthArray[(i + currentMonth >= 12) ? i + currentMonth - 12 : i + currentMonth], expenses: 0, cashFlow: 0 };
             }
             for (let i = 0; i < wellNames.length; i++) {
                 if (objectOfArrays[wellNames[i]] !== 'File not found.') {
@@ -134,6 +135,18 @@ export default function Main() {
         }
     };
 
+    const calcReserve = (reserveName = '') => {
+        if (reserveName !== '') {
+            let reserveSum = 0;
+            for (const reserve in pageData.reserves) {
+                if (pageData.reserves[reserve]) {
+                    reserveSum += parseFloat(pageData.reserves[reserve][reserveName]);
+                }
+            }
+            return reserveSum;
+        }
+    };
+
     React.useEffect(() => {
         if (typeof wellsData === 'object') {
             calculateMarkersCenter();
@@ -149,9 +162,11 @@ export default function Main() {
                         {pageData && pageData.return_on_investment !== undefined ?
                             <AreaChart data={averageROIOfArrays(pageData.return_on_investment)} /> :
                             <></>}
-                        <br /><br /><br />
-                        GIP/recoverable:<br />{getRandomInt(20, 250)}/{getRandomInt(20, 150)} MMcf<br /><br />
-                        OIP/recoverable:<br />{getRandomInt(20, 250)}/{getRandomInt(20, 150)} MMbbl
+                        {pageData && pageData.reserves !== undefined ? <>
+                            <br /><br /><br />
+                            GIP/recoverable:<br />{calcReserve('GIP')}/{calcReserve('gas_recoverable')} MMcf<br /><br />
+                            OIP/recoverable:<br />{calcReserve('OIP')}/{calcReserve('oil_recoverable')} MMbbl
+                        </> : <></>}
                     </div>
                 </div>
                 <div className="main__right__container">
