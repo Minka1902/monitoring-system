@@ -5,12 +5,10 @@ import proj4 from 'proj4';
 import BubblePieChart from '../chart/BubblePieChart';
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import React from 'react';
-import MarkersContext from "../../contexts/MarkersContext";
 import DataContext from "../../contexts/DataContext";
 
 const MapWithOverlay = () => {
     const mapRef = React.useRef();
-    const markers = React.useContext(MarkersContext);
     const wellsData = React.useContext(DataContext);
     const center = { lat: 31.9, lng: 35 };
     const [tempChartData, setTempChartData] = React.useState(undefined);
@@ -74,15 +72,11 @@ const MapWithOverlay = () => {
     };
 
     React.useEffect(() => {
-        if (markers && markers[0].oil) {
-            createData(markers);
-        } else {
-            if (wellsData && wellsData.production[0].oil) {
-                const asd = createData(wellsData.production);
-                setChartData(asd);
-            }
+        if (wellsData && wellsData.production[0].oil) {
+            const asd = createData(wellsData.production);
+            setChartData(asd);
         }
-    }, [markers, wellsData]);
+    }, [wellsData]);
 
     return (
         <MapContainer center={center} zoom={7} ref={mapRef} style={{ height: '500px', width: '100%' }} inertia={true}>

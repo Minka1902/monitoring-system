@@ -16,6 +16,16 @@
   filter: invert(31%) sepia(84%) saturate(6015%) hue-rotate(100deg) brightness(90%) contrast(89%);
 }
 
+.polygon_blue {
+  stroke: blue;
+  fill: blue;
+}
+
+.polygon_black {
+  stroke: black;
+  fill: black;
+}
+
 .tooltip__wrapper {
   position: relative;
   bottom: 60px;

@@ -1,6 +1,5 @@
 import 'regenerator-runtime';
 import 'leaflet/dist/leaflet.css';
-import MarkersContext from "../../contexts/MarkersContext";
 import DataContext from "../../contexts/DataContext";
 import proj4 from 'proj4';
 import epsg from 'epsg';
@@ -9,11 +8,11 @@ import { shortenString } from '../../constants/functions';
 import React from 'react';
 import Topography from 'leaflet-topography';
 import { options, maps } from '../../constants/leaflet/mapOptions';
-import { customMarkerDotBlack, customMarkerDotRed, customMarkerDotBlue, customMarkerDotGreen } from '../../constants/leaflet/markers';
+import { customMarkerDotRed, customMarkerDotBlue, customMarkerDotGreen } from '../../constants/leaflet/markers';
 
 function SetViewOnClick({ coords }) {
   const map = useMap();
-  map.setView(coords, 7);
+  map.setView(coords, 9);
 
   return null;
 };
@@ -21,8 +20,7 @@ function SetViewOnClick({ coords }) {
 export default function Map({ coords, polygons }) {
   const { BaseLayer } = LayersControl;
   const mapRef = React.useRef();
-  const markersArray = [customMarkerDotBlue, customMarkerDotRed, customMarkerDotGreen]
-  const markers = React.useContext(MarkersContext);
+  const markersArray = [customMarkerDotBlue, customMarkerDotRed, customMarkerDotGreen];
   const wellsData = React.useContext(DataContext);
 
   const LocationFinderDummy = () => {
@@ -61,10 +59,17 @@ export default function Map({ coords, polygons }) {
 
   function ZoomIn() {
     const map = useMap();
+    let isAny = false;
     if (wellsData !== undefined) {
-      if (wellsData.length > 0 && coords[0] !== 31.3) {
-        map.setView(coords, 11);
+      for (const prop in wellsData) {
+        if (wellsData[prop].length > 0 && coords[0] !== 31.3) {
+          isAny = true;
+          break;
+        }
       }
+    }
+    if (isAny) {
+      map.flyTo(coords, 13);
     }
     return null;
   };
@@ -74,7 +79,7 @@ export default function Map({ coords, polygons }) {
       <MapContainer
         center={coords}
         minZoom={7}
-        zoom={7}
+        zoom={9}
         maxZoom={18}
         scrollWheelZoom={true}
         doubleClickZoom={true}
@@ -82,48 +87,31 @@ export default function Map({ coords, polygons }) {
         ref={mapRef}
       >
         {polygons && Object.keys(polygons).map((polygon, index) => {
-          return <Polygon positions={CreatePolygon(polygons[polygon])} key={index} />
+          return <Polygon positions={CreatePolygon(polygons[polygon])} className={polygon.slice(-2) === "3D" ? 'polygon_black' : 'polygon_blue'} key={index} />
         })}
 
-        {coords[0] === 31.3 && coords[1] === 34.8 ? wellsData !== undefined ? <SetViewOnClick coords={coords} /> : <ZoomIn /> : <ZoomIn />}
+        {coords[0] === 31.3 && coords[1] === 34.8 ?
+          <SetViewOnClick coords={coords} /> :
+          <ZoomIn />}
         <LocationFinderDummy />
 
-        {markers ?
-          markers.map((marker, index) => {
+        {wellsData ? Object.keys(wellsData).map((key, markerIndex) => {
+          return wellsData[key].map((well, index) => {
             return (
-              <Marker key={index} icon={customMarkerDotBlack} position={epsgConvert({ x: marker.x, y: marker.y }).reverse()}>
+              <Marker key={index} icon={markersArray[markerIndex]} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
                 <Popup>
-                  {Object.keys(marker).map((prop, index) => {
+                  {Object.keys(well).map((prop, index) => {
                     if (prop !== 'x' && prop !== 'y') {
                       return (
-                        <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {marker[prop]}</p>
+                        <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {well[prop]}</p>
                       );
                     } return <></>;
                   })}
                 </Popup>
               </Marker>
             );
-          }) :
-          <>
-            {wellsData ? Object.keys(wellsData).map((key, markerIndex) => {
-              return wellsData[key].map((well, index) => {
-                return (
-                  <Marker key={index} icon={markersArray[markerIndex]} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
-                    <Popup>
-                      {Object.keys(well).map((prop, index) => {
-                        if (prop !== 'x' && prop !== 'y') {
-                          return (
-                            <p style={{ margin: 0 }} key={index}><span style={{ textTransform: 'capitalize' }}>{prop}</span>: {well[prop]}</p>
-                          );
-                        } return <></>;
-                      })}
-                    </Popup>
-                  </Marker>
-                );
-              })
-            }) : <></>}
-          </>
-        }
+          })
+        }) : <></>}
 
         <LayersControl>
           {maps.map((map, index) => {
