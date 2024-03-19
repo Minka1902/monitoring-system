@@ -23,7 +23,12 @@ function App() {
   const [graphData, setGraphData] = React.useState(undefined);
   const [pageData, setPageData] = React.useState(undefined);
   const [wellNames, setWellNames] = React.useState(["Brur_1", "Brur_10", "Brur_2", "Brur_5", "Heletz_1", "Heletz_9", "Heletz_11", "Heletz_35"]);
-  const pageResourcesNeeded = { main: ['polygons', 'prod_300', 'safety', 'return_on_investment'], production: ['prod_300'], drilling: [''], "project-plan": [''] };
+  const pageResourcesNeeded = {
+    main: ['polygons', 'prod_300', 'safety', 'return_on_investment', 'seismic', 'reserves'],
+    production: ['prod_300'],
+    drilling: [''],
+    "project-plan": [''],
+  };
   const history = useHistory();
 
   // ???????????????????????????????????????????????????
