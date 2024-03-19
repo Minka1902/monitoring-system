@@ -381,7 +381,7 @@ export const getRandomInt = (min = 0, max) => {
 // TODO findNodePathByName(nodeTree, 'nodeName')
 // ?  	['path', 'from', 'tree', 'root']
 export const findNodePathByName = (tree, nodeName, currentPath = []) => {
-    if (tree.name === nodeName) {
+    if (tree.name.toUpperCase() === nodeName.toUpperCase()) {
         return [...currentPath, tree.name];
     }
     if (tree.children) {
