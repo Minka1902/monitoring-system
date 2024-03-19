@@ -65,7 +65,7 @@ export function LinesChart({ data, backgroundColor = 'transparent' }) {
 function gasRenderer({ datum, xKey, yKey, yName }) {
     return {
         title: yName,
-        content: `Day ${datum[xKey]}, ` + datum[yKey] + '-bbl',
+        content: `${datum[xKey]}, ` + datum[yKey] + '-bbl',
     };
 };
 
@@ -96,22 +96,22 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
                 yName: 'water',
             },
         ],
-        axes: [
-            {
-                type: "category",
-                position: "bottom",
-            },
-            {
-                type: "number",
-                position: "left",
-                keys: ["water", "gas"],
-            },
-            {
-                type: "number",
-                position: "right",
-                keys: ["oil"],
-            },
-        ],
+        // axes: [
+        //     {
+        //         type: "category",
+        //         position: "bottom",
+        //     },
+        //     {
+        //         type: "number",
+        //         position: "left",
+        //         keys: ["water", "gas"],
+        //     },
+        //     {
+        //         type: "number",
+        //         position: "right",
+        //         keys: ["oil"],
+        //     },
+        // ],
         background: {
             fill: backgroundColor,
         },
@@ -140,6 +140,13 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
     return <AgChartsReact options={options} />;
 };
 
+function ROIRenderer({ datum, xKey, yKey, yName }) {
+    return {
+        title: yName,
+        content: `Month ${datum[xKey]}, ` + datum[yKey] / 1000 + 'K $',
+    };
+};
+
 export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
     const [options,] = React.useState({
         title: {
@@ -149,21 +156,17 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
         series: [
             {
                 type: "area",
+                tooltip: { renderer: ROIRenderer },
                 xKey: "month",
-                yKey: "debtPaydown",
-                yName: "Debt paydown",
+                yKey: "expenses",
+                yName: "Expenses",
             },
             {
                 type: "area",
+                tooltip: { renderer: ROIRenderer },
                 xKey: "month",
-                yKey: "cashflow",
+                yKey: "cashFlow",
                 yName: "Cashflow",
-            },
-            {
-                type: "area",
-                xKey: "month",
-                yKey: "appreciation",
-                yName: "Appreciation",
             },
         ],
         background: {
@@ -183,7 +186,7 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
 function renderer({ datum, xKey, yKey, yName }) {
     return {
         title: yName,
-        content: `Day ${datum[xKey]}, ` + parseInt(datum[yKey]) + '-bbl',
+        content: `${datum[xKey]}, ` + parseInt(datum[yKey]) + '-bbl',
     };
 };
 
