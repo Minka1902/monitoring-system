@@ -14,9 +14,9 @@ export default function MyTreeView({ files, onClick }) {
             defaultEndIcon={<DescriptionIcon />}
             sx={{ height: '100%', flexGrow: 1, maxWidth: 250, overflowY: 'auto' }}
         >
-            <TreeItem nodeId='root-node-item' label='All files'>
+            <TreeItem nodeId="/forTreeView" className='forTreeView directory' label='All fields' onClick={onClick}>
                 {files !== undefined ? files.children.map((entry, index) => (
-                    <TreeItem className={entry.name + " " + entry.type} key={`${entry.name}${index}`} onClick={onClick} nodeId={entry.name} label={formatName(entry.name)}>
+                    <TreeItem className={entry.name + " " + entry.type} key={`${entry.name}${index}`} onClick={onClick} nodeId={entry.path} label={formatName(entry.name)}>
                         <TreeElement key={`${entry.name}${index}`} entry={entry} onClick={onClick} />
                     </TreeItem>
                 )) : <></>}
@@ -32,9 +32,9 @@ function TreeElement({ entry, onClick }) {
         entry !== undefined ?
             <div style={{ paddingLeft: `5px` }} >
                 {entry.children?.map((entry, index) => (
-                    <TreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
+                    <TreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
                         {entry.children?.map((entry, index) => (
-                            <TreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
+                            <TreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
                                 {entry.children.length > 0
                                     ? <TreeElement entry={entry} onClick={onClick} />
                                     : <></>}
