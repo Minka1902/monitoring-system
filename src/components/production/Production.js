@@ -45,7 +45,7 @@ export default function Production() {
 
     const averageOfArrays = (objectOfArrays) => {
         const wellNames = Object.keys(objectOfArrays);
-        if (wellNames.length === 1) {
+        if (wellNames.length > 1) {
             let averagedArray = [];
             for (let i = 0; i < objectOfArrays[wellNames[0]].length; i++) {
                 averagedArray[i] = { day: 0, fluids: 0, water: 0 };
@@ -67,11 +67,6 @@ export default function Production() {
             return objectOfArrays[wellNames[0]];
         }
     };
-
-    React.useEffect(() => {
-        if (pageData && pageData.prod_300)
-            prepData(pageData.prod_300);
-    }, [pageData]);
 
     return (
         <section id="Production">
