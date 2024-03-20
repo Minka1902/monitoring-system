@@ -139,10 +139,8 @@ function App() {
           if (data) {
             if (typeof data === 'object' && data.length > 0) {
               const obj = mergeObjects(data[0], data[1]);
-              setPageData(obj);
               setWellsData(obj);
             } else {
-              setPageData(data);
               setWellsData(data);
             }
           }
