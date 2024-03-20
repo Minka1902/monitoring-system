@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100% - 40px);
+    height: calc(99% - 40px);
     width: 60%;
     margin-top: 40px;
     margin-left: 20px;
@@ -20,9 +20,8 @@
 .main__right__container {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    height: 100%;
-    margin: 0;
+    height: calc(99% - 40px);
+    margin: 40px 0 0 0;
     padding: 0 20px 0 20px;
     width: 40%;
 }
@@ -33,33 +32,50 @@
     max-height: 65%;
 }
 
+.gip_oip {
+    width: 30%;
+    font-size: 30px;
+    line-height: 40px;
+    font-weight: 700;
+    color: #035B1C;
+}
+
 .main__resources_graph {
     width: 100%;
+    height: calc(35% - 3px);
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     font: Inter, Arial, Helvetica;
     font-size: 20px;
     line-height: 25px;
     font-weight: 400;
     color: #035B1C;
-    margin: auto;
+    align-items: center;
 }
 
 .main__graph__container {
     width: 100%;
-    height: 450px;
-    margin: 0 auto;
+    height: 550px;
 }
 
 .main__well__info {
     font: Inter, Arial, Helvetica;
-    font-size: 24px;
+    font-size: 30px;
     line-height: 40px;
-    font-weight: 600;
+    font-weight: 700;
     color: #035B1C;
     width: 100%;
-    margin: 20px auto 0;
+    margin: 0;
+    padding: 0 0 0 20px;
+    box-sizing: content-box;
+}
+
+.main__right_top__container {
+    height: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .main__well_other-ops {
@@ -73,14 +89,20 @@
 .main__safety {
     display: flex;
     flex-direction: row;
-    /* justify-content: space-around; */
+    margin-top: 190px;
+    margin-left: 20px;
+}
+
+.safety__image {
+    width: 125px;
+    height: 125px;
 }
 
 .main__safety_text {
     font-family: Inter, Arial, Helvetica;
-    font-weight: 600;
-    font-size: 24px;
+    font-size: 30px;
     line-height: 40px;
+    font-weight: 700;
     color: #035B1C;
     margin: auto 0 auto 20px;
 }
@@ -93,7 +115,7 @@
 
 
 @media screen and (min-width: 768px) and (max-width:1024px) {
-    .main__well__info {
+    /* .main__well__info {
         font-size: 12px;
         line-height: 26px;
     }
@@ -104,7 +126,7 @@
 
     .main__graph__container {
         height: 200px;
-    }
+    } */
 }
 
 @media screen and (max-width: 768px) {}
