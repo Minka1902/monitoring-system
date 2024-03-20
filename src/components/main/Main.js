@@ -33,12 +33,17 @@ export default function Main() {
     };
 
     const calcAvgProduction = () => {
-        if (pageData) {
+        if (wellsData && wellsData.production) {
             let total = 0;
-            for (let i = 0; i < pageData.production.length; i++) {
-                total += parseFloat(wellsData.production[i].oil ? wellsData.production[i].oil : 0);
+            for (const well of wellsData.production) {
+                for (let i = 0; i < 300; i++) {
+                    if (pageData.prod_300[well.name] !== undefined) {
+                        const d = pageData.prod_300[well.name][i];
+                        total += parseFloat(d.fluids ? d.fluids : '0');
+                    }
+                }
             }
-            return parseInt(total / wellsData.production.length);
+            return parseInt(total / 300);
         }
     };
 
@@ -158,41 +163,44 @@ export default function Main() {
             <div className="main__content__container">
                 <div className="main__left__container">
                     <MainMap coords={coords} polygons={pageData && pageData.polygons} />
-                    <div className="main__resources_graph return_on_investment">
+                    <div className="main__resources_graph">
                         {pageData && pageData.return_on_investment !== undefined ?
                             <AreaChart data={averageROIOfArrays(pageData.return_on_investment)} /> :
                             <></>}
-                        {pageData && pageData.reserves !== undefined ? <>
-                            <br /><br /><br />
-                            GIP/recoverable:<br />{calcReserve('GIP')}/{calcReserve('gas_recoverable')} MMcf<br /><br />
-                            OIP/recoverable:<br />{calcReserve('OIP')}/{calcReserve('oil_recoverable')} MMbbl
-                        </> : <></>}
+                        {pageData && pageData.reserves !== undefined ?
+                            <div className="gip_oip">
+                                GIP/recoverable:<br />{calcReserve('GIP')}/{calcReserve('gas_recoverable')} MMcf<br /><br />
+                                OIP/recoverable:<br />{calcReserve('OIP')}/{calcReserve('oil_recoverable')} MMbbl
+                            </div> : <></>}
                     </div>
                 </div>
                 <div className="main__right__container">
-                    <div className="main__graph__container prod_300">
-                        {pageData && pageData.prod_300 !== undefined ?
-                            <MainLinesChart data={prepData(pageData.prod_300)} /> :
-                            <></>}
+                    <div className="main__right_top__container">
+                        <div className="main__graph__container prod_300">
+                            {pageData && pageData.prod_300 !== undefined ?
+                                <MainLinesChart data={prepData(pageData.prod_300)} /> :
+                                <></>}
+                        </div>
+                        <p className="main__well__info">
+                            Wells in drilling - {wellsData && wellsData.drilling ? wellsData.drilling.length : 'Please click a field/reservoir'}<br />
+                            Wells in production - {wellsData && wellsData.production && wellsData.production !== undefined ? wellsData.production.length : 'Please click a field/reservoir'}<br />
+                            <br />Average production - {pageData && pageData.prod_300 ? `${0.00001 && calcAvgProduction()}~ bbl/day` : 'Please click a field/reservoir'}<br /><br />
+                            <span className="main__well_other-ops">
+                                Other operations:<br />
+                            </span>
+                            <span style={{ marginLeft: '15px' }}>
+                                Wells in testing - {wellsData && wellsData.test ? wellsData.test.length : 'Please click a field/reservoir'}<br />
+                            </span>
+                            <span className="main__well_survey" style={{ marginLeft: '15px' }}>
+                                Seismic survey - {false ? wellsData.threeDStatus : 'Can`t find status'}{<></>}
+                            </span>
+                        </p>
                     </div>
-                    <p className="main__well__info">
-                        Wells in drilling - {wellsData && wellsData.drilling ? wellsData.drilling.length : 'Please click a field/reservoir'}<br />
-                        Wells in production - {wellsData && wellsData.production && wellsData.production !== undefined ? wellsData.production.length : 'Please click a field/reservoir'}<br />
-                        Average production - {pageData && pageData.production ? calcAvgProduction() : 'Please click a field/reservoir'}~ bbl/day<br />
-                        <span className="main__well_other-ops">
-                            Other operations:<br />
-                        </span>
-                        <span style={{ marginLeft: '15px' }}>
-                            Wells in testing - {wellsData && wellsData.test ? wellsData.test.length : 'Please click a field/reservoir'}<br />
-                        </span>
-                        <span className="main__well_survey" style={{ marginLeft: '15px' }}>
-                            Seismic survey - {false ? wellsData.threeDStatus : 'Can`t find status'}{<></>}
-                        </span>
-                    </p>
+
                     <div className="main__safety">
                         {pageData && pageData.safety ?
                             <>
-                                <img src={require('../../images/weAreSafe.png')} alt="Are we safe?" />
+                                <img className="safety__image" src={require('../../images/weAreSafe.png')} alt="Are we safe?" />
                                 <span className="main__safety_text">
                                     Safety and compliance: <br />
                                     {returnMinimum(pageData.safety)} days without incidents
