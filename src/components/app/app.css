@@ -5,7 +5,7 @@
 section {
   background-color: #fff9f0;
   width: calc(100% - 250px);
-  height: calc(100% - 80px);
+  height: calc(100% - 81px);
   margin-left: 250px;
   display: flex;
   flex-direction: row;
