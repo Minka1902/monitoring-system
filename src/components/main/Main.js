@@ -39,7 +39,9 @@ export default function Main() {
                 for (let i = 0; i < 300; i++) {
                     if (pageData.prod_300[well.name] !== undefined) {
                         const d = pageData.prod_300[well.name][i];
-                        total += parseFloat(d.fluids ? d.fluids : '0');
+                        if (d && d.fluids) {
+                            total += parseFloat(d.fluids ? d.fluids : '0');
+                        }
                     }
                 }
             }
@@ -164,9 +166,11 @@ export default function Main() {
                 <div className="main__left__container">
                     <MainMap coords={coords} polygons={pageData && pageData.polygons} />
                     <div className="main__resources_graph">
-                        {pageData && pageData.return_on_investment !== undefined ?
-                            <AreaChart data={averageROIOfArrays(pageData.return_on_investment)} /> :
-                            <></>}
+                        <div className="main__area__container">
+                            {pageData && pageData.return_on_investment !== undefined ?
+                                <AreaChart data={averageROIOfArrays(pageData.return_on_investment)} /> :
+                                <></>}
+                        </div>
                         {pageData && pageData.reserves !== undefined ?
                             <div className="gip_oip">
                                 GIP/recoverable:<br />{calcReserve('GIP')}/{calcReserve('gas_recoverable')} MMcf<br /><br />
@@ -188,10 +192,8 @@ export default function Main() {
                             <span className="main__well_other-ops">
                                 Other operations:<br />
                             </span>
-                            <span style={{ marginLeft: '15px' }}>
-                                Wells in testing - {wellsData && wellsData.test ? wellsData.test.length : 'Please click a field/reservoir'}<br />
-                            </span>
-                            <span className="main__well_survey" style={{ marginLeft: '15px' }}>
+                            Wells in testing - {wellsData && wellsData.test ? wellsData.test.length : 'Please click a field/reservoir'}<br />
+                            <span className="main__well_survey">
                                 Seismic survey - {false ? wellsData.threeDStatus : 'Can`t find status'}{<></>}
                             </span>
                         </p>
