@@ -4,11 +4,11 @@ import DataContext from "../../contexts/DataContext";
 import proj4 from 'proj4';
 import epsg from 'epsg';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl, Polygon } from "react-leaflet";
-import { shortenString, countNumberOfWells } from '../../constants/functions';
+import { shortenString } from '../../constants/functions';
 import React from 'react';
 import Topography from 'leaflet-topography';
 import { options, maps } from '../../constants/leaflet/mapOptions';
-import { customMarkerDotRed } from '../../constants/leaflet/markers';
+import { customMarkerWell } from '../../constants/leaflet/markers';
 
 export default function Map({ coords, polygons, polyName }) {
   const { BaseLayer } = LayersControl;
@@ -68,7 +68,7 @@ export default function Map({ coords, polygons, polyName }) {
       return polygon;
     }
   };
-  
+
   return (
     <div id='map'>
       <MapContainer
@@ -93,7 +93,7 @@ export default function Map({ coords, polygons, polyName }) {
         {wellsData ? Object.keys(wellsData).map((key) => {
           return wellsData[key].map((well, index) => {
             return (
-              <Marker key={index} icon={customMarkerDotRed} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
+              <Marker key={index} icon={customMarkerWell} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
                 <Popup>
                   {Object.keys(well).map((prop, index) => {
                     if (prop !== 'x' && prop !== 'y') {
