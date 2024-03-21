@@ -39,10 +39,20 @@ export default function Map({ coords, polygons, polyName }) {
 
   function FocusBoundingBox() {
     const map = useMap();
-    if (polyName !== 'all') {
-      if (polygons) {
-        const asd = createPolygon(polygons[polyName]);
-        map.fitBounds(asd);
+    if (polygons) {
+      if (polyName === 'all') {
+        let combinedPolygons = [];
+        const polyNames = Object.keys(polygons);
+        for (const poly of polyNames) {
+          for (let i = 0; i < polygons[poly].length; i++) {
+            combinedPolygons.push(polygons[poly][i]);
+          }
+        }
+        const tempPolygon = createPolygon(combinedPolygons);
+        map.fitBounds(tempPolygon);
+      } else {
+        const tempPolygon = createPolygon(polygons[polyName]);
+        map.fitBounds(tempPolygon);
       }
     }
   };
@@ -58,24 +68,7 @@ export default function Map({ coords, polygons, polyName }) {
       return polygon;
     }
   };
-
-  function ZoomIn() {
-    let numberOfWells = 0;
-    const map = useMap();
-    if (wellsData !== undefined) {
-      numberOfWells = countNumberOfWells(wellsData);
-      for (const prop in wellsData) {
-        if (wellsData[prop].length > 0 && coords[0] !== 31.3) {
-          break;
-        }
-      }
-    }
-    if (numberOfWells > 1) {
-      map.flyTo(coords, 13);
-    }
-    return null;
-  };
-
+  
   return (
     <div id='map'>
       <MapContainer
@@ -92,9 +85,9 @@ export default function Map({ coords, polygons, polyName }) {
           return <Polygon positions={createPolygon(polygons[polygon])} className={polygon.slice(-2) === "3D" ? 'polygon_black' : 'polygon_blue'} key={index} />
         })}
 
-        {polyName === 'all' ?
-          <ZoomIn /> :
-          <FocusBoundingBox />}
+        {polyName !== undefined ?
+          <FocusBoundingBox /> :
+          <></>}
         <LocationFinderDummy />
 
         {wellsData ? Object.keys(wellsData).map((key) => {
