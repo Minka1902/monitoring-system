@@ -22,6 +22,8 @@ class fieldsApi {
 
   _handleResponse = (res) => (res.ok ? res.json() : Promise.reject(`Error: ${res.status}`));
 
+  initWells = () => this._fetch({ method: "GET", url: "/init-wells" });
+
   getStructure = () => this._fetch({ method: "GET", url: "/reservoirs" });
 
   getReservoir = ({ path }) => this._fetch({ method: "POST", url: "/reservoir", data: { path } });
