@@ -23,6 +23,7 @@ function App() {
   const [graphData, setGraphData] = React.useState(undefined);
   const [pageData, setPageData] = React.useState(undefined);
   const [wellNames, setWellNames] = React.useState(["Brur_1", "Brur_10", "Brur_2", "Brur_5", "Heletz_1", "Heletz_9", "Heletz_11", "Heletz_35"]);
+  const [polyName, setPolyName] = React.useState('all');
   const pageResourcesNeeded = {
     main: ['polygons', 'prod_300', 'safety', 'return_on_investment', 'seismic', 'reserves'],
     production: ['prod_300'],
@@ -168,6 +169,16 @@ function App() {
     const type = event.target.closest('li').classList[2].toLowerCase();
     const name = event.target.closest('li').classList[1].toLowerCase();
     const nodePath = event.target.closest('li').id.slice(5);
+    if (nodePath.slice(nodePath.indexOf(12, '/') + 1).toLowerCase()) {
+      if (nodePath.indexOf('/', 13) === -1 && pageData.polygons[name]) {
+        setPolyName(name);
+      } else {
+        const tempPolyName = nodePath.slice(nodePath.indexOf('/', 2) + 1, nodePath.indexOf('/', 13));
+        if (pageData.polygons[tempPolyName]) {
+          setPolyName(tempPolyName);
+        }
+      }
+    }
     let names;
     if (type !== 'well') {
       names = createNamesArray(getLastBranches(getNodeByPath(nodePath)));
@@ -279,7 +290,7 @@ function App() {
           </div>
           <Switch>
             <Route path='/main'>
-              <Main />
+              <Main polyName={polyName} />
             </Route>
 
             <Route path='/geology'>
