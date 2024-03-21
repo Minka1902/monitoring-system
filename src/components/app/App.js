@@ -3,7 +3,7 @@ import DataContext from '../../contexts/DataContext';
 import GraphDataContext from '../../contexts/GraphDataContext';
 import PageDataContext from "../../contexts/PageDataContext";
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
-import { pages } from '../../constants/constants'
+import { pages } from '../../constants/constants';
 import NavOverPage from "../navOverPage/NavOverPage";
 import MyTreeView from "../myTreeView/MyTreeView";
 import Main from "../main/Main";
@@ -120,16 +120,21 @@ function App() {
     }
   };
 
-  const mergeObjects = (object1, object2) => {
-    if (typeof object1 === 'object' && typeof object1 === 'object') {
-      const mergedObject = {};
-      for (const key in object1) {
-        if (object1.hasOwnProperty(key) && object2.hasOwnProperty(key)) {
-          mergedObject[key] = object1[key].concat(object2[key]);
+  function mergeObjects(arrayOfObjects) {
+    const combinedObject = { drilling: [], test: [], production: [] };
+    for (let obj of arrayOfObjects) {
+      if (obj) {
+        for (let key in obj) {
+          if (obj[key] && obj[key].length > 0) {
+            for (let i = 0; i < obj[key].length; i++) {
+              combinedObject[key].push(obj[key][i]);
+            }
+          }
         }
       }
-      return mergedObject;
     }
+
+    return combinedObject;
   };
 
   const getWellsData = (folderName = '') => {
@@ -138,7 +143,7 @@ function App() {
         .then((data) => {
           if (data) {
             if (typeof data === 'object' && data.length > 0) {
-              const obj = mergeObjects(data[0], data[1]);
+              const obj = mergeObjects(data);
               setWellsData(obj);
             } else {
               setWellsData(data);
@@ -181,6 +186,17 @@ function App() {
       const parentPath = event.target.closest('li').closest('ul').parentElement.id.slice(5);
       getReservoir(parentPath, name);
     }
+  };
+
+  const initWells = () => {
+    fieldsApiOBJ.initWells()
+      .then((data) => {
+        if (data) {
+          setWellsData(data);
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
   };
 
   // ???????????????????????????????????????????????????
@@ -249,6 +265,7 @@ function App() {
     history.push('/main');
     getFileStructure();
     getPageData();
+    initWells();
   }, []); //eslint-disable-line
 
   return (
@@ -257,7 +274,7 @@ function App() {
         <PageDataContext.Provider value={pageData}>
           <NavOverPage pages={pages} onClick={getPageData} />
           <div className="tree-view__container">
-            <MyTreeView files={tree} onClick={onTreeItemClick} />
+            <MyTreeView files={tree} onClick={onTreeItemClick} allFieldsClick={initWells} />
             <div className="tree-view__border" />
           </div>
           <Switch>
