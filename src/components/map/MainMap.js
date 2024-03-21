@@ -4,7 +4,7 @@ import DataContext from "../../contexts/DataContext";
 import proj4 from 'proj4';
 import epsg from 'epsg';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, LayersControl, Polygon } from "react-leaflet";
-import { shortenString } from '../../constants/functions';
+import { shortenString, countNumberOfWells } from '../../constants/functions';
 import React from 'react';
 import Topography from 'leaflet-topography';
 import { options, maps } from '../../constants/leaflet/mapOptions';
@@ -57,9 +57,11 @@ export default function Map({ coords, polygons }) {
   };
 
   function ZoomIn() {
+    let numberOfWells = 0;
     const map = useMap();
     let isAny = false;
     if (wellsData !== undefined) {
+      numberOfWells = countNumberOfWells(wellsData);
       for (const prop in wellsData) {
         if (wellsData[prop].length > 0 && coords[0] !== 31.3) {
           isAny = true;
@@ -68,7 +70,11 @@ export default function Map({ coords, polygons }) {
       }
     }
     if (isAny) {
-      map.flyTo(coords, 13);
+      if (numberOfWells > 1) {
+        map.flyTo(coords, 13);
+      } else {
+        map.flyTo(coords, map.getZoom());
+      }
     }
     return null;
   };
