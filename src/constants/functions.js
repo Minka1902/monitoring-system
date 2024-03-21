@@ -394,3 +394,13 @@ export const findNodePathByName = (tree, nodeName, currentPath = []) => {
     }
     return null;
 };
+
+export const countNumberOfWells = (wells) => {
+    let counter = 0;
+    for (const prop in wells) {
+        if (wells.hasOwnProperty(prop)) {
+            counter += wells[prop].length;
+        }
+    }
+    return counter;
+};
