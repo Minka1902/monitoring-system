@@ -8,7 +8,7 @@ import { MainLinesChart, AreaChart } from '../chart/Charts';
 import proj4 from 'proj4';
 import epsg from 'epsg';
 
-export default function Main() {
+export default function Main({ polyName }) {
     const [coords, setCoords] = React.useState([31.3, 34.8]);
     const wellsData = React.useContext(DataContext);
     const pageData = React.useContext(PageDataContext);
@@ -154,6 +154,26 @@ export default function Main() {
         }
     };
 
+    const handleSeismicStatus = () => {
+        const seismic_surveys = Object.keys(pageData.seismic);
+        let isAll = true;
+        if (wellsData && seismic_surveys.length === 1) {
+            for (const key in wellsData) {
+                for (const well of wellsData[key]) {
+                    if (well.name.toUpperCase().indexOf(seismic_surveys[0].toUpperCase()) === -1) {
+                        isAll = false;
+                    }
+                }
+            }
+            if (isAll) {
+                return pageData.seismic[seismic_surveys[0]].status;
+            } else {
+                return 'Select field';
+            }
+        }
+        return 'Select field';
+    };
+
     React.useEffect(() => {
         if (typeof wellsData === 'object') {
             calculateMarkersCenter();
@@ -164,7 +184,7 @@ export default function Main() {
         <section id="main">
             <div className="main__content__container">
                 <div className="main__left__container">
-                    <MainMap coords={coords} polygons={pageData && pageData.polygons} />
+                    <MainMap coords={coords} polygons={pageData && pageData.polygons} polyName={polyName} />
                     <div className="main__resources_graph">
                         <div className="main__area__container">
                             {pageData && pageData.return_on_investment !== undefined ?
@@ -194,7 +214,7 @@ export default function Main() {
                             </span>
                             Wells in testing - {wellsData && wellsData.test ? wellsData.test.length : 'Please click a field/reservoir'}<br />
                             <span className="main__well_survey">
-                                Seismic survey - {false ? wellsData.threeDStatus : 'Can`t find status'}{<></>}
+                                Seismic survey - {pageData && pageData.seismic ? handleSeismicStatus() : 'No data'}{<></>}
                             </span>
                         </p>
                     </div>
