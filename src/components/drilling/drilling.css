@@ -40,7 +40,7 @@
 }
 
 .drilling__state_text {
-    font-family: Inter, Arial, Helvetica;
+    font-family: SLBSans, Arial, Helvetica;
     font-size: 22px;
     font-weight: 600;
     line-height: 27px;
@@ -50,7 +50,7 @@
 }
 
 .drilling__state_list {
-    font-family: Inter, Arial, Helvetica;
+    font-family: SLBSans, Arial, Helvetica;
     font-size: 22px;
     font-weight: 200;
     line-height: 27px;

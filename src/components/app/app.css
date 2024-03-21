@@ -4,9 +4,9 @@
 
 section {
   background-color: #fff9f0;
-  width: calc(100% - 250px);
+  width: calc(100% - 350px);
   height: calc(100% - 81px);
-  margin-left: 250px;
+  margin-left: 350px;
   display: flex;
   flex-direction: row;
 }
@@ -14,7 +14,7 @@ section {
 .tree-view__border {
   position: fixed;
   top: 0;
-  left: 250px;
+  left: 350px;
   height: 80%;
   margin: 10% 0;
   background-color: #000;
@@ -26,7 +26,7 @@ section {
   background-color: #fff9f0;
   position: fixed;
   display: flex;
-  width: 250px;
+  width: 350px;
   flex-direction: row;
   padding-top: 30px;
 }
