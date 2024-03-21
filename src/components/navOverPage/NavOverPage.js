@@ -16,7 +16,10 @@ export default function NavOverPage({ pages, onClick }) {
     return (
         <div className="navigation__container">
             <div className="logo__container">
-                <img className="logo__image" src={geomageLogo} alt="Logo of Geomage-2003 LTD" />
+                <img className="logo__image" src={geomageLogo} alt="Geomage-2003 LTD" onClick={() => { window.open('https://www.geomage.com', 'Geomage home page') }} />
+                <span className="logo__powered-by" onClick={() => { window.open('https://www.geomage.com', 'Geomage home page') }}>
+                    powered by
+                </span>
             </div>
             <nav className="nav-over-page">
                 {pages && pages.map((page, index) => {

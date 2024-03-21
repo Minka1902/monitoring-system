@@ -17,6 +17,16 @@
     background-color: #7c8999;
 }
 
+.logo__image:hover {
+    cursor: pointer;
+}
+
+.logo__powered-by {
+    margin: 4px 0 0 0;
+    color: #000;
+    font-family: SLBSans, Arial, Helvetica;
+}
+
 .nav-over-page__link {
     color: #000;
     display: block;
