@@ -199,6 +199,10 @@ function App() {
     }
   };
 
+  const setPolyNameAll = () => {
+    setPolyName('all');
+  };
+
   const initWells = () => {
     fieldsApiOBJ.initWells()
       .then((data) => {
@@ -285,7 +289,7 @@ function App() {
         <PageDataContext.Provider value={pageData}>
           <NavOverPage pages={pages} onClick={getPageData} />
           <div className="tree-view__container">
-            <MyTreeView files={tree} onClick={onTreeItemClick} allFieldsClick={initWells} />
+            <MyTreeView files={tree} onClick={onTreeItemClick} allFieldsClick={setPolyNameAll} />
             <div className="tree-view__border" />
           </div>
           <Switch>
