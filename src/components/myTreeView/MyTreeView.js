@@ -9,7 +9,8 @@ import { formatName } from '../../constants/functions';
 const StyledTreeItem = styled(TreeItem)(() => ({
     [`& .${treeItemClasses.content}`]: {
         [`& .${treeItemClasses.label}`]: {
-            fontSize: '20px',
+            fontSize: '24px',
+            fontFamily: 'SLBSans, Arial, Helvetica',
         },
     },
 }));
