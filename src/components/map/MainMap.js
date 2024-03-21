@@ -10,14 +10,7 @@ import Topography from 'leaflet-topography';
 import { options, maps } from '../../constants/leaflet/mapOptions';
 import { customMarkerDotRed } from '../../constants/leaflet/markers';
 
-function SetViewOnClick({ coords }) {
-  const map = useMap();
-  map.setView(coords, 9);
-
-  return null;
-};
-
-export default function Map({ coords, polygons }) {
+export default function Map({ coords, polygons, polyName }) {
   const { BaseLayer } = LayersControl;
   const mapRef = React.useRef();
   const wellsData = React.useContext(DataContext);
@@ -44,7 +37,17 @@ export default function Map({ coords, polygons }) {
     return coordinates;
   };
 
-  function CreatePolygon(polygonData) {
+  function FocusBoundingBox() {
+    const map = useMap();
+    if (polyName !== 'all') {
+      if (polygons) {
+        const asd = createPolygon(polygons[polyName]);
+        map.fitBounds(asd);
+      }
+    }
+  };
+
+  function createPolygon(polygonData) {
     if (polygonData) {
       let polygon = [];
 
@@ -59,22 +62,16 @@ export default function Map({ coords, polygons }) {
   function ZoomIn() {
     let numberOfWells = 0;
     const map = useMap();
-    let isAny = false;
     if (wellsData !== undefined) {
       numberOfWells = countNumberOfWells(wellsData);
       for (const prop in wellsData) {
         if (wellsData[prop].length > 0 && coords[0] !== 31.3) {
-          isAny = true;
           break;
         }
       }
     }
-    if (isAny) {
-      if (numberOfWells > 1) {
-        map.flyTo(coords, 13);
-      } else {
-        map.flyTo(coords, map.getZoom());
-      }
+    if (numberOfWells > 1) {
+      map.flyTo(coords, 13);
     }
     return null;
   };
@@ -92,15 +89,15 @@ export default function Map({ coords, polygons }) {
         ref={mapRef}
       >
         {polygons && Object.keys(polygons).map((polygon, index) => {
-          return <Polygon positions={CreatePolygon(polygons[polygon])} className={polygon.slice(-2) === "3D" ? 'polygon_black' : 'polygon_blue'} key={index} />
+          return <Polygon positions={createPolygon(polygons[polygon])} className={polygon.slice(-2) === "3D" ? 'polygon_black' : 'polygon_blue'} key={index} />
         })}
 
-        {coords[0] === 31.3 && coords[1] === 34.8 ?
-          <SetViewOnClick coords={coords} /> :
-          <ZoomIn />}
+        {polyName === 'all' ?
+          <ZoomIn /> :
+          <FocusBoundingBox />}
         <LocationFinderDummy />
 
-        {wellsData ? Object.keys(wellsData).map((key, markerIndex) => {
+        {wellsData ? Object.keys(wellsData).map((key) => {
           return wellsData[key].map((well, index) => {
             return (
               <Marker key={index} icon={customMarkerDotRed} position={epsgConvert({ x: well.x, y: well.y }).reverse()}>
