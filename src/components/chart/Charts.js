@@ -96,24 +96,14 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
                 yName: 'water',
             },
         ],
-        // axes: [
-        //     {
-        //         type: "category",
-        //         position: "bottom",
-        //     },
-        //     {
-        //         type: "number",
-        //         position: "left",
-        //         keys: ["water", "gas"],
-        //     },
-        //     {
-        //         type: "number",
-        //         position: "right",
-        //         keys: ["oil"],
-        //     },
-        // ],
         background: {
             fill: backgroundColor,
+        },
+        padding: {
+            top: 0,
+            bottom: 0,
+            right: '0',
+            left: 0,
         },
         contextMenu: {
             enabled: typeof contextMenuAction === 'object' ? true : false,
@@ -169,8 +159,29 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
                 yName: "Cashflow",
             },
         ],
+        axes: [
+            {
+                type: "category",
+                position: "bottom",
+            },
+            {
+                type: "number",
+                position: "left",
+                label: {
+                    formatter: (params) => {
+                        return parseFloat(params.value) / 1000000 + 'M';
+                    },
+                },
+            },
+        ],
         background: {
             fill: backgroundColor,
+        },
+        padding: {
+            top: '20px',
+            bottom: 0,
+            right: '0',
+            left: 0,
         },
         contextMenu: {
             enabled: typeof contextMenuAction === 'object' ? true : false,
