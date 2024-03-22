@@ -241,6 +241,7 @@ function App() {
   };
 
   const getPageData = (page = 'main', names = undefined) => {
+    setPageData(null);
     dataApiOBJ.initPage({ dataNames: pageResourcesNeeded[page], wellNames: names === undefined ? wellNames : names })
       .then((data) => {
         if (data) {
