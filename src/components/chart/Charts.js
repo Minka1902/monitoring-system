@@ -102,7 +102,7 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
         padding: {
             top: 0,
             bottom: 0,
-            right: '0',
+            right: 10,
             left: 0,
         },
         contextMenu: {
@@ -169,7 +169,10 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
                 position: "left",
                 label: {
                     formatter: (params) => {
-                        return parseFloat(params.value) / 1000000 + 'M';
+                        if (params.value > 1000000) {
+                            return parseFloat(params.value) / 1000000 + 'M';
+                        }
+                        return params.value;
                     },
                 },
             },
@@ -178,9 +181,9 @@ export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction
             fill: backgroundColor,
         },
         padding: {
-            top: '20px',
+            top: 0,
             bottom: 0,
-            right: '0',
+            right: 30,
             left: 0,
         },
         contextMenu: {
