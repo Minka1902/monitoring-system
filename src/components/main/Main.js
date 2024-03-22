@@ -19,17 +19,19 @@ export default function Main({ polyName }) {
         const props = Object.keys(wellsData);
         for (let i = 0; i < props.length; i++) {
             for (const well of wellsData[props[i]]) {
-                if (wellsData[props[i]].length !== 0) {
+                if (wellsData[props[i]].length !== 0 && center.x && center.y) {
                     wellCounter++;
                     center.x += parseFloat(well.x);
                     center.y += parseFloat(well.y);
                 }
             }
         }
-        center.x = center.x / wellCounter;
-        center.y = center.y / wellCounter;
-        let coordinates = proj4(epsg['EPSG:2039'], epsg['EPSG:4326'], [parseFloat(center.x), parseFloat(center.y)]).reverse();
-        setCoords(coordinates);
+        if (wellCounter > 0) {
+            center.x = center.x / wellCounter;
+            center.y = center.y / wellCounter;
+            let coordinates = proj4(epsg['EPSG:2039'], epsg['EPSG:4326'], [parseFloat(center.x), parseFloat(center.y)]).reverse();
+            setCoords(coordinates);
+        }
     };
 
     const calcAvgProduction = () => {
@@ -63,7 +65,16 @@ export default function Main({ polyName }) {
                 }
             }
         }
-        return averageProdOfArrays(arraysObject);
+        if (Object.keys(arraysObject).length > 0) {
+            return averageProdOfArrays(arraysObject);
+        } else {
+            let averagedArray = [];
+            for (let i = 0; i < 11; i++) {
+                const dateString = `${reduceDays(new Date(), 10 - i).getDate()}/${reduceDays(new Date(), 10 - i).getMonth() + 1}`;
+                averagedArray[i] = { day: dateString, oil: NaN, water: NaN, gas: NaN };
+            }
+            return averagedArray;
+        }
     };
 
     const averageProdOfArrays = (objectOfArrays) => {
@@ -193,8 +204,13 @@ export default function Main({ polyName }) {
                         </div>
                         {pageData && pageData.reserves !== undefined ?
                             <div className="gip_oip">
-                                GIP/recoverable:<br />{calcReserve('GIP')}/{calcReserve('gas_recoverable')} MMcf<br /><br />
-                                OIP/recoverable:<br />{calcReserve('OIP')}/{calcReserve('oil_recoverable')} MMbbl
+                                <span style={{ display: 'flex', flexDirection: 'row', width: '200px' }}>
+                                    Resources<br /><br />
+                                </span>
+                                <span style={{ fontWeight: '500', display: 'flex', flexDirection: 'row-reverse' }}>
+                                    GIP/recoverable:<br />{calcReserve('GIP')}/{calcReserve('gas_recoverable')} MMcf<br /><br />
+                                    OIP/recoverable:<br />{calcReserve('OIP')}/{calcReserve('oil_recoverable')} MMbbl
+                                </span>
                             </div> : <></>}
                     </div>
                 </div>
@@ -208,7 +224,7 @@ export default function Main({ polyName }) {
                         <p className="main__well__info">
                             Wells in drilling - {wellsData && wellsData.drilling ? wellsData.drilling.length : 'Please click a field/reservoir'}<br />
                             Wells in production - {wellsData && wellsData.production && wellsData.production !== undefined ? wellsData.production.length : 'Please click a field/reservoir'}<br />
-                            <br />Average production - {pageData && pageData.prod_300 ? `${0.00001 && calcAvgProduction()}~ bbl/day` : 'Please click a field/reservoir'}<br /><br />
+                            <br />Average production - {pageData && pageData.prod_300 ? `${0.00001 && calcAvgProduction()}~ bbl/day` : 'Click a field'}<br /><br />
                             <span className="main__well_other-ops">
                                 Other operations:<br />
                             </span>
@@ -222,11 +238,11 @@ export default function Main({ polyName }) {
                     <div className="main__safety">
                         {pageData && pageData.safety ?
                             <>
-                                <img className="safety__image" src={require('../../images/weAreSafe.png')} alt="Are we safe?" />
                                 <span className="main__safety_text">
                                     Safety and compliance: <br />
                                     {returnMinimum(pageData.safety)} days without incidents
                                 </span>
+                                <img className="safety__image" src={require('../../images/weAreSafe.png')} alt="Are we safe?" />
                             </> : <></>}
                     </div>
                 </div>

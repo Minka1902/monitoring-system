@@ -14,7 +14,7 @@
     height: calc(99% - 40px);
     width: 60%;
     margin-top: 40px;
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
 .main__right__container {
@@ -22,7 +22,7 @@
     flex-direction: column;
     height: calc(99% - 40px);
     margin: 40px 0 0 0;
-    padding: 0 20px 0 20px;
+    padding: 0 20px 0 40px;
     width: 40%;
 }
 
@@ -40,15 +40,18 @@
     line-height: 40px;
     font-weight: 700;
     color: #035B1C;
+    display: flex;
+    flex-direction: column;
 }
 
 .main__resources_graph {
     width: 100%;
-    height: calc(35% - 3px);
+    height: calc(35% - 40px);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .main__area__container {
@@ -90,9 +93,10 @@
 
 .main__safety {
     display: flex;
-    flex-direction: row;
-    margin-top: 190px;
-    margin-left: 20px;
+    flex-direction: row-reverse;
+    margin: auto;
+    padding-top: calc(40% - 125px);
+    margin-right: calc(30% - 200px);
 }
 
 .safety__image {
