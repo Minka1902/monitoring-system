@@ -15,6 +15,7 @@
     justify-content: space-around;
     align-items: center;
     background-color: #7c8999;
+    height: 55px;
 }
 
 .logo__image:hover {
@@ -31,8 +32,9 @@
     color: #000;
     display: block;
     width: 100%;
+    height: auto;
     text-decoration: none;
-    padding: 8px 0;
+    padding: 14px 0;
 }
 
 .nav-over-page__button {
@@ -43,6 +45,7 @@
     text-transform: capitalize;
     font-family: SLBSans, Arial, Helvetica;
     font-size: 24px;
+    height: 100%;
     position: relative;
     background-color: #F66969;
 }
