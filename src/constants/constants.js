@@ -6,6 +6,8 @@ export const delay = (seconds) => new Promise((res) => setTimeout(res, seconds *
 
 export const memoryUnits = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
+export const moneyUnits = ['K', 'M', 'B'];
+
 export const pages = ['main', 'geology', 'production', 'drilling', 'project-plan'];
 
 export const fieldsData = [

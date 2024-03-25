@@ -1,4 +1,4 @@
-import { shortMonthArray, monthArray, shortMonthArrayLow, memoryUnits } from './constants';
+import { shortMonthArray, monthArray, shortMonthArrayLow, memoryUnits, moneyUnits } from './constants';
 
 // ! 	gets a HTML string, returns the number of words.
 // TODO findElementByName("<div><h3 class="class__name">hello world!</h3></div>", 'h3');
@@ -344,6 +344,19 @@ export const formatMemory = (memory = 0) => {
     return `${memory === 0 ? 0 : tempMem.toFixed(4)} ${memoryUnits[counter]}`;
 };
 
+// ! 	gets a number and returns it after some formatting 
+// TODO formatMoney(1656729231)
+// ?  	"1.6567 B"
+export const formatMoney = (money = 0, currency = '$') => {
+    let counter = 0;
+    let tempMoney = money;
+    while (tempMoney >= 1000) {
+        counter++;
+        tempMoney = tempMoney / 1000;
+    }
+    return `${money === 0 ? 0 : tempMoney.toFixed(2)} ${moneyUnits[counter]} ${currency}`;
+};
+
 // ! 	gets a name and formats it
 // TODO formatName('lower_cretaceous') | formatName('drilling.csv') 
 // ?  	"Lower cretaceous" | "Drilling"
@@ -353,20 +366,12 @@ export const formatName = (name = "") => {
         formattedString = formattedString.slice(formattedString.lastIndexOf('-') + 1)
     }
     formattedString = formattedString.replace(/\.[^/.]+$/, '');
-    formattedString = formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
+    return formattedString.replace(/\b\w/g, function (char) {
+        return char.toUpperCase();
+    });
+    // formattedString = formattedString.charAt(0).toUpperCase() + formattedString.slice(1);
 
     return formattedString;
-};
-
-
-// ! 	gets a name and formats it
-// TODO formatName('lower_cretaceous') | formatName('drilling.csv') 
-// ?  	"Lower cretaceous" | "Drilling"
-export const pathFromName = (name) => {
-    let path = '/' + name.replace(/ /g, '_');
-    path = path.replace(/-/g, '/');
-    const last = path.lastIndexOf('/');
-    return path.slice(0, last) + `/${name}`;
 };
 
 export const getRandomInt = (min = 0, max) => {
@@ -375,32 +380,4 @@ export const getRandomInt = (min = 0, max) => {
         randomNumber = Math.floor(Math.random() * max);
     }
     return randomNumber;
-};
-
-// ! 	gets a node tree and a node name
-// TODO findNodePathByName(nodeTree, 'nodeName')
-// ?  	['path', 'from', 'tree', 'root']
-export const findNodePathByName = (tree, nodeName, currentPath = []) => {
-    if (tree.name.toUpperCase() === nodeName.toUpperCase()) {
-        return [...currentPath, tree.name];
-    }
-    if (tree.children) {
-        for (const child of tree.children) {
-            const newPath = findNodePathByName(child, nodeName, [...currentPath, tree.name]);
-            if (newPath) {
-                return newPath;
-            }
-        }
-    }
-    return null;
-};
-
-export const countNumberOfWells = (wells) => {
-    let counter = 0;
-    for (const prop in wells) {
-        if (wells.hasOwnProperty(prop)) {
-            counter += wells[prop].length;
-        }
-    }
-    return counter;
 };
