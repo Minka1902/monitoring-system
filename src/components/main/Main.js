@@ -59,7 +59,8 @@ export default function Main({ polyName }) {
                 let tempArr = [];
                 if (data[dataKeys[k]] !== "File not found.") {
                     for (let i = fromIndex; i < toIndex; i++) {
-                        tempArr[i - fromIndex] = { day: i + 1, oil: data[dataKeys[k]][i].oil, gas: data[dataKeys[k]][i].gas, water: data[dataKeys[k]][i].water };
+                        const dateString = `${reduceDays(new Date(), 10 - i).getDate()}/${reduceDays(new Date(), 10 - i).getMonth() + 1}`;
+                        tempArr[i - fromIndex] = { day: dateString, oil: data[dataKeys[k]][i].oil, gas: data[dataKeys[k]][i].gas, water: data[dataKeys[k]][i].water };
                     }
                     arraysObject[dataKeys[k]] = tempArr;
                 }
