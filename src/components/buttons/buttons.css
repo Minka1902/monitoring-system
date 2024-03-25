@@ -79,9 +79,9 @@
 
 .switch input:checked+.slider:before {
     margin-left: -14px;
-    -webkit-transform: translateX(0em) rotate(180deg) translateY(37.5px);
-    -ms-transform: translateX(0em) rotate(180deg) translateY(37.5px);
-    transform: translateX(0em) rotate(180deg) translateY(37.5px);
+    -webkit-transform: translateX(50px);
+    -ms-transform: translateX(50px);
+    transform: translateX(50px);
 }
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
