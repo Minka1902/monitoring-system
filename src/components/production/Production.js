@@ -3,6 +3,7 @@ import GraphDataContext from "../../contexts/GraphDataContext";
 import PageDataContext from "../../contexts/PageDataContext";
 import ProgressBar from '../progressBar/ProgressBar';
 import ToggleSwitch from "../buttons/ButtonToggle";
+import { reduceDays } from "../../utils/timeDiff.ts";
 import { ProductionLinesChart, ProductionChart } from '../chart/Charts';
 import MapWithOverlay from "../map/ProductionMap";
 
@@ -21,7 +22,8 @@ export default function Production({ polyName }) {
             for (let k = 0; k < dataKeys.length; k++) {
                 if (data[dataKeys[k]] !== "File not found.") {
                     for (let i = fromIndex; i < toIndex; i++) {
-                        tempArr[i - fromIndex] = { day: i + 1, fluids: sumOfArray(createArray(data[dataKeys[k]], propName, i)), water: data[dataKeys[k]][i].water };
+                        const dateString = `${reduceDays(new Date(), 300 - i).getDate()}/${reduceDays(new Date(), 300 - i).getMonth() + 1}`;
+                        tempArr[i - fromIndex] = { day: dateString, fluids: sumOfArray(createArray(data[dataKeys[k]], propName, i)), water: data[dataKeys[k]][i].water };
                     }
                     arraysObject[dataKeys[k]] = tempArr;
                 }
@@ -51,18 +53,21 @@ export default function Production({ polyName }) {
         if (wellNames.length > 1) {
             let averagedArray = [];
             for (let i = 0; i < objectOfArrays[wellNames[0]].length; i++) {
-                averagedArray[i] = { day: 0, fluids: 0, water: 0 };
+                averagedArray[i] = { day: objectOfArrays[wellNames[0]][i].day, fluids: 0, water: 0 };
             }
             for (let i = 0; i < wellNames.length; i++) {
                 for (let j = 0; j < objectOfArrays[wellNames[i]].length; j++) {
                     for (const prop in objectOfArrays[wellNames[i]][j]) {
-                        averagedArray[j][prop] += objectOfArrays[wellNames[i]][j][prop];
+                        if (prop !== 'day')
+                            averagedArray[j][prop] += objectOfArrays[wellNames[i]][j][prop];
                     }
                 }
             }
             for (let i = 0; i < averagedArray.length; i++) {
                 for (const prop in averagedArray[i]) {
-                    averagedArray[i][prop] = averagedArray[i][prop] / wellNames.length
+                    if (prop !== 'day') {
+                        averagedArray[i][prop] = averagedArray[i][prop] / wellNames.length
+                    }
                 }
             }
             return averagedArray;
@@ -74,7 +79,7 @@ export default function Production({ polyName }) {
     return (
         <section id="Production">
             <div className="production__time-bar">
-                {/* <ProgressBar value={2015} maxValue={2024} minValue={1984} /> */}
+                <ProgressBar value={2015} maxValue={2024} minValue={1984} />
             </div>
             <div className="production__content__container">
                 <div className="production__daily-prod_graph prod_300">
