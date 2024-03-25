@@ -55,8 +55,8 @@ export default function Main({ polyName }) {
         const dataKeys = Object.keys(data);
         let arraysObject = {};
         if (dataKeys.length >= 1) {
-            let tempArr = [];
             for (let k = 0; k < dataKeys.length; k++) {
+                let tempArr = [];
                 if (data[dataKeys[k]] !== "File not found.") {
                     for (let i = fromIndex; i < toIndex; i++) {
                         tempArr[i - fromIndex] = { day: i + 1, oil: data[dataKeys[k]][i].oil, gas: data[dataKeys[k]][i].gas, water: data[dataKeys[k]][i].water };
@@ -110,12 +110,12 @@ export default function Main({ polyName }) {
     const averageROIOfArrays = (objectOfArrays) => {
         const wellNames = Object.keys(objectOfArrays);
         let counter = 0;
+        let averagedArray = [];
+        for (let i = 0; i < 12; i++) {
+            const currentMonth = new Date().getMonth() + 1;
+            averagedArray[i] = { month: shortMonthArray[(i + currentMonth >= 12) ? i + currentMonth - 12 : i + currentMonth], expenses: 0, cashFlow: 0 };
+        }
         if (wellNames.length > 1) {
-            let averagedArray = [];
-            for (let i = 0; i < 12; i++) {
-                const currentMonth = new Date().getMonth() + 1;
-                averagedArray[i] = { month: shortMonthArray[(i + currentMonth >= 12) ? i + currentMonth - 12 : i + currentMonth], expenses: 0, cashFlow: 0 };
-            }
             for (let i = 0; i < wellNames.length; i++) {
                 if (objectOfArrays[wellNames[i]] !== 'File not found.') {
                     counter++;
@@ -136,7 +136,10 @@ export default function Main({ polyName }) {
             }
             return averagedArray;
         } else {
-            return objectOfArrays[wellNames[0]];
+            if (objectOfArrays[wellNames[0]] !== 'File not found.') {
+                return objectOfArrays[wellNames[0]];
+            }
+            return averagedArray;
         }
     };
 
@@ -224,7 +227,7 @@ export default function Main({ polyName }) {
                         <p className="main__well__info">
                             Wells in drilling - {wellsData && wellsData.drilling ? wellsData.drilling.length : 'Please click a field/reservoir'}<br />
                             Wells in production - {wellsData && wellsData.production && wellsData.production !== undefined ? wellsData.production.length : 'Please click a field/reservoir'}<br />
-                            <br />Average production - {pageData && pageData.prod_300 ? `${0.00001 && calcAvgProduction()}~ bbl/day` : 'Click a field'}<br /><br />
+                            <br />Average production - {pageData && pageData.prod_300 ? `${0.00001 && calcAvgProduction()}~ bbl/day` : 'Loading...'}<br /><br />
                             <span className="main__well_other-ops">
                                 Other operations:<br />
                             </span>
