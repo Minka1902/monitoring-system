@@ -6,9 +6,12 @@ import ToggleSwitch from "../buttons/ButtonToggle";
 import { ProductionLinesChart, ProductionChart } from '../chart/Charts';
 import MapWithOverlay from "../map/ProductionMap";
 
-export default function Production() {
+export default function Production({ polyName }) {
     const graphData = React.useContext(GraphDataContext);
     const pageData = React.useContext(PageDataContext);
+    const [isSum, setIsSum] = React.useState(false);
+
+    const toggleIsSum = () => setIsSum(!isSum);
 
     const prepData = (data, propName = 'fluids', fromIndex = 0, toIndex = 300) => {
         const dataKeys = Object.keys(data);
@@ -71,7 +74,7 @@ export default function Production() {
     return (
         <section id="Production">
             <div className="production__time-bar">
-                <ProgressBar value={2015} maxValue={2024} minValue={1984} />
+                {/* <ProgressBar value={2015} maxValue={2024} minValue={1984} /> */}
             </div>
             <div className="production__content__container">
                 <div className="production__daily-prod_graph prod_300">
@@ -84,10 +87,10 @@ export default function Production() {
                 </div>
                 <div className="production__bubble-graph production_bubble">
                     <div className="production__bubble-graph__container">
-                        <MapWithOverlay />
+                        <MapWithOverlay polyName={polyName} polygons={pageData && pageData.polygons} isSum={isSum} />
                     </div>
                     <div className="production__switch__container">
-                        <ToggleSwitch />
+                        <ToggleSwitch onClick={toggleIsSum} />
                     </div>
                 </div>
                 <div className="production__another-graph i_dont_know">
