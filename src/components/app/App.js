@@ -27,8 +27,8 @@ function App() {
   const pageResourcesNeeded = {
     main: ['polygons', 'prod_300', 'safety', 'return_on_investment', 'seismic', 'reserves'],
     production: ['polygons', 'prod_300'],
-    drilling: [''],
-    "project-plan": [''],
+    drilling: ['polygons'],
+    "project-plan": ['polygons'],
   };
   const history = useHistory();
 
@@ -174,7 +174,7 @@ function App() {
         setPolyName(name);
       } else {
         const tempPolyName = nodePath.slice(nodePath.indexOf('/', 2) + 1, nodePath.indexOf('/', 13));
-        if (pageData.polygons[tempPolyName]) {
+        if (pageData.polygons && pageData.polygons[tempPolyName]) {
           setPolyName(tempPolyName);
         }
       }
