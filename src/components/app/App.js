@@ -26,6 +26,7 @@ function App() {
   const [polyName, setPolyName] = React.useState('all');
   const pageResourcesNeeded = {
     main: ['polygons', 'prod_300', 'safety', 'return_on_investment', 'seismic', 'reserves'],
+    geology: ['polygons'],
     production: ['polygons', 'prod_300'],
     drilling: ['polygons'],
     "project-plan": ['polygons'],
