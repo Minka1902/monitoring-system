@@ -233,9 +233,9 @@ export default function Main({ polyName }) {
                                 Other operations:<br />
                             </span>
                             Wells in testing - {wellsData && wellsData.test ? wellsData.test.length : 'Please click a field/reservoir'}<br />
-                            <span className="main__well_survey">
-                                Seismic survey - {pageData && pageData.seismic ? handleSeismicStatus() : 'No data'}{<></>}
-                            </span>
+                            {/* <span className="main__well_survey"> */}
+                            Seismic survey - {pageData && pageData.seismic ? handleSeismicStatus() : 'No data'}{<></>}
+                            {/* </span> */}
                         </p>
                     </div>
 
