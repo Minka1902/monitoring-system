@@ -45,7 +45,7 @@ function TreeElement({ entry, onClick }) {
                     <StyledTreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path ? entry.path : entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
                         {entry.children?.map((entry, index) => (
                             <StyledTreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path ? entry.path : entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
-                                {entry.children.length > 0
+                                {entry.children && entry.children.length > 0
                                     ? <TreeElement entry={entry} onClick={onClick} />
                                     : <></>}
                             </StyledTreeItem>
