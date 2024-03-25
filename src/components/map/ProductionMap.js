@@ -95,17 +95,17 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
                     // ! here is sum
                     let myObject = pageData && pageData.prod_300[wells[i].name];
                     var data = [
-                        { name: 'water', value: Math.ceil(sumProp(myObject, 'water')), fill: 'blue' },
-                        { name: 'oil', value: Math.ceil(sumProp(myObject, 'oil')), fill: 'black' },
-                        { name: 'gas', value: Math.ceil(sumProp(myObject, 'gas')), fill: 'gray' }
+                        { name: 'water', value: Math.ceil(sumProp(myObject, 'water')), fill: '#0073ff' },
+                        { name: 'oil', value: Math.ceil(sumProp(myObject, 'oil')), fill: '#52a702' },
+                        { name: 'gas', value: Math.ceil(sumProp(myObject, 'gas')), fill: '#ff0000' }
                     ];
                 } else {
                     // ! here is not sum
                     let myObject = pageData && pageData.prod_300[wells[i].name][pageData.prod_300[wells[i].name].length - 1];
                     var data = [
-                        { name: 'water', value: parseFloat(myObject.water), fill: 'blue' },
-                        { name: 'oil', value: parseFloat(myObject.oil), fill: 'black' },
-                        { name: 'gas', value: parseFloat(myObject.gas), fill: 'gray' }
+                        { name: 'water', value: parseFloat(myObject.water), fill: '#0073ff' },
+                        { name: 'oil', value: parseFloat(myObject.oil), fill: '#52a702' },
+                        { name: 'gas', value: parseFloat(myObject.gas), fill: '#ff0000' }
                     ];
                 }
                 const tempD = { name: wells[i].name, location: coordinates, divPoint: { x: 100, y: 100 }, data };
