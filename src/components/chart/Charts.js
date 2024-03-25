@@ -4,6 +4,7 @@ import 'ag-charts-enterprise';
 import { AgChartsReact } from 'ag-charts-react';
 import wellioviz from 'wellioviz';
 import { lasGraphTemplate } from '../../constants/chart';
+import { formatMoney } from "../../constants/functions";
 
 export function LinesChart({ data, backgroundColor = 'transparent' }) {
     const [options,] = React.useState({
@@ -133,7 +134,7 @@ export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuA
 function ROIRenderer({ datum, xKey, yKey, yName }) {
     return {
         title: yName,
-        content: `${datum[xKey]}, ` + datum[yKey] / 1000 + 'K $',
+        content: `${datum[xKey]}, ` + formatMoney(datum[yKey]),
     };
 };
 
