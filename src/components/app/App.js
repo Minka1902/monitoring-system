@@ -26,7 +26,7 @@ function App() {
   const [polyName, setPolyName] = React.useState('all');
   const pageResourcesNeeded = {
     main: ['polygons', 'prod_300', 'safety', 'return_on_investment', 'seismic', 'reserves'],
-    production: ['prod_300'],
+    production: ['polygons', 'prod_300'],
     drilling: [''],
     "project-plan": [''],
   };
@@ -303,7 +303,7 @@ function App() {
             </Route>
 
             <Route path='/production'>
-              <Production />
+              <Production polyName={polyName} />
             </Route>
 
             <Route path='/drilling'>
