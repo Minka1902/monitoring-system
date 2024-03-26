@@ -40,9 +40,7 @@ export default function Drilling() {
                         </div>
                     </div>
                     <div className="drilling__content_bottom">
-                        <div className="drilling__3d__picture">
-
-                        </div>
+                        <img src={require(is3D ? '../../images/drilling_3d.png' : '../../images/geology_section.png')} className="drilling__3d__picture" />
                         <ToggleSwitch states={['3D', 'Section']} onClick={toggle3D} />
                     </div>
                 </div>

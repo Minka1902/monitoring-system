@@ -83,7 +83,6 @@
 }
 
 .drilling__3d__picture {
-    border: 1px solid red;
     width: 100%;
     height: calc(100% - 80px);
 }
