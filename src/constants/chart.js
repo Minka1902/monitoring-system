@@ -17,7 +17,7 @@ export const lasGraphTemplate = ({ graphId, title = '', grouped_or_independent =
             "order_of_component": ["curves", "rectanges", "lines"], /// not built yet
             "lines_connected_across_curveboxes": "no", /// not built yet
             "header_sep_svg_or_not": "yes",
-            "svg_header_height": "4em",
+            "svg_header_height": "5em",
             "gridlines": "yes",
             "gridlines_color": "#D3D3D3",
             "gridlines_stroke_width": 0.30,
@@ -50,31 +50,6 @@ export const lasGraphTemplate = ({ graphId, title = '', grouped_or_independent =
                     "curve_units": ["g/cm3"],
                     "depth_limits": [{ "min": "autocalculate", "max": "autocalculate" }],
                     "curve_limits": [{ "curve_name": "LL3", "min": 5, "max": 10 }],
-                    "data": [{ "depth": 1598.3, "RHOB": 2.2322 }, {
-                        "depth": 1598.4,
-                        "RHOB": 2.0513
-                    }, { "depth": 1598.5, "RHOB": 2.2548 }, {
-                        "depth": 1598.6,
-                        "RHOB": 2.9445
-                    }, { "depth": 1598.7, "RHOB": 2.2223 }, {
-                        "depth": 1598.8,
-                        "RHOB": 2.447
-                    }, { "depth": 1598.9, "RHOB": 2.598 }, { "depth": 1599, "RHOB": 2.8088 }, {
-                        "depth": 1599.1,
-                        "RHOB": 2.2248
-                    }, { "depth": 1599.2, "RHOB": 2.2399 }, {
-                        "depth": 1599.3,
-                        "RHOB": 2.251
-                    }, { "depth": 1599.4, "RHOB": 2.255 }, {
-                        "depth": 1599.5,
-                        "RHOB": 2.2526
-                    }, { "depth": 1599.6, "RHOB": 2.2322 }, {
-                        "depth": 1599.7,
-                        "RHOB": 2.2513
-                    }, { "depth": 1599.8, "RHOB": 2.2548 }, { "depth": 1599.9, "RHOB": 2.2445 }, {
-                        "depth": 1600,
-                        "RHOB": 2.2223
-                    }, { "depth": 1600.1, "RHOB": 2.2047 }, { "depth": 1600.2, "RHOB": 2.198 }], /// not built yet
                     "depth_curve_name": "DEPT",/// not built yet
                     "data_id": ["placeholder_data_id",], /// not built yet
                     "well_names": [""], /// not built yet
