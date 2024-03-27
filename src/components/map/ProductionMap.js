@@ -15,6 +15,7 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
     const center = { lat: 31.9, lng: 35 };
     const [tempChartData, setTempChartData] = React.useState(undefined);
     const [chartData, setChartData] = React.useState([]);
+    const [tempPolyName, setTempPolyName] = React.useState(polyName);
 
     const LocationFinder = () => {
         const map = useMapEvents({ // eslint-disable-line
@@ -62,6 +63,27 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
         return coordinates;
     };
 
+    function FocusBoundingBox() {
+        let map = useMap();
+        if (polygons) {
+            if (polyName === 'all') {
+                let combinedPolygons = [];
+                const polyNames = Object.keys(polygons);
+                for (const poly of polyNames) {
+                    for (let i = 0; i < polygons[poly].length; i++) {
+                        combinedPolygons.push(polygons[poly][i]);
+                    }
+                }
+                const tempPolygon = createPolygon(combinedPolygons);
+                map.fitBounds(tempPolygon);
+            } else {
+                const tempPolygon = createPolygon(polygons[polyName]);
+                map.fitBounds(tempPolygon);
+            }
+            setTempPolyName(polyName);
+        }
+    };
+
     function createPolygon(polygonData) {
         if (polygonData) {
             let polygon = [];
@@ -89,11 +111,11 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
     const createData = (wells) => {
         let newData = [];
         for (let i = 0; i < wells.length; i++) {
-            if (pageData.prod_300[wells[i].name] !== "File not found." && pageData.prod_300[wells[i].name] !== undefined) {
+            if (pageData.prod_300[wells[i].name.toLowerCase()] !== "File not found." && pageData.prod_300[wells[i].name.toLowerCase()] !== undefined) {
                 const coordinates = epsgConvert({ x: wells[i].x, y: wells[i].y });
                 if (isSum) {
                     // ! here is sum
-                    let myObject = pageData && pageData.prod_300[wells[i].name];
+                    let myObject = pageData && pageData.prod_300[wells[i].name.toLowerCase()];
                     var data = [
                         { name: 'water', value: Math.ceil(sumProp(myObject, 'water')), fill: '#0073ff' },
                         { name: 'oil', value: Math.ceil(sumProp(myObject, 'oil')), fill: '#52a702' },
@@ -101,14 +123,14 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
                     ];
                 } else {
                     // ! here is not sum
-                    let myObject = pageData && pageData.prod_300[wells[i].name][pageData.prod_300[wells[i].name].length - 1];
+                    let myObject = pageData && pageData.prod_300[wells[i].name.toLowerCase()][pageData.prod_300[wells[i].name.toLowerCase()].length - 1];
                     var data = [
                         { name: 'water', value: parseFloat(myObject.water), fill: '#0073ff' },
                         { name: 'oil', value: parseFloat(myObject.oil), fill: '#52a702' },
                         { name: 'gas', value: parseFloat(myObject.gas), fill: '#ff0000' }
                     ];
                 }
-                const tempD = { name: wells[i].name, location: coordinates, divPoint: { x: 100, y: 100 }, data };
+                const tempD = { name: wells[i].name.toLowerCase(), location: coordinates, divPoint: { x: 100, y: 100 }, data };
                 newData.push(tempD);
             }
         }
@@ -123,17 +145,30 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
     }, [pageData, wellsData, isSum]);
 
     return (
-        <MapContainer center={center} maxZoom={15} zoom={9} minZoom={7} ref={mapRef} style={{ height: '500px', width: '100%' }} inertia={true}>
+        <MapContainer
+            center={center}
+            minZoom={7}
+            zoom={9}
+            maxZoom={15}
+            scrollWheelZoom={true}
+            doubleClickZoom={true}
+            dragging={true}
+            ref={mapRef}
+        >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
 
+            {polyName !== tempPolyName ?
+                <FocusBoundingBox /> :
+                <></>}
+            <LocationFinder />
+
             {polygons && Object.keys(polygons).map((polygon, index) => {
                 return <Polygon positions={createPolygon(polygons[polygon])} className={polygon.slice(-2) === "3D" ? 'polygon_black' : 'polygon_blue'} key={index} />
             })}
 
-            <LocationFinder />
 
             {chartData !== undefined && chartData.map((well, index) => (
                 <BubblePieChart
