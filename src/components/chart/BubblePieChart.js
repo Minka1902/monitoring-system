@@ -6,16 +6,16 @@ export default function BubblePieChart({ well, myMap, tooltip__wrapper = 'toolti
         <div
             style={{
                 position: 'absolute',
-                top: `${myMap && myMap.latLngToContainerPoint(well.location).y - 30}px`,
-                left: `${myMap && myMap.latLngToContainerPoint(well.location).x - 30}px`,
+                top: `${myMap ? myMap.latLngToContainerPoint(well.location).y - 30 : well.divPoint.y}px`,
+                left: `${myMap ? myMap.latLngToContainerPoint(well.location).x - 30 : well.divPoint.x}px`,
                 zIndex: 1000,
             }}
         >
-            <PieChart width={60} height={60}>
+            <PieChart width={well.rad ? well.rad * 2 : 60} height={well.rad ? well.rad * 2 : 60}>
                 <Tooltip wrapperClassName={tooltip__wrapper} />
                 <Pie
                     data={well.data}
-                    outerRadius={30}
+                    outerRadius={well.rad ? well.rad : 30}
                     fill="#8884d8"
                     dataKey="value"
                 >
