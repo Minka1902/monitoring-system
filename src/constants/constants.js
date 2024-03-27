@@ -8,7 +8,7 @@ export const memoryUnits = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', '
 
 export const moneyUnits = ['K', 'M', 'B'];
 
-export const pages = ['main', 'geology', 'production', 'drilling', 'project-plan'];
+export const pages = [{ name: 'main', isActive: true }, { name: 'geology', isActive: false }, { name: 'production', isActive: true }, { name: 'drilling', isActive: true }, { name: 'project-plan', isActive: false }];
 
 export const fieldsData = [
     { fieldName: 'Field 1', object: { objectName: 'Object 1', minBbl: 30 } },
