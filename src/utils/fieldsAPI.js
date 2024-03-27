@@ -29,10 +29,6 @@ class fieldsApi {
   getReservoir = ({ path }) => this._fetch({ method: "POST", url: "/reservoir", data: { path } });
 
   getWellsData = ({ folderName }) => this._fetch({ method: "POST", url: "/fields", data: { folderName } });
-
-  getGraphData = ({ fileName }) => this._fetch({ method: "POST", url: "/file", data: { fileName } });
-
-  getPageGraphData = ({ page }) => this._fetch({ method: "POST", url: "/files", data: { folderName: page } });
 }
 // ! REAL API
 const fieldsApiOBJ = new fieldsApi({ auth: '4den6CaDRe58L5Jx85R7E38xpVcn8TZcyqznqZVpKFAjeqqG80eZQc1WCtRNM1Aq', rootUrl: PUBLIC_URL });
