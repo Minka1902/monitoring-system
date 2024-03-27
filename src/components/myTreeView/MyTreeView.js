@@ -42,9 +42,9 @@ function TreeElement({ entry, onClick }) {
         entry !== undefined ?
             <div style={{ paddingLeft: `5px` }} >
                 {entry.children?.map((entry, index) => (
-                    <StyledTreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path ? entry.path : entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
+                    <StyledTreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path && !entry.parentPath ? entry.path : entry.parentPath + '@' + entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
                         {entry.children?.map((entry, index) => (
-                            <StyledTreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path ? entry.path : entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
+                            <StyledTreeItem key={`${entry.name}${index}`} onBlur={onBlurEvent} onClick={onClick} nodeId={entry.path && !entry.parentPath ? entry.path : entry.parentPath + '@' + entry.name} className={entry.name + " " + entry.type} label={formatName(entry.name)}>
                                 {entry.children && entry.children.length > 0
                                     ? <TreeElement entry={entry} onClick={onClick} />
                                     : <></>}
