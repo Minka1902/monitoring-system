@@ -34,6 +34,7 @@
     width: 100%;
     height: auto;
     text-decoration: none;
+    margin: 0;
     padding: 14px 0;
 }
 
@@ -47,7 +48,6 @@
     font-size: 24px;
     height: 100%;
     position: relative;
-    background-color: #F66969;
 }
 
 @media screen and (max-width: 768px) {
@@ -55,7 +55,13 @@
 }
 
 .button-active {
-    background-color: #fff9f0;
+    /* background-color: #fff9f0; */
+    background-color: white;
+}
+
+.button_disabled {
+    background-color: #a7a7a7;
+    cursor: not-allowed;
 }
 
 .button-active:hover {

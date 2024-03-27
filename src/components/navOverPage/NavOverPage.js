@@ -4,7 +4,7 @@ import geomageLogo from '../../images/geomageLogo.png';
 
 export default function NavOverPage({ pages, onClick }) {
     const history = useHistory();
-    const [currentPage, setCurrentPage] = React.useState(history.location.pathname.slice(1, history.location.pathname.length) || 'main');
+    const [currentPage, setCurrentPage] = React.useState('main');
 
     const onButtonClick = (evt) => {
         if (evt.target.innerHTML !== currentPage) {
@@ -24,9 +24,13 @@ export default function NavOverPage({ pages, onClick }) {
             <nav className="nav-over-page">
                 {pages && pages.map((page, index) => {
                     return (
-                        <button onClick={onButtonClick} key={index} className={`nav-over-page__button ${page === currentPage ? 'button-active' : 'button-inactive'}`}>
-                            <Link className='nav-over-page__link' to={`/${page}`}>{page}</Link>
-                        </button>
+                        page.isActive ?
+                            <button onClick={onButtonClick} key={index} className={`nav-over-page__button ${page.name === currentPage ? 'button-active' : 'button-inactive'}`}>
+                                <Link className='nav-over-page__link' to={`/${page.name}`}>{page.name}</Link>
+                            </button>
+                            : <button key={index} className='nav-over-page__button button_disabled'>
+                                <p className='nav-over-page__link'>{page.name}</p>
+                            </button>
                     )
                 })}
             </nav>
