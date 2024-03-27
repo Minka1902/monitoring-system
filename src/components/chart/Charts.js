@@ -66,11 +66,11 @@ export function LinesChart({ data, backgroundColor = 'transparent' }) {
 function gasRenderer({ datum, xKey, yKey, yName }) {
     return {
         title: yName,
-        content: `${datum[xKey]}, ` + datum[yKey] + '-bbl',
+        content: `${datum[xKey]}, ` + datum[yKey].toFixed(2) + '-bbl',
     };
 };
 
-export function MainLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+export function MainLinesChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         title: { text: '10-day production' },
         data: data,
@@ -138,7 +138,7 @@ function ROIRenderer({ datum, xKey, yKey, yName }) {
     };
 };
 
-export function AreaChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+export function AreaChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         title: {
             text: "Return on investment",
@@ -205,7 +205,7 @@ function renderer({ datum, xKey, yKey, yName }) {
     };
 };
 
-export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+export function ProductionLinesChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         title: { text: 'Daily production' },
         data: data,
@@ -214,28 +214,31 @@ export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contex
                 type: 'line',
                 xKey: 'day',
                 tooltip: { renderer: renderer },
-                yKey: 'fluids',
-                yName: 'Fluids',
+                yKey: 'cumulative',
+                yName: 'Cumulative',
             },
             {
                 type: 'line',
                 xKey: 'day',
                 tooltip: { renderer: renderer },
-                yKey: 'water',
-                yName: 'Water',
+                yKey: 'daily',
+                yName: 'Daily',
             }
         ],
         axes: [
             {
                 type: "category",
                 position: "bottom",
+                label: {
+                    rotation: 0,
+                },
             },
             {
                 type: "number",
                 position: "left",
-                keys: ["fluids"],
+                keys: ["cumulative"],
                 title: {
-                    text: "Total fluids extracted - bbl/day",
+                    text: "Cumulative production, bbl",
                 },
                 label: {
                     formatter: (params) => {
@@ -246,10 +249,10 @@ export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contex
             {
                 type: "number",
                 position: "right",
-                keys: ["water"],
+                keys: ["daily"],
                 title: {
                     enabled: true,
-                    text: "Water extracted - bbl/day",
+                    text: "Daily production, bbl",
                 },
             },
         ],
@@ -284,7 +287,7 @@ export function ProductionLinesChart({ data, backgroundColor = '#fff9f0', contex
     return <AgChartsReact options={options} />;
 };
 
-export function ProductionChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+export function ProductionChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         data: data,
         series: [
@@ -304,6 +307,20 @@ export function ProductionChart({ data, backgroundColor = '#fff9f0', contextMenu
         background: {
             fill: backgroundColor,
         },
+        axes: [
+            {
+                type: "category",
+                position: "bottom",
+                label: {
+                    rotation: 0,
+                },
+            },
+            {
+                type: "number",
+                position: "left",
+                reverse: true,
+            },
+        ],
         contextMenu: {
             enabled: typeof contextMenuAction === 'object' ? true : false,
             extraActions: [
@@ -329,7 +346,7 @@ export function ProductionChart({ data, backgroundColor = '#fff9f0', contextMenu
     return <AgChartsReact options={options} />;
 };
 
-export function DrillingLinesChart({ data, backgroundColor = '#fff9f0', contextMenuAction }) {
+export function DrillingLinesChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         title: { text: 'Days VS. Depth' },
         data: data,
@@ -397,60 +414,123 @@ export function DrillingLinesChart({ data, backgroundColor = '#fff9f0', contextM
     return <AgChartsReact options={options} />;
 };
 
-export function DrillingLasChart({ well, depth_curve_name = "DEPT" }) {
+export function DrillingTestChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
+    const [options,] = React.useState({
+        title: { text: 'Well testing' },
+        data: data,
+        series: [
+            {
+                type: 'line',
+                xKey: 'hours',
+                yKey: 'pressure_psig',
+                yName: 'Pressure (PSIG)',
+            },
+            {
+                type: 'line',
+                xKey: 'hours',
+                yKey: 'fluid_rate',
+                yName: 'Fluid rate',
+            },
+            {
+                type: 'line',
+                xKey: 'hours',
+                yKey: 'chock_size',
+                yName: 'Chock size',
+            },
+        ],
+        background: {
+            fill: backgroundColor,
+        },
+        contextMenu: {
+            enabled: typeof contextMenuAction === 'object' ? true : false,
+            extraActions: [
+                { label: 'Say hello', action: () => window.alert('Hello world') },
+            ],
+        },
+        axes: [
+            {
+                type: 'category',
+                position: 'bottom',
+                label: {},
+            },
+            {
+                type: 'number',
+                position: 'left',
+                keys: ['pressure_psig'],
+                label: {},
+            },
+            {
+                type: 'number',
+                position: 'right',
+                keys: ['fluid_rate', 'chock_size'],
+                label: {},
+            }
+        ],
+        theme: {
+            overrides: {
+                line: {
+                    series: {
+                        highlightStyle: {
+                            series: {
+                                dimOpacity: 0.2,
+                                strokeWidth: 4,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return <AgChartsReact options={options} />;
+};
+
+export function DrillingLasChart({ well, depth_curve_name = "DEPT", height = 600, width = 180 }) {
     if (well) {
         const wellInfo = well['WELL INFORMATION BLOCK'];
         const uwi2 = wellInfo.UWI.DATA === '' ? wellInfo.API.DATA === '' ? wellInfo.WELL.DATA : wellInfo.API.DATA : wellInfo.UWI.DATA;
         const three_things_2 = wellioviz.fromJSONofWEllGetThingsForPlotting(well, depth_curve_name);
         const well_log_curves_reformatted_for_d3_2 = three_things_2["well_log_curves_reformatted_for_d3"];
-        const sp_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["SP"], ["black"], [""], [{
-            "curve_name": "SP",
+        const rop_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ROP"], ["blue"], [""], [{
+            "curve_name": "ROP",
             "fill": "no",
             "fill_direction": "left",
             "cutoffs": [0],
             "fill_colors": ["gray", "orange", "yellow"],
             "curve2": ""
-        }], "well_holder_1A", 180, 500, depth_curve_name)
-        const ll3_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ['LL3'], ["RED"], [""], [{
-            "curve_name": "LL3",
-            "fill": "yes",
+        }], "well_holder_1A", width, height, depth_curve_name)
+        const caliper_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ['Caliper'], ["blue"], [""], [{
+            "curve_name": "Caliper",
+            "fill": "no",
             "fill_direction": "left",
             "cutoffs": [5, 10, 25],
             "fill_colors": ["#ffe6e6", "#ffb3b3", "red"],
-            "curve2": "LL3"
-        }], "well_holder_1B", 180, 500, depth_curve_name);
-        const poro_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1C' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["RILD", "RILM"], ["purple", "pink"], [""], [{
-            "curve_name": "RILD",
-            "fill": "yes",
-            "fill_direction": "between",
-            "cutoffs": [0],
-            "fill_colors": ["lightblue"],
-            "curve2": "RILD"
-        }, {
-            "curve_name": "RILM",
-            "fill": "no",
-            "fill_direction": "left",
-            "cutoffs": [],
-            "fill_colors": [],
-            "curve2": ""
-        }], "well_holder_1C", 180, 500, depth_curve_name);
-        const sp_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1A' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["SP"], ["black"], [""], [{
-            "curve_name": "SP",
+            "curve2": "Caliper"
+        }], "well_holder_1B", width, height, depth_curve_name);
+        const poro_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1C' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ILD", "ILM"], ["black", "blue"], [""], [{
+            "curve_name": "ILD",
             "fill": "yes",
             "fill_direction": "right",
             "cutoffs": [0],
-            "fill_colors": ["yellow", "orange", "gray"],
+            "fill_colors": ["#b0b0ff"],
+            "curve2": "ILD"
+        }, {
+            "curve_name": "ILM",
+            "fill": "no",
+            "fill_direction": "left",
+            "cutoffs": [],
+            "fill_colors": ['green'],
             "curve2": ""
-        }], "well_holder_1A", 180, 500, depth_curve_name);
+        }], "well_holder_1C", width, height, depth_curve_name);
+        const rop_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1A' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ROP"], ["blue"], [""], [{
+            "curve_name": "ROP",
+            "fill": "yes",
+            "fill_direction": "right",
+            "cutoffs": [0],
+            "fill_colors": ["#b0b0ff", "gray"],
+            "curve2": ""
+        }], "well_holder_1A", width, height, depth_curve_name);
         // eslint-disable-next-line
-        const results = wellioviz.multipleLogPlot("well_holder-", [sp_plot_template_noFill, ll3_plot_template_1, poro_plot_template_1, sp_plot_template_1]);
-
-        return (
-            <>
-                {three_things_2["curve_names"].map((curveName, index) => {
-                    return curveName !== depth_curve_name ? <Checkbox text={curveName} key={index} /> : ''
-                })}
-            </>
-        );
+        const results = wellioviz.multipleLogPlot("well_holder-", [rop_plot_template_noFill, caliper_plot_template_1, poro_plot_template_1, rop_plot_template_1]);
     }
 };
