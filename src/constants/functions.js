@@ -381,3 +381,13 @@ export const getRandomInt = (min = 0, max) => {
     }
     return randomNumber;
 };
+
+export function convertNumberToHour(time) {
+    const hours = Math.floor(time);
+    const minutes = Math.round((time - hours) * 60);
+    
+    const formattedHour = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+  
+    return `${formattedHour}:${formattedMinutes}`;
+  }

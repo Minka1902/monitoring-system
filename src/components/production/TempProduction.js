@@ -1,16 +1,26 @@
 import React from "react";
-import DataContext from '../../contexts/DataContext';
-import PageDataContext from "../../contexts/PageDataContext";
-import ProgressBar from '../progressBar/ProgressBar';
-import ToggleSwitch from "../buttons/ButtonToggle";
+import PageDataContext from "../../contexts/PageDataContext.js";
+import ToggleSwitch from "../buttons/ButtonToggle.js";
 import { reduceDays } from "../../utils/timeDiff.ts";
-import { ProductionLinesChart } from '../chart/Charts';
-import MapWithOverlay from "../map/ProductionMap";
+import { ProductionLinesChart } from '../chart/Charts.js';
+import MapWithOverlay from "../map/ProductionMap.js";
+import BubblePieChart from '../chart/BubblePieChart';
 
 export default function Production({ polyName }) {
     const pageData = React.useContext(PageDataContext);
-    const wellsData = React.useContext(DataContext);
     const [isSum, setIsSum] = React.useState(false);
+
+    const d = {
+        name: "",
+        location: [31.593603230717974, 34.6448453680275,],
+        divPoint: { x: 0, y: 0, },
+        rad: 80,
+        data: [
+            { name: "water", value: 33.333, fill: "#508fdc" },
+            { name: "oil", value: 33.333, fill: "#ffa03a" },
+            { name: "gas", value: 33.333, fill: "#459d55" },
+        ],
+    }
 
     const toggleIsSum = () => setIsSum(!isSum);
 
@@ -76,46 +86,48 @@ export default function Production({ polyName }) {
         }
     };
 
-    function checkFileExists(folder, wellName) {
-        return new Promise(async (resolve) => {
-            try {
-                const path = `./src/images/${folder}/${wellName.toLowerCase()}.${folder === 'well_schemes' ? 'jpg' : 'png'}`;
-                const res = await fetch(path, { method: 'HEAD' });
-                if (res.ok) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            } catch (err) {
-                resolve(false);
-            }
-        });
-    };
-
     return (
         <section id="Production">
-            <div className="production__time-bar">
-                <ProgressBar value={2015} maxValue={2024} minValue={1984} />
-            </div>
-            <div className="production__content__container">
-                <div className="production__daily-prod_graph prod_300">
-                    {pageData && pageData.prod_300 !== undefined ?
-                        <ProductionLinesChart data={prepData(pageData.prod_300)} /> :
-                        <></>}
-                </div>
-                <div className="production__well_stage">
-                    {wellsData && wellsData.production.length === 1 ? checkFileExists('well_schemes', wellsData.production[0].name) ? <img src={require(`../../images/well_schemes/${wellsData.production[0].name.toLowerCase()}.jpg`)} alt="Well schema" /> : <></> : <></>}
-                </div>
-                <div className="production__bubble-graph production_bubble">
-                    <div className="production__bubble-graph__container">
+            <div className="production__content__container_temp">
+                <div className="production__left_container_temp">
+                    <div className="production__bubble-graph__container_temp">
                         <MapWithOverlay polyName={polyName} polygons={pageData && pageData.polygons} isSum={isSum} />
                     </div>
-                    <div className="production__switch__container">
+                    <div className="production__switch__container_temp">
                         <ToggleSwitch onClick={toggleIsSum} />
                     </div>
                 </div>
-                <div className="production__another-graph">
-                    {wellsData && wellsData.production.length === 1 ? checkFileExists('well_testing', wellsData.production[0].name) ? <img className="well_testing__image" src={require(`../../images/well_testing/${wellsData.production[0].name.toLowerCase()}.png`)} alt="Well schema" /> : <></> : <></>}
+                <div className="production__right_container_temp">
+                    <div className="production__right_small_container_temp">
+                        <div className="production__bubble-graph_legend">
+                            <h3 className="bubble-chart_legend__title">Production Legend</h3>
+                            <div className="bubble-chart_legend__container">
+                                <BubblePieChart
+                                    well={d}
+                                    tooltip__wrapper={'none'}
+                                />
+                            </div>
+                            <div className="colors-legend">
+                                <div className="color-legend">
+                                    <div className="color-square_orange" />
+                                    <p className="legend-title">Oil</p>
+                                </div>
+                                <div className="color-legend">
+                                    <div className="color-square_green" />
+                                    <p className="legend-title">Gas</p>
+                                </div>
+                                <div className="color-legend">
+                                    <div className="color-square_blue" />
+                                    <p className="legend-title">Water</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="production__daily-prod_graph_temp">
+                            {pageData && pageData.prod_300 !== undefined ?
+                                <ProductionLinesChart data={prepData(pageData.prod_300)} /> :
+                                <></>}
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

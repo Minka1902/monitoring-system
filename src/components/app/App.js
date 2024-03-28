@@ -8,7 +8,8 @@ import NavOverPage from "../navOverPage/NavOverPage";
 import MyTreeView from "../myTreeView/MyTreeView";
 import Main from "../main/Main";
 import Geology from "../geology/Geology";
-import Production from "../production/Production";
+// import Production from "../production/Production";
+import Production from "../production/TempProduction";
 import Drilling from "../drilling/Drilling";
 import ProjectPlan from "../projectPlan/ProjectPlan";
 import RightClickMenu from '../rightClickMenu/RightClickMenu';
@@ -27,8 +28,8 @@ function App() {
   const pageResourcesNeeded = {
     main: ['polygons', 'prod_300', 'safety', 'return_on_investment', 'seismic', 'reserves'],
     geology: ['polygons'],
-    production: ['polygons', 'prod_300'],
-    drilling: ['polygons'],
+    production: ['polygons', 'prod_300', 'well_schemes'],
+    drilling: ['polygons', 'las', 'well_testing', 'time_depth'],
     "project-plan": ['polygons'],
   };
   const history = useHistory();
@@ -49,17 +50,13 @@ function App() {
   };
 
   function getNodeByPath(nodePath) {
-    // Split the node path string into an array of node names
-    const pathNodes = nodePath.split('/').filter(node => node !== ''); // Remove empty strings
+    const pathNodes = nodePath.split('/').filter(node => node !== '');
 
-    // Recursive function to find a node
     function findNode(node, currentIndex) {
-      // If the current node is the last node in the path
       if (currentIndex === pathNodes.length - 1) {
         return node;
       }
 
-      // If the current node is not the last node in the path, continue traversing
       if (node.children) {
         for (const child of node.children) {
           if (child.name === pathNodes[currentIndex + 1]) {
@@ -68,11 +65,9 @@ function App() {
         }
       }
 
-      // If the child corresponding to the next node in the path is not found
       return null;
     }
 
-    // Start the traversal from the root of the tree
     return findNode(tree, 0);
   };
 
@@ -169,7 +164,18 @@ function App() {
   const onTreeItemClick = (event) => {
     const type = event.target.closest('li').classList[2].toLowerCase();
     const name = event.target.closest('li').classList[1].toLowerCase();
-    const nodePath = event.target.closest('li').id.slice(5);
+    if (event.target.closest('li').childNodes[1]) {
+      const listToHide = event.target.closest('li').childNodes[1];
+      if (listToHide.style) {
+        listToHide.style.display = '';
+      }
+    }
+    if (type === 'well') {
+      let id = event.target.closest('li').id;
+      var nodePath = id.slice(5, id.indexOf('@'));
+    } else {
+      var nodePath = event.target.closest('li').id.slice(5);
+    }
     if (nodePath.slice(nodePath.indexOf(12, '/') + 1).toLowerCase()) {
       if (nodePath.indexOf('/', 13) === -1 && pageData.polygons[name]) {
         setPolyName(name);
@@ -184,19 +190,20 @@ function App() {
     if (type !== 'well') {
       names = createNamesArray(getLastBranches(getNodeByPath(nodePath)));
     } else {
-      names = name;
+      names = [name];
     }
     setWellNames(names);
     if (type !== 'well') {
       if (type === 'file') {
         getReservoir(nodePath);
+        getPageData(history.location.pathname.slice(1), names, event.target);
       } else {
         getWellsData(nodePath.slice(nodePath.indexOf('/', 1)));
-        getPageData(history.location.pathname.slice(1), names);
+        getPageData(history.location.pathname.slice(1), names, event.target);
       }
     } else {
-      const parentPath = event.target.closest('li').closest('ul').parentElement.id.slice(5);
-      getReservoir(parentPath, name);
+      getReservoir(nodePath, name);
+      getPageData(history.location.pathname.slice(1), names, event.target);
     }
   };
 
@@ -216,35 +223,22 @@ function App() {
   };
 
   // ???????????????????????????????????????????????????
-  // !!!!!!!!!!!!!     GRAPH handling     !!!!!!!!!!!!!!
+  // !!!!!!!!!!!!!!     DATA handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const getGraphData = (name) => {
-    if (name) {
-      fieldsApiOBJ.getGraphData({ fileName: name })
-        .then((data) => {
-          if (data) {
-            let temp = {};
-            temp[data.name] = data.value;
-            for (const prop in graphData) {
-              if (prop !== data.name) {
-                temp[prop] = graphData[prop];
-              }
-            }
-            setGraphData(temp);
-          }
-        })
-        .catch((err) => {
-          if (err) {
-            console.log(err);
-          }
-        })
-    }
-  };
-
-  const getPageData = (page = 'main', names = undefined) => {
+  const getPageData = (page = 'main', names = undefined, target) => {
     setPageData(null);
     dataApiOBJ.initPage({ dataNames: pageResourcesNeeded[page], wellNames: names === undefined ? wellNames : names })
       .then((data) => {
+        // if (target && target.className === "MuiTreeItem-label") {
+        //   const listToHide = target.closest('li').childNodes[1];
+        //   if (listToHide) {
+        //     if (listToHide.style.display === 'none') {
+        //       listToHide.style.display = "";
+        //     } else {
+        //       listToHide.style.display = "none";
+        //     }
+        //   }
+        // }
         if (data) {
           setPageData(data);
         }
@@ -259,17 +253,7 @@ function App() {
   // ???????????????????????????????????????????????????
   // !!!!!!!!!!!!!     ROUTE handling     !!!!!!!!!!!!!!
   // ???????????????????????????????????????????????????
-  const handleRefreshClicked = (item) => {
-    if (item.evt.target.parentElement.parentElement.parentElement.classList.length > 0) {
-      const fileName = item.evt.target.parentElement.parentElement.parentElement.classList[1];
-      getGraphData(`${fileName}.csv`);
-    } else {
-      if (item.evt.target.parentElement.classList.length > 0) {
-        const fileName = item.evt.target.parentElement.classList[1];
-        getGraphData(`${fileName}.csv`);
-      }
-    }
-  };
+  const handleRefreshClicked = () => { };
 
   const rightClickItems = [
     { buttonText: 'refresh', buttonClicked: handleRefreshClicked, filter: 'canvas', isAllowed: true },

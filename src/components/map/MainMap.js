@@ -82,7 +82,7 @@ export default function Map({ coords, polygons, polyName }) {
         ref={mapRef}
       >
         {polygons && Object.keys(polygons).map((polygon, index) => {
-          return <Polygon positions={createPolygon(polygons[polygon])} className={polygon.slice(-2) === "3D" ? 'polygon_black' : 'polygon_blue'} key={index} />
+          return <Polygon positions={createPolygon(polygons[polygon])} className={polygon.slice(-2) === "3d" ? 'polygon_black' : 'polygon_blue'} key={index} />
         })}
 
         {polyName !== undefined ?

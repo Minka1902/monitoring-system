@@ -35,7 +35,7 @@ export default function MyTreeView({ files, onClick, allFieldsClick }) {
     );
 };
 
-function TreeElement({ entry, onClick }) {
+function TreeElement({ entry, onClick, ref }) {
     const onBlurEvent = (event) => { };
 
     return (

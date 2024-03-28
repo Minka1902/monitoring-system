@@ -4,11 +4,14 @@ import 'ag-charts-enterprise';
 import { AgChartsReact } from 'ag-charts-react';
 import wellioviz from 'wellioviz';
 import { lasGraphTemplate } from '../../constants/chart';
-import { formatMoney } from "../../constants/functions";
+import { formatMoney, convertNumberToHour } from "../../constants/functions";
 
 export function LinesChart({ data, backgroundColor = 'transparent' }) {
     const [options,] = React.useState({
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
             {
                 type: 'line',
@@ -74,27 +77,42 @@ export function MainLinesChart({ data, backgroundColor = 'transparent', contextM
     const [options,] = React.useState({
         title: { text: '10-day production' },
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
             {
                 type: 'line',
-                tooltip: { renderer: gasRenderer },
+                tooltip: { renderer: renderer },
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 4,
                 xKey: 'day',
-                yKey: 'gas',
-                yName: 'gas',
+                yKey: 'water',
+                yName: 'water',
             },
             {
                 type: 'line',
                 tooltip: { renderer: renderer },
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 4,
                 xKey: 'day',
                 yKey: 'oil',
                 yName: 'oil',
             },
             {
                 type: 'line',
-                tooltip: { renderer: renderer },
+                tooltip: { renderer: gasRenderer },
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 4,
                 xKey: 'day',
-                yKey: 'water',
-                yName: 'water',
+                yKey: 'gas',
+                yName: 'gas',
             },
         ],
         background: {
@@ -144,6 +162,9 @@ export function AreaChart({ data, backgroundColor = 'transparent', contextMenuAc
             text: "Return on investment",
         },
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
             {
                 type: "area",
@@ -157,6 +178,7 @@ export function AreaChart({ data, backgroundColor = 'transparent', contextMenuAc
                 tooltip: { renderer: ROIRenderer },
                 xKey: "month",
                 yKey: "cashFlow",
+                fill: "green",
                 yName: "Cashflow",
             },
         ],
@@ -209,6 +231,9 @@ export function ProductionLinesChart({ data, backgroundColor = 'transparent', co
     const [options,] = React.useState({
         title: { text: 'Daily production' },
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
             {
                 type: 'line',
@@ -290,6 +315,9 @@ export function ProductionLinesChart({ data, backgroundColor = 'transparent', co
 export function ProductionChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
             {
                 type: 'line',
@@ -346,55 +374,67 @@ export function ProductionChart({ data, backgroundColor = 'transparent', context
     return <AgChartsReact options={options} />;
 };
 
-export function DrillingLinesChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
+export function DrillingLinesChart({ data, backgroundColor = 'transparent' }) {
     const [options,] = React.useState({
         title: { text: 'Days VS. Depth' },
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
+            {},
+            {},
             {
                 type: 'line',
-                xKey: 'days',
-                yKey: 'actual',
-                yName: 'Actual',
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 6,
+                xKey: 'day',
+                yKey: 'fact',
+                yName: 'Actual state',
             },
+            {},
+            {},
+            {},
             {
                 type: 'line',
-                xKey: 'days',
-                yKey: 'afe',
-                yName: 'AFE',
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 6,
+                xKey: 'day',
+                yKey: 'plan',
+                yName: 'Planned state',
             },
-            {
-                type: 'line',
-                xKey: 'days',
-                yKey: 'go',
-                yName: 'Geomechanics optimized',
-            },
+
         ],
         background: {
             fill: backgroundColor,
         },
-        contextMenu: {
-            enabled: typeof contextMenuAction === 'object' ? true : false,
-            extraActions: [
-                { label: 'Say hello', action: () => window.alert('Hello world') },
-            ],
-        },
         axes: [
             {
                 type: 'category',
-                position: 'top',
-                label: {
-                    format: "🌧️ #{0>2.0f} °C",
-                },
+                position: 'bottom',
+                title: {
+                    text: 'Days'
+                }
             },
             {
-                type: 'number',
-                position: 'left',
-                label: {
-                    format: "#{0>3.0f} ft.",
-                },
-            }
+                type: "number",
+                position: "left",
+                reverse: false,
+                title: {
+                    text: 'Depth, m'
+                }
+            },
         ],
+        padding: {
+            top: 20,
+            bottom: 0,
+            right: 0,
+            left: 0,
+        },
         theme: {
             overrides: {
                 line: {
@@ -411,31 +451,56 @@ export function DrillingLinesChart({ data, backgroundColor = 'transparent', cont
         },
     });
 
-    return <AgChartsReact options={options} />;
+    return (<AgChartsReact options={options} />);
+};
+
+function testRenderer({ datum, xKey, yKey, yName }) {
+    return {
+        title: yName,
+        content: `${convertNumberToHour(datum[xKey])}, ${datum[yKey]} ${yKey === 'pressure_psig' ? ' PSIG' : ''}${yKey === 'fluid_rate' ? ' BBL/Day' : ''}${yKey === 'chock_size' ? ' /64"' : ''}`,
+    };
 };
 
 export function DrillingTestChart({ data, backgroundColor = 'transparent', contextMenuAction }) {
     const [options,] = React.useState({
         title: { text: 'Well testing' },
         data: data,
+        animation: {
+            enabled: false,
+        },
         series: [
             {
                 type: 'line',
+                tooltip: { renderer: testRenderer },
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 6,
                 xKey: 'hours',
                 yKey: 'pressure_psig',
                 yName: 'Pressure (PSIG)',
             },
             {
                 type: 'line',
+                tooltip: { renderer: testRenderer },
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 6,
                 xKey: 'hours',
                 yKey: 'fluid_rate',
-                yName: 'Fluid rate',
+                yName: 'Fluid rate (BBL/Day)',
             },
             {
                 type: 'line',
+                tooltip: { renderer: testRenderer },
+                marker: {
+                    enabled: false,
+                },
+                strokeWidth: 6,
                 xKey: 'hours',
                 yKey: 'chock_size',
-                yName: 'Chock size',
+                yName: 'Choke size ( /64")',
             },
         ],
         background: {
@@ -451,19 +516,30 @@ export function DrillingTestChart({ data, backgroundColor = 'transparent', conte
             {
                 type: 'category',
                 position: 'bottom',
-                label: {},
-            },
-            {
-                type: 'number',
-                position: 'left',
-                keys: ['pressure_psig'],
-                label: {},
+                label: {
+                    formatter: (params) => {
+                        return convertNumberToHour(params.value);
+                    },
+                    rotation: 0,
+                },
             },
             {
                 type: 'number',
                 position: 'right',
-                keys: ['fluid_rate', 'chock_size'],
-                label: {},
+                keys: ['chock_size'],
+                min: 0,
+                max: 100,
+                title: {
+                    text: "Choke size",
+                },
+            },
+            {
+                type: 'number',
+                position: 'left',
+                keys: ['fluid_rate', 'pressure_psig',],
+                title: {
+                    text: "Pressure, Fluid rate",
+                },
             }
         ],
         theme: {
@@ -485,31 +561,32 @@ export function DrillingTestChart({ data, backgroundColor = 'transparent', conte
     return <AgChartsReact options={options} />;
 };
 
-export function DrillingLasChart({ well, depth_curve_name = "DEPT", height = 600, width = 180 }) {
+export function DrillingLasChart({ well, depth_curve_name = "DEPT", size, setWellNames }) {
     if (well) {
         const wellInfo = well['WELL INFORMATION BLOCK'];
         const uwi2 = wellInfo.UWI.DATA === '' ? wellInfo.API.DATA === '' ? wellInfo.WELL.DATA : wellInfo.API.DATA : wellInfo.UWI.DATA;
         const three_things_2 = wellioviz.fromJSONofWEllGetThingsForPlotting(well, depth_curve_name);
+        setWellNames(three_things_2.curve_names);
         const well_log_curves_reformatted_for_d3_2 = three_things_2["well_log_curves_reformatted_for_d3"];
-        const rop_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ROP"], ["blue"], [""], [{
+        const rop_plot_template_noFill = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ROP"], ["red"], [""], [{
             "curve_name": "ROP",
-            "fill": "no",
-            "fill_direction": "left",
-            "cutoffs": [0],
-            "fill_colors": ["gray", "orange", "yellow"],
-            "curve2": ""
-        }], "well_holder_1A", width, height, depth_curve_name)
-        const caliper_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1B' }), well_log_curves_reformatted_for_d3_2, [uwi2], ['Caliper'], ["blue"], [""], [{
-            "curve_name": "Caliper",
-            "fill": "no",
-            "fill_direction": "left",
-            "cutoffs": [5, 10, 25],
-            "fill_colors": ["#ffe6e6", "#ffb3b3", "red"],
-            "curve2": "Caliper"
-        }], "well_holder_1B", width, height, depth_curve_name);
-        const poro_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1C' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ILD", "ILM"], ["black", "blue"], [""], [{
-            "curve_name": "ILD",
             "fill": "yes",
+            "fill_direction": "left",
+            "cutoffs": [6, 5],
+            "fill_colors": ["green", "orange", 'blue'],
+            "curve2": ""
+        }], "well_holder_1B", size.width / 5, size.height, depth_curve_name)
+        const caliper_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1C' }), well_log_curves_reformatted_for_d3_2, [uwi2], ['Caliper'], ["blue"], [""], [{
+            "curve_name": "Caliper",
+            "fill": "yes",
+            "fill_direction": "right",
+            "cutoffs": [5, 10, 25],
+            "fill_colors": ["#b0b0ff"],
+            "curve2": "Caliper"
+        }], "well_holder_1C", size.width / 5, size.height, depth_curve_name);
+        const poro_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1D' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ILD", "ILM"], ["#c370ff", "#2e014f"], [""], [{
+            "curve_name": "ILD",
+            "fill": "no",
             "fill_direction": "right",
             "cutoffs": [0],
             "fill_colors": ["#b0b0ff"],
@@ -521,16 +598,24 @@ export function DrillingLasChart({ well, depth_curve_name = "DEPT", height = 600
             "cutoffs": [],
             "fill_colors": ['green'],
             "curve2": ""
-        }], "well_holder_1C", width, height, depth_curve_name);
-        const rop_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1A' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["ROP"], ["blue"], [""], [{
-            "curve_name": "ROP",
+        }], "well_holder_1D", size.width / 5, size.height, depth_curve_name);
+        const gr_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1A' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["GR"], ["green"], [""], [{
+            "curve_name": "GR",
+            "fill": "yes",
+            "fill_direction": "left",
+            "cutoffs": [0],
+            "fill_colors": ["#69ff69", "gray"],
+            "curve2": ""
+        }], "well_holder_1A", size.width / 5, size.height, depth_curve_name);
+        const temp_plot_template_1 = wellioviz.minimumDataIntoTemplateFunc(lasGraphTemplate({ graphId: 'well_holder_1E' }), well_log_curves_reformatted_for_d3_2, [uwi2], ["Temp"], ["green"], [""], [{
+            "curve_name": "Temp",
             "fill": "yes",
             "fill_direction": "right",
             "cutoffs": [0],
             "fill_colors": ["#b0b0ff", "gray"],
             "curve2": ""
-        }], "well_holder_1A", width, height, depth_curve_name);
+        }], "well_holder_1E", size.width / 5, size.height, depth_curve_name);
         // eslint-disable-next-line
-        const results = wellioviz.multipleLogPlot("well_holder-", [rop_plot_template_noFill, caliper_plot_template_1, poro_plot_template_1, rop_plot_template_1]);
+        const results = wellioviz.multipleLogPlot("well_holder-", [rop_plot_template_noFill, caliper_plot_template_1, poro_plot_template_1, gr_plot_template_1, temp_plot_template_1]);
     }
 };

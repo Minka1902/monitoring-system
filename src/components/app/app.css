@@ -3,7 +3,8 @@
 }
 
 section {
-  background-color: #fff9f0;
+  /* background-color: #fff9f0; */
+  background-color: white;
   width: calc(100% - 350px);
   height: calc(100% - 90px);
   margin-left: 350px;
@@ -23,7 +24,8 @@ section {
 
 .tree-view__container {
   height: calc(100% - 65px);
-  background-color: #fff9f0;
+  /* background-color: #fff9f0; */
+  background-color: white;
   position: fixed;
   display: flex;
   width: 350px;

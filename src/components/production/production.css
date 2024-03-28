@@ -38,6 +38,7 @@
     padding: 10px;
     display: flex;
     flex-direction: row-reverse;
+    justify-content: center;
 }
 
 .production__well_stage img {
@@ -68,4 +69,133 @@
     height: 90%;
     grid-area: d;
     padding: 10px;
+}
+
+.well_testing__image {
+    height: 100%;
+    width: 100%;
+}
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+.production__content__container_temp {
+    height: 100%;
+    width: calc(100% - 20px);
+    margin: 0;
+    padding: 45px 20px 20px 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.production__right_container_temp {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 40%;
+    justify-content: center;
+}
+
+.production__left_container_temp {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 40px);
+    width: 60%;
+    justify-content: center;
+    padding: 0 10px 40px 0;
+}
+
+.production__right_small_container_temp {
+    width: 100%;
+    height: calc(70% + 56px + 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.production__bubble-graph__container_temp {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0 0 40px;
+    width: calc(100% - 80px);
+    height: 100%;
+}
+
+.production__bubble-graph_legend {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 60%;
+    height: 30%;
+    justify-content: space-between;
+}
+
+.bubble-chart_legend__title {
+    height: 60px;
+    line-height: 50px;
+    font-size: 40px;
+    font-weight: 500;
+    font-family: SLBSans, Arial, Helvetica;
+    margin: 0;
+    text-align: center;
+}
+
+.bubble-chart_legend__container {
+    position: absolute;
+    top: calc(50% - 80px);
+    left: calc(50% - 20px);
+}
+
+.production__daily-prod_graph_temp {
+    width: 100%;
+    height: 50%;
+}
+
+.production__switch__container_temp {
+    margin: 10px auto 0;
+    height: min-content;
+}
+
+.colors-legend {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 200px;
+}
+
+.color-legend {
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.legend-title {
+    margin: 0 0 0 5px;
+    padding: 0;
+    height: 100%;
+    line-height: 30px;
+    font-size: 30px;
+    font-weight: 500;
+    font-family: SLBSans, Arial, Helvetica;
+}
+
+.color-square_green {
+    height: 30px;
+    width: 30px;
+    background-color: rgb(69, 157, 85);
+}
+
+.color-square_blue {
+    height: 30px;
+    width: 30px;
+    background-color: rgb(80, 144, 220);
+}
+
+.color-square_orange {
+    height: 30px;
+    width: 30px;
+    background-color: rgb(255, 160, 58);
 }

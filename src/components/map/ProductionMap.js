@@ -16,6 +16,7 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
     const [tempChartData, setTempChartData] = React.useState(undefined);
     const [chartData, setChartData] = React.useState([]);
     const [tempPolyName, setTempPolyName] = React.useState(polyName);
+    const [minMax, setMinMax] = React.useState({});
 
     const LocationFinder = () => {
         const map = useMapEvents({ // eslint-disable-line
@@ -26,7 +27,7 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
                     if (chartData !== undefined) {
                         for (let i = 0; i < chartData.length; i++) {
                             const containerPoint = map.latLngToContainerPoint(chartData[i].location);
-                            const newWell = { name: chartData[i].name, data: chartData[i].data, location: chartData[i].location, divPoint: containerPoint };
+                            const newWell = { name: chartData[i].name, rad: calcWellRadius(chartData[i].data) < 30 ? calcWellRadius(chartData[i].data) : 40, data: chartData[i].data, location: chartData[i].location, divPoint: containerPoint };
                             if (containerPoint && newWell.divPoint !== chartData[i].divPoint) {
                                 newChartData[i] = newWell;
                             }
@@ -34,7 +35,7 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
                     } else {
                         for (let i = 0; i < tempChartData.length; i++) {
                             const containerPoint = map.latLngToContainerPoint(tempChartData[i].location);
-                            const newWell = { name: tempChartData[i].name, data: tempChartData[i].data, location: tempChartData[i].location, divPoint: containerPoint };
+                            const newWell = { name: tempChartData[i].name, rad: calcWellRadius(tempChartData[i].data) < 30 ? calcWellRadius(tempChartData[i].data) : 40, data: tempChartData[i].data, location: tempChartData[i].location, divPoint: containerPoint };
                             if (containerPoint && newWell.divPoint !== tempChartData[i].divPoint) {
                                 newChartData[i] = newWell;
                             }
@@ -54,6 +55,13 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
             }
         });
         return null;
+    };
+
+    const calcWellRadius = (data) => {
+        if (data && minMax) {
+            const current = data[0].value + data[1].value + data[2].value;
+            return 40 * current / (minMax.max - minMax.min);
+        }
     };
 
     const epsgConvert = ({ x, y, toEpsg = 4326, fromEpsg = 2039 }) => {
@@ -108,6 +116,58 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
         }
     };
 
+    const returnMinMaxBbl = () => {
+        if (pageData && pageData.prod_300) {
+            let tmin = 10000000000000000, tmax = 0;
+            const keys = Object.keys(pageData.prod_300);
+            for (const key of keys) {
+                if (pageData.prod_300[key] !== "File not found.") {
+                    if (isSum) {
+                        if (tmin > Math.ceil(sumProp(pageData.prod_300[key], 'water'))) {
+                            tmin = Math.ceil(sumProp(pageData.prod_300[key], 'water'));
+                        }
+                        if (tmin > Math.ceil(sumProp(pageData.prod_300[key], 'oil'))) {
+                            tmin = Math.ceil(sumProp(pageData.prod_300[key], 'oil'));
+                        }
+                        if (tmin > Math.ceil(sumProp(pageData.prod_300[key], 'gas'))) {
+                            tmin = Math.ceil(sumProp(pageData.prod_300[key], 'gas'));
+                        }
+                        if (tmax < Math.ceil(sumProp(pageData.prod_300[key], 'water'))) {
+                            tmax = Math.ceil(sumProp(pageData.prod_300[key], 'water'));
+                        }
+                        if (tmax < Math.ceil(sumProp(pageData.prod_300[key], 'oil'))) {
+                            tmax = Math.ceil(sumProp(pageData.prod_300[key], 'oil'));
+                        }
+                        if (tmax < Math.ceil(sumProp(pageData.prod_300[key], 'gas'))) {
+                            tmax = Math.ceil(sumProp(pageData.prod_300[key], 'gas'));
+                        }
+                    } else {
+                        let myObject = pageData && pageData.prod_300[key][pageData.prod_300[key].length - 1];
+                        if (tmin > myObject.water) {
+                            tmin = myObject.water;
+                        }
+                        if (tmin > myObject.oil) {
+                            tmin = myObject.oil;
+                        }
+                        if (tmin > myObject.gas) {
+                            tmin = myObject.gas;
+                        }
+                        if (tmax < myObject.water) {
+                            tmax = myObject.water;
+                        }
+                        if (tmax < myObject.oil) {
+                            tmax = myObject.oil;
+                        }
+                        if (tmax < myObject.gas) {
+                            tmax = myObject.gas;
+                        }
+                    }
+                }
+            }
+            setMinMax({ min: tmin, max: tmax });
+        }
+    };
+
     const createData = (wells) => {
         let newData = [];
         for (let i = 0; i < wells.length; i++) {
@@ -115,22 +175,24 @@ const MapWithOverlay = ({ polygons, polyName, isSum }) => {
                 const coordinates = epsgConvert({ x: wells[i].x, y: wells[i].y });
                 if (isSum) {
                     // ! here is sum
+                    returnMinMaxBbl();
                     let myObject = pageData && pageData.prod_300[wells[i].name.toLowerCase()];
                     var data = [
-                        { name: 'water', value: Math.ceil(sumProp(myObject, 'water')), fill: '#0073ff' },
-                        { name: 'oil', value: Math.ceil(sumProp(myObject, 'oil')), fill: '#52a702' },
-                        { name: 'gas', value: Math.ceil(sumProp(myObject, 'gas')), fill: '#ff0000' }
+                        { name: 'water', value: Math.ceil(sumProp(myObject, 'water')), fill: "#508fdc" },
+                        { name: 'oil', value: Math.ceil(sumProp(myObject, 'oil')), fill: "#ffa03a" },
+                        { name: 'gas', value: Math.ceil(sumProp(myObject, 'gas')), fill: "#459d55" }
                     ];
                 } else {
                     // ! here is not sum
                     let myObject = pageData && pageData.prod_300[wells[i].name.toLowerCase()][pageData.prod_300[wells[i].name.toLowerCase()].length - 1];
+                    returnMinMaxBbl();
                     var data = [
-                        { name: 'water', value: parseFloat(myObject.water), fill: '#0073ff' },
-                        { name: 'oil', value: parseFloat(myObject.oil), fill: '#52a702' },
-                        { name: 'gas', value: parseFloat(myObject.gas), fill: '#ff0000' }
+                        { name: 'water', value: parseFloat(myObject.water), fill: "#508fdc" },
+                        { name: 'oil', value: parseFloat(myObject.oil), fill: "#ffa03a" },
+                        { name: 'gas', value: parseFloat(myObject.gas), fill: "#459d55" }
                     ];
                 }
-                const tempD = { name: wells[i].name.toLowerCase(), location: coordinates, divPoint: { x: 100, y: 100 }, data };
+                const tempD = { name: wells[i].name.toLowerCase(), rad: calcWellRadius(data) < 30 ? calcWellRadius(data) : 30, location: coordinates, divPoint: { x: 100, y: 100 }, data };
                 newData.push(tempD);
             }
         }

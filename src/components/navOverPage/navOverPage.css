@@ -64,6 +64,10 @@
     cursor: not-allowed;
 }
 
+.button_disabled .nav-over-page__link{
+    color: rgb(110, 110, 110);
+}
+
 .button-active:hover {
     cursor: pointer;
     background-color: #bbb6f5;

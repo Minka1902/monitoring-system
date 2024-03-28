@@ -11,7 +11,7 @@ export const lasGraphTemplate = ({ graphId, title = '', grouped_or_independent =
             "width": 200,
             "height": 700,
             "height_multiplier_components": 0.99,
-            "margin": { "top": 10, "right": 0, "bottom": 0, "left": 40 },
+            "margin": { "top": 10, "right": 10, "bottom": 0, "left": 80 },
             "title": { "text": title, "title_font_size": "10px" }, /// not built yet
             "div_id": graphId, /// Should be skip-able // default=random str? What happens if div doesn't exist?
             "order_of_component": ["curves", "rectanges", "lines"], /// not built yet
@@ -36,7 +36,7 @@ export const lasGraphTemplate = ({ graphId, title = '', grouped_or_independent =
                     "curve_colors": ["black"],
                     "curve_stroke_dasharray": ["solid"],
                     "stroke_linecap": ["butt"],
-                    "stroke_width": [1],
+                    "stroke_width": [1.8],
                     "fill": [
                         {
                             "curve_name": "RHOB",
